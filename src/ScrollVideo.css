@@ -1,0 +1,145 @@
+.scroll-video-container {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.scroll-video-container video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  object-fit: contain;
+  z-index: 1;
+  background: #fff;
+}
+
+/* Espacio dinámico de scroll */
+.scroll-space {
+  width: 100%;
+}
+
+/* Overlay animado */
+.overlay-content {
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  color: #000;
+  z-index: 2;
+  max-width: 80%;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* animaciones de entrada */
+.fade-text {
+  animation: fadeUp 1.2s ease-out;
+  font-size: 2.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.fade-subtext {
+  animation: fadeUp 1.5s ease-out;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Barra de progreso */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #00b3ff, #006eff);
+  z-index: 4;
+  transition: width 0.1s ease-out;
+}
+
+/* Panel flotante */
+.control-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(25, 25, 25, 0.7);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: sans-serif;
+  opacity: 0.2;
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+.control-panel.visible {
+  opacity: 1;
+}
+
+.control-panel label {
+  display: block;
+  margin-top: 8px;
+}
+
+.control-panel input[type="range"] {
+  width: 140px;
+  margin-top: 4px;
+}
+
+.checkbox-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.panel-header {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .overlay-content {
+    top: 5%;
+    left: 5%;
+    text-align: center;
+  }
+
+  .fade-text {
+    font-size: 1.8rem;
+  }
+
+  .fade-subtext {
+    font-size: 1rem;
+  }
+
+  .control-panel {
+    bottom: 10px;
+    right: 10px;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  .control-panel input[type="range"] {
+    width: 100px;
+  }
+
+  .scroll-video-container video {
+    object-fit: cover;
+  }
+}
+
+
+
+
+
