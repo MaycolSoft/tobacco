@@ -4,6 +4,7 @@ import myVideo from "./assets/video.mp4";
 
 export default function ScrollVideo() {
   const videoRef = useRef(null);
+  const [activated, setActivated] = useState(false);
   const [speed, setSpeed] = useState(0.3);
   const [scrollHeight, setScrollHeight] = useState(400);
   const [visible, setVisible] = useState(false);
@@ -13,9 +14,7 @@ export default function ScrollVideo() {
   const [scrollPercent, setScrollPercent] = useState(0);
 
   const [fadeSpeed, setFadeSpeed] = useState(3.5);
-
-
-  
+  const [videoSrc, setVideoSrc] = useState(myVideo); 
 
   useEffect(() => {
     const video = videoRef.current;
@@ -42,6 +41,8 @@ export default function ScrollVideo() {
     };
 
     const handleScroll = () => {
+      if (!activated) return; 
+
       const scrollTop = window.scrollY;
       const docHeight = document.body.scrollHeight - window.innerHeight;
       const scrollPercent = docHeight > 0 ? scrollTop / docHeight : 0;
@@ -61,6 +62,13 @@ export default function ScrollVideo() {
 
 
 
+  const handleVideoUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const url = URL.createObjectURL(file);
+    setVideoSrc(url);
+  };
 
 
 
@@ -76,7 +84,9 @@ export default function ScrollVideo() {
   return (
     <div className="scroll-video-container">
       {/* Video fijo */}
-      <video ref={videoRef} src={myVideo} preload="auto" muted playsInline />
+      {/* <video ref={videoRef} src={myVideo} preload="auto" muted playsInline /> */}
+      <video ref={videoRef} src={videoSrc} preload="auto" muted playsInline />
+
 
       {/* Overlay animado */}
       {showOverlay && (
@@ -90,6 +100,11 @@ export default function ScrollVideo() {
         </div>
       )}
 
+      {!activated && (
+        <div className="tap-overlay" onClick={() => setActivated(true)}>
+          Toca para activar el video
+        </div>
+      )}
 
       {/* Barra de progreso */}
       {showProgress && (
@@ -160,6 +175,16 @@ export default function ScrollVideo() {
           />
           Mostrar texto animado
         </label>
+
+        <label>
+          Subir nuevo video:
+          <input
+            type="file"
+            accept="video/mp4,video/webm"
+            onChange={handleVideoUpload}
+          />
+        </label>
+
       </div>
 
       {/* Capa "fantasma" dinámica */}
