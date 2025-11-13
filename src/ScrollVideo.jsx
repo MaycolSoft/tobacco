@@ -12,6 +12,8 @@ export default function ScrollVideo() {
   const [scrollPercent, setScrollPercent] = useState(0);
   const [fadeSpeed, setFadeSpeed] = useState(3.5);
   const [customVideo, setCustomVideo] = useState(null);
+  const [videoFit, setVideoFit] = useState("css"); 
+
 
   const [screenInfo, setScreenInfo] = useState({
     width: window.innerWidth,
@@ -145,6 +147,19 @@ export default function ScrollVideo() {
       : Math.round((screenInfo.width / 9) * 16);
 
 
+  const dynamicVideoStyle = videoFit === "css"
+    ? {}
+    : {
+        width: "100%",
+        height: "100%",
+        objectFit: videoFit,
+        position: "fixed",
+        top: 0,
+        left: 0,
+        zIndex: -1,
+      };
+
+
   return (
     <div className="scroll-video-container">
       {/* Video fijo */}
@@ -154,7 +169,9 @@ export default function ScrollVideo() {
         preload="auto"
         muted
         playsInline
+        style={dynamicVideoStyle}
       />
+
 
 
       {/* Overlay animado */}
@@ -274,6 +291,17 @@ export default function ScrollVideo() {
             onChange={handleVideoUpload}
           />
         </label>
+
+        <label>
+          Modo de visualización del video:
+          <select value={videoFit} onChange={(e) => setVideoFit(e.target.value)}>
+            <option value="css">Usar CSS original</option>
+            <option value="contain">Ajustar sin recorte (contain)</option>
+            <option value="cover">Llenar pantalla (cover)</option>
+            <option value="fill">Deformar para llenar (fill)</option>
+          </select>
+        </label>
+
       </div>
 
       {/* Capa "fantasma" dinámica */}
