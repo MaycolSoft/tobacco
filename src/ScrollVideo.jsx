@@ -4,17 +4,41 @@ import myVideo from "./assets/video.mp4";
 
 export default function ScrollVideo() {
   const videoRef = useRef(null);
-  const [activated, setActivated] = useState(false);
   const [speed, setSpeed] = useState(0.3);
   const [scrollHeight, setScrollHeight] = useState(400);
   const [visible, setVisible] = useState(false);
-
   const [showProgress, setShowProgress] = useState(true);
   const [showOverlay, setShowOverlay] = useState(true);
   const [scrollPercent, setScrollPercent] = useState(0);
-
   const [fadeSpeed, setFadeSpeed] = useState(3.5);
-  const [videoSrc, setVideoSrc] = useState(myVideo); 
+  const [customVideo, setCustomVideo] = useState(null);
+
+  const [screenInfo, setScreenInfo] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+    orientation: window.innerWidth > window.innerHeight ? "horizontal" : "vertical",
+    aspectRatio: (window.innerWidth / window.innerHeight).toFixed(2),
+  });
+
+
+
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenInfo({
+        width: window.innerWidth,
+        height: window.innerHeight,
+        orientation: window.innerWidth > window.innerHeight ? "horizontal" : "vertical",
+        aspectRatio: (window.innerWidth / window.innerHeight).toFixed(2),
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
 
   useEffect(() => {
     const video = videoRef.current;
@@ -23,31 +47,49 @@ export default function ScrollVideo() {
     let ready = false;
     video.addEventListener("loadedmetadata", () => {
       ready = true;
+      console.log("Video listo. Duración:", video.duration);
     });
+
 
     let targetTime = 0;
     let animationFrameId;
 
     const updateVideoTime = () => {
-      if (!ready || !Number.isFinite(video.duration)) {
-        animationFrameId = requestAnimationFrame(updateVideoTime);
-        return;
-      }
+      try {
+        if (!ready || !Number.isFinite(video.duration)) {
+          animationFrameId = requestAnimationFrame(updateVideoTime);
+          return;
+        }
 
-      const newTime = video.currentTime + (targetTime - video.currentTime) * speed;
-      if (Number.isFinite(newTime)) video.currentTime = newTime;
+        const newTime = video.currentTime + (targetTime - video.currentTime) * speed;
+
+        if (Number.isFinite(newTime)) {
+          video.currentTime = newTime;
+        }
+      } catch (err) {
+        console.error("Error en updateVideoTime:", err);
+      }
 
       animationFrameId = requestAnimationFrame(updateVideoTime);
     };
 
-    const handleScroll = () => {
-      if (!activated) return; 
 
-      const scrollTop = window.scrollY;
-      const docHeight = document.body.scrollHeight - window.innerHeight;
-      const scrollPercent = docHeight > 0 ? scrollTop / docHeight : 0;
-      targetTime = video.duration * scrollPercent;
+    const handleScroll = () => {
+      try {
+        const scrollTop = window.scrollY;
+        const docHeight = document.body.scrollHeight - window.innerHeight;
+        const percent = docHeight > 0 ? scrollTop / docHeight : 0;
+
+        if (Number.isFinite(video.duration)) {
+          targetTime = video.duration * percent;
+        }
+
+        setScrollPercent(percent);
+      } catch (err) {
+        console.error("Error en handleScroll:", err);
+      }
     };
+
 
     window.addEventListener("scroll", handleScroll);
     animationFrameId = requestAnimationFrame(updateVideoTime);
@@ -58,17 +100,33 @@ export default function ScrollVideo() {
     };
   }, [speed]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
 
+    const handleMeta = () => {
+      console.log("Metadata cargada. Duración:", video.duration);
+    };
+
+    video.addEventListener("loadedmetadata", handleMeta);
+
+    return () => {
+      video.removeEventListener("loadedmetadata", handleMeta);
+    };
+  }, [customVideo]);
 
 
 
   const handleVideoUpload = (e) => {
     const file = e.target.files[0];
-    if (!file) return;
-
-    const url = URL.createObjectURL(file);
-    setVideoSrc(url);
+    if (file) {
+      const videoURL = URL.createObjectURL(file);
+      setCustomVideo(videoURL);
+    }
   };
+
+
+
 
 
 
@@ -81,30 +139,62 @@ export default function ScrollVideo() {
 
 
 
+  const recommendedHeight =
+    screenInfo.orientation === "horizontal"
+      ? Math.round((screenInfo.width / 16) * 9)
+      : Math.round((screenInfo.width / 9) * 16);
+
+
   return (
     <div className="scroll-video-container">
       {/* Video fijo */}
-      {/* <video ref={videoRef} src={myVideo} preload="auto" muted playsInline /> */}
-      <video ref={videoRef} src={videoSrc} preload="auto" muted playsInline />
+      <video
+        ref={videoRef}
+        src={customVideo || myVideo}
+        preload="auto"
+        muted
+        playsInline
+      />
 
 
       {/* Overlay animado */}
       {showOverlay && (
         <div className="overlay-content" style={overlayStyle}>
           <h1 className="fade-text">El arte detrás del tabaco</h1>
-          <p className="fade-subtext">
-            Cada hoja cuenta una historia.  
-            Desde el secado hasta el enrollado, este video revela capa a capa  
-            el proceso de preparación, textura y carácter que dan vida al tabaco artesanal.
+
+          <p className="fade-subtext" style={{ lineHeight: "1.6em" }}>
+            Cada hoja encierra una historia.  
+            Desde el secado hasta el enrollado, este recorrido revela con detalle la
+            preparación artesanal del tabaco: sus capas, texturas y carácter.
+
+            <br /><br />
+
+            <strong>📱 Información de la pantalla actual</strong><br />
+            Orientación: <strong>{screenInfo.orientation}</strong><br />
+            Resolución detectada:{" "}
+            <strong>{screenInfo.width} × {screenInfo.height}px</strong><br />
+            Relación de aspecto:{" "}
+            <strong>{screenInfo.aspectRatio}:1</strong>
+
+            <br /><br />
+
+            <strong>🎞️ Recomendación automática de exportación</strong><br />
+            Para esta pantalla ({screenInfo.orientation}):<br />
+            <strong>
+              {screenInfo.width} × {recommendedHeight}px
+            </strong>{" "}
+            ({screenInfo.orientation === "horizontal" ? "16:9" : "9:16"})
+            <br /><br />
+
+            Esta recomendación se ajusta dinámicamente según el tamaño y orientación
+            del dispositivo del usuario, garantizando que el video se muestre sin
+            distorsión, recortes o pérdida de calidad.
           </p>
         </div>
       )}
 
-      {!activated && (
-        <div className="tap-overlay" onClick={() => setActivated(true)}>
-          Toca para activar el video
-        </div>
-      )}
+
+
 
       {/* Barra de progreso */}
       {showProgress && (
@@ -176,15 +266,14 @@ export default function ScrollVideo() {
           Mostrar texto animado
         </label>
 
-        <label>
-          Subir nuevo video:
+        <label className="file-upload-control">
+          Subir video
           <input
             type="file"
-            accept="video/mp4,video/webm"
+            accept="video/*"
             onChange={handleVideoUpload}
           />
         </label>
-
       </div>
 
       {/* Capa "fantasma" dinámica */}
