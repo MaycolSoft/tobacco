@@ -1,0 +1,30 @@
+.image-card {
+  width: 150px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.image-card:hover {
+  border-color: #999;
+}
+
+.image-card-selected {
+  border-color: #4caf50;
+  box-shadow: 0 0 12px rgba(76, 175, 80, 0.6);
+}
+
+.image-card-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.image-card-title {
+  font-size: 14px;
+  margin-top: 8px;
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function useCentralLogger(limit = 20) {
+export default function useCentralLogger(limit = 100) {
   let centralLogCounter = 0;
 
   const genId = () => {
