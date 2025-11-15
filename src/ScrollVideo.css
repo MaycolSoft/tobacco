@@ -158,3 +158,134 @@
   align-items: center;
   z-index: 9999;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* === BOTÓN FLOTANTE DE CONFIGURACIÓN === */
+.control-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99999;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: none;
+  background: #1e1e1e;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.control-toggle-btn:hover {
+  background: #2a2a2a;
+  transform: scale(1.05);
+}
+
+/* === PANEL === */
+.control-panel {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  background: rgba(20, 20, 20, 0.97);
+  padding: 15px;
+  border-radius: 12px;
+  width: 280px;
+  color: white;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transform: translateY(20px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    visibility 0.35s ease;
+}
+
+.control-panel.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.play-toggle-btn {
+  /* position: fixed; */
+  bottom: 20px;
+  right: 90px;
+  z-index: 99999;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: none;
+  background: #1e1e1e;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease;
+}
