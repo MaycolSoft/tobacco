@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
-import "./ScrollVideo.css";
-import myVideo from "./assets/video.mp4";
+import "@styles/ScrollVideo.css";
+import myVideo from "@/assets/video.mp4";
 
 export default function ScrollVideo() {
   const videoRef = useRef(null);
@@ -11,7 +11,7 @@ export default function ScrollVideo() {
   const [scrollHeight, setScrollHeight] = useState(400);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showProgress, setShowProgress] = useState(true);
-  const [showOverlay, setShowOverlay] = useState(true);
+  const [showOverlay, setShowOverlay] = useState(false);
   const [scrollPercent, setScrollPercent] = useState(0);
   const [fadeSpeed, setFadeSpeed] = useState(3.5);
   const [customVideo, setCustomVideo] = useState(null);
@@ -45,16 +45,16 @@ export default function ScrollVideo() {
     if (!v) return;
 
     const events = [
-      "loadeddata",
-      "canplay",
-      "canplaythrough",
-      "error",
-      "stalled",
-      "abort",
-      "suspend",
-      "waiting",
-      "emptied",
-      "loadstart",
+      // "canplay",
+      // "canplaythrough",
+      // "loadeddata",
+      // "error",
+      // "stalled",
+      // "abort",
+      // "suspend",
+      // "waiting",
+      // "emptied",
+      // "loadstart",
     ];
 
     const log = (e) => {

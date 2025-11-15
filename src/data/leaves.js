@@ -1,0 +1,315 @@
+// export const leaves = [
+//   // Kentucky
+//   { id: 1, name: "American Kentucky", family: "Kentucky", image: "/images/american-kentucky.png" },
+//   { id: 2, name: "Italian Kentucky", family: "Kentucky", image: "/images/italian-kentucky.png" },
+//   { id: 3, name: "Tennessee Fire-Cured", family: "Kentucky", image: "/images/tennessee-kentucky.png" },
+//   { id: 4, name: "Dark Fire-Cured Kentucky", family: "Kentucky", image: "/images/dark-kentucky.png" },
+//   { id: 5, name: "Cavendish Kentucky", family: "Kentucky", image: "/images/cavendish-kentucky.png" },
+
+//   // Burley
+//   { id: 6, name: "White Burley", family: "Burley", image: "/images/white-burley.png" },
+//   { id: 7, name: "Red Burley", family: "Burley", image: "/images/red-burley.png" },
+//   { id: 8, name: "Dark Burley", family: "Burley", image: "/images/dark-burley.png" },
+//   { id: 9, name: "Light Air-Cured Burley", family: "Burley", image: "/images/light-burley.png" },
+//   { id: 10, name: "Aged Burley Leaf", family: "Burley", image: "/images/aged-burley.png" },
+
+//   // Virginia
+//   { id: 11, name: "Bright Virginia", family: "Virginia", image: "/images/bright-virginia.png" },
+//   { id: 12, name: "Red Virginia", family: "Virginia", image: "/images/red-virginia.png" },
+//   { id: 13, name: "Lemon Virginia", family: "Virginia", image: "/images/lemon-virginia.png" },
+//   { id: 14, name: "Orange Virginia", family: "Virginia", image: "/images/orange-virginia.png" },
+//   { id: 15, name: "Virginia Gold", family: "Virginia", image: "/images/gold-virginia.png" },
+//   { id: 16, name: "Flue-Cured Virginia", family: "Virginia", image: "/images/flue-virginia.png" },
+
+//   // Oriental
+//   { id: 17, name: "Izmir Oriental", family: "Oriental", image: "/images/izmir-oriental.png" },
+//   { id: 18, name: "Basma Oriental", family: "Oriental", image: "/images/basma-oriental.png" },
+//   { id: 19, name: "Samsun Oriental", family: "Oriental", image: "/images/samsun-oriental.png" },
+//   { id: 20, name: "Katerini Oriental", family: "Oriental", image: "/images/katerini-oriental.png" },
+//   { id: 21, name: "Yenidje Oriental", family: "Oriental", image: "/images/yenidje-oriental.png" }
+// ];
+
+
+
+export const leaves = [
+  // Kentucky
+  {
+    id: 1,
+    name: "American Kentucky",
+    family: "Kentucky",
+    role: "filler",
+    color: "dark brown",
+    curing: "fire",
+    strength: "strong",
+    aroma: "smoky",
+    description:
+      "A dark, fire-cured leaf with intense smoky notes, often used to give strength and depth to a blend.",
+    image: "/images/american-kentucky.png"
+  },
+  {
+    id: 2,
+    name: "Italian Kentucky",
+    family: "Kentucky",
+    role: "filler",
+    color: "dark brown",
+    curing: "fire",
+    strength: "strong",
+    aroma: "earthy, smoky",
+    description:
+      "Traditional Italian fire-cured Kentucky with earthy and smoky character, common in strong cigars.",
+    image: "/images/italian-kentucky.png"
+  },
+  {
+    id: 3,
+    name: "Tennessee Fire-Cured",
+    family: "Kentucky",
+    role: "filler",
+    color: "very dark brown",
+    curing: "fire",
+    strength: "very strong",
+    aroma: "campfire smoke",
+    description:
+      "Rich Tennessee fire-cured leaf with heavy campfire aromas, used sparingly for powerful blends.",
+    image: "/images/tennessee-kentucky.png"
+  },
+  {
+    id: 4,
+    name: "Dark Fire-Cured Kentucky",
+    family: "Kentucky",
+    role: "filler",
+    color: "black-brown",
+    curing: "fire",
+    strength: "very strong",
+    aroma: "heavy smoke",
+    description:
+      "Extremely dark, slow-burning fire-cured leaf, ideal for adding body and slow combustion.",
+    image: "/images/dark-kentucky.png"
+  },
+  {
+    id: 5,
+    name: "Cavendish Kentucky",
+    family: "Kentucky",
+    role: "filler",
+    color: "dark brown",
+    curing: "fire + processed",
+    strength: "medium-strong",
+    aroma: "sweet smoky",
+    description:
+      "A processed Kentucky leaf with softened edges and a sweeter smoky profile, often used in pipe-style aromatics.",
+    image: "/images/cavendish-kentucky.png"
+  },
+
+  // Burley
+  {
+    id: 6,
+    name: "White Burley",
+    family: "Burley",
+    role: "filler",
+    color: "light brown",
+    curing: "air",
+    strength: "medium",
+    aroma: "nutty",
+    description:
+      "A classic neutral Burley with nutty notes and good burning qualities, used as a base in many blends.",
+    image: "/images/white-burley.png"
+  },
+  {
+    id: 7,
+    name: "Red Burley",
+    family: "Burley",
+    role: "filler",
+    color: "reddish brown",
+    curing: "air",
+    strength: "medium-strong",
+    aroma: "earthy, cocoa",
+    description:
+      "Richer Burley with more body and cocoa-like undertones, ideal to add fullness to a blend.",
+    image: "/images/red-burley.png"
+  },
+  {
+    id: 8,
+    name: "Dark Burley",
+    family: "Burley",
+    role: "filler",
+    color: "dark brown",
+    curing: "air",
+    strength: "strong",
+    aroma: "chocolate, earthy",
+    description:
+      "Dark, full-flavored Burley that delivers chocolate and earthy tones with a stronger impact.",
+    image: "/images/dark-burley.png"
+  },
+  {
+    id: 9,
+    name: "Light Air-Cured Burley",
+    family: "Burley",
+    role: "filler",
+    color: "medium brown",
+    curing: "air",
+    strength: "medium",
+    aroma: "soft, toasted",
+    description:
+      "A softer air-cured Burley offering gentle toasted notes and good burning behavior.",
+    image: "/images/light-burley.png"
+  },
+  {
+    id: 10,
+    name: "Aged Burley Leaf",
+    family: "Burley",
+    role: "filler",
+    color: "medium-dark brown",
+    curing: "air, long-aged",
+    strength: "medium",
+    aroma: "smooth, rounded",
+    description:
+      "Burley leaf aged for years to round off harshness, providing a smooth, refined taste.",
+    image: "/images/aged-burley.png"
+  },
+
+  // Virginia
+  {
+    id: 11,
+    name: "Bright Virginia",
+    family: "Virginia",
+    role: "filler",
+    color: "bright yellow",
+    curing: "flue / hot air",
+    strength: "mild-medium",
+    aroma: "sweet, hay-like",
+    description:
+      "A bright, naturally sweet Virginia with hay and citrus notes, common in many light blends.",
+    image: "/images/bright-virginia.png"
+  },
+  {
+    id: 12,
+    name: "Red Virginia",
+    family: "Virginia",
+    role: "filler",
+    color: "red-brown",
+    curing: "flue",
+    strength: "medium",
+    aroma: "dark fruit, bread",
+    description:
+      "Deeper, matured Virginia with darker sweetness and bready, fruity character.",
+    image: "/images/red-virginia.png"
+  },
+  {
+    id: 13,
+    name: "Lemon Virginia",
+    family: "Virginia",
+    role: "filler",
+    color: "light yellow",
+    curing: "flue",
+    strength: "mild",
+    aroma: "citrus, grassy",
+    description:
+      "Light, citrusy Virginia that brightens a blend with high notes and gentle sweetness.",
+    image: "/images/lemon-virginia.png"
+  },
+  {
+    id: 14,
+    name: "Orange Virginia",
+    family: "Virginia",
+    role: "filler",
+    color: "orange-gold",
+    curing: "flue",
+    strength: "mild-medium",
+    aroma: "sweet, toasty",
+    description:
+      "Balanced Virginia leaf sitting between bright and red, with toasty and sweet flavors.",
+    image: "/images/orange-virginia.png"
+  },
+  {
+    id: 15,
+    name: "Virginia Gold",
+    family: "Virginia",
+    role: "filler",
+    color: "golden",
+    curing: "flue",
+    strength: "mild",
+    aroma: "honey, hay",
+    description:
+      "Golden flue-cured leaf with honey-like sweetness and clean, fragrant aroma.",
+    image: "/images/gold-virginia.png"
+  },
+  {
+    id: 16,
+    name: "Flue-Cured Virginia",
+    family: "Virginia",
+    role: "filler",
+    color: "gold to orange",
+    curing: "flue",
+    strength: "mild-medium",
+    aroma: "sweet, aromatic",
+    description:
+      "General flue-cured Virginia grade that burns evenly and provides a sweet aromatic base.",
+    image: "/images/flue-virginia.png"
+  },
+
+  // Oriental
+  {
+    id: 17,
+    name: "Izmir Oriental",
+    family: "Oriental",
+    role: "filler",
+    color: "yellow-brown",
+    curing: "sun",
+    strength: "mild",
+    aroma: "spicy, incense-like",
+    description:
+      "Turkish Izmir leaf with spicy, incense-like aroma that adds complexity and perfume to blends.",
+    image: "/images/izmir-oriental.png"
+  },
+  {
+    id: 18,
+    name: "Basma Oriental",
+    family: "Oriental",
+    role: "filler",
+    color: "yellow-gold",
+    curing: "sun",
+    strength: "mild",
+    aroma: "sweet, very aromatic",
+    description:
+      "Highly aromatic Basma leaf with sweet, exotic aroma used in many Eastern-style mixtures.",
+    image: "/images/basma-oriental.png"
+  },
+  {
+    id: 19,
+    name: "Samsun Oriental",
+    family: "Oriental",
+    role: "filler",
+    color: "brown-gold",
+    curing: "sun",
+    strength: "mild-medium",
+    aroma: "earthy, spicy",
+    description:
+      "Samsun tobacco brings earthy spice and depth to Oriental-forward blends.",
+    image: "/images/samsun-oriental.png"
+  },
+  {
+    id: 20,
+    name: "Katerini Oriental",
+    family: "Oriental",
+    role: "filler",
+    color: "yellow-brown",
+    curing: "sun",
+    strength: "mild",
+    aroma: "floral, exotic",
+    description:
+      "A floral, exotic Oriental leaf that lifts a blend with high aromatic notes.",
+    image: "/images/katerini-oriental.png"
+  },
+  {
+    id: 21,
+    name: "Yenidje Oriental",
+    family: "Oriental",
+    role: "filler",
+    color: "light brown",
+    curing: "sun",
+    strength: "mild",
+    aroma: "rich, incense-like",
+    description:
+      "Legendary Oriental leaf with rich, incense-like aroma, often used in small amounts for elegance.",
+    image: "/images/yenidje-oriental.png"
+  }
+];
