@@ -1,0 +1,69 @@
+.tobacco-info-container {
+  padding: 40px 30px;
+  background: #111;
+  color: #eee;
+  text-align: center;
+}
+
+.tobacco-info-title {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #c5a48f;
+}
+
+.tobacco-info-subtitle {
+  font-style: italic;
+  margin-bottom: 30px;
+  color: #ddd;
+}
+
+.tobacco-info-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 25px;
+  margin: 0 auto;
+  width: 90%;
+}
+
+.tobacco-info-column {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.tobacco-info-column p {
+  margin: 8px 0;
+}
+
+.tobacco-info-header {
+  background: #550000;
+  color: #fff;
+  padding: 6px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.tobacco-info-labels {
+  background: #5a2d00;
+  font-weight: bold;
+  text-align: left;
+}
+
+.tobacco-info-footer {
+  margin-top: 30px;
+  font-style: italic;
+  color: #ccc;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .tobacco-info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .tobacco-info-grid {
+    grid-template-columns: 1fr;
+  }
+}

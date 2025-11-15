@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import useCentralLogger from "./useCentralLogger";
-import "./CentralLog.css";
+import useCentralLogger from "@/useCentralLogger";
+import "@styles/CentralLog.css";
 
 export default function CentralLogViewer() {
   const { logs, clearLogs } = useCentralLogger(20);

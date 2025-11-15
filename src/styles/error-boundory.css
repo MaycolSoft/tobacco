@@ -1,0 +1,107 @@
+/* === Error Boundory Styles === */
+.error-boundory-container {
+  box-sizing: border-box;
+  padding: 1.25rem;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.error-boundory-card {
+  width: 100%;
+  max-width: 720px;
+  border: 1px solid #e1e1e1;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  background: #fff;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.05);
+  color: #222;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.error-boundory-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.error-boundory-title {
+  margin: 0.5rem 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.error-boundory-message,
+.error-boundory-stack {
+  margin: 0.5rem 0;
+  padding: 0.75rem 0.9rem;
+  background: #f8f8f8;
+  border-radius: 8px;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.error-boundory-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.error-boundory-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.error-boundory-button {
+  appearance: none;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.error-boundory-button:hover {
+  background: #f0f0f0;
+}
+
+.error-boundory-button.secondary {
+  background: #fff;
+}
+
+/* === Dark Mode === */
+body.dark-mode .error-boundory-card {
+  background: #1e1e1e;
+  color: #eee;
+  border-color: #333;
+  box-shadow: 0 2px 14px rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .error-boundory-message,
+body.dark-mode .error-boundory-stack {
+  background: #2a2a2a;
+  color: #ddd;
+}
+
+body.dark-mode .error-boundory-details summary {
+  color: #ccc;
+}
+
+body.dark-mode .error-boundory-button {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #eee;
+}
+
+body.dark-mode .error-boundory-button:hover {
+  background: #333;
+}
+
+body.dark-mode .error-boundory-button.secondary {
+  background: #1e1e1e;
+  border-color: #444;
+}
