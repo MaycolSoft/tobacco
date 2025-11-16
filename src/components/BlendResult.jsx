@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import "../styles/blend-result.css";
+import "@styles/blend-result.css";
 
 export default function BlendResult({ blend }) {
   if (!blend) return null;
