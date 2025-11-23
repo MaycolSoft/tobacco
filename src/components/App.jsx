@@ -30,44 +30,72 @@ function App() {
 
   const blend = findBlend();
 
+  if(showVide){
+    return <ScrollVideo />
+  }
+
+  if (showGuide) {
+    {/* Guía, con animación */}
+    return (
+      <AnimatePresence>
+        {showGuide && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <TobaccoGuidePage />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    );
+  }
+
   return (
     <div>
       <header style={{ textAlign: "center", padding: "20px" }}>
         <h1>Tobacco Leaf Selector</h1>
         <p>Select real tobacco leaves to form a blend. Then open the guide to learn more.</p>
 
-        <button
-          onClick={() => setShowGuide((prev) => !prev)}
-          style={{
-            marginTop: "10px",
-            padding: "8px 18px",
-            borderRadius: "999px",
-            border: "1px solid #444",
-            background: showGuide ? "#7a2c2c" : "#1a1a1a",
-            color: "#fff",
-            cursor: "pointer"
-          }}
-        >
-          {showGuide ? "Hide Tobacco Guide" : "Show Tobacco Guide"}
-        </button>
+        <div className="actions" style={{
+          textAlign: "center",
+          display:"flex",
+          gap:"20px",
+          justifyContent:"center"
+        }}>
+          <button
+            onClick={() => setShowGuide((prev) => !prev)}
+            style={{
+              marginTop: "10px",
+              padding: "8px 18px",
+              borderRadius: "999px",
+              border: "1px solid #444",
+              background: showGuide ? "#7a2c2c" : "#1a1a1a",
+              color: "#fff",
+              cursor: "pointer"
+            }}
+          >
+            {showGuide ? "Hide Tobacco Guide" : "Show Tobacco Guide"}
+          </button>
 
-        <button
-          onClick={() => setShowVideo((prev) => !prev)}
-          style={{
-            marginTop: "10px",
-            padding: "8px 18px",
-            borderRadius: "999px",
-            border: "1px solid #444",
-            background: showGuide ? "#7a2c2c" : "#1a1a1a",
-            color: "#fff",
-            cursor: "pointer"
-          }}
-        >
-          {showVide ? "Hide Scroll Video" : "Show Scroll Video"}
-        </button>
+          <button
+            onClick={() => setShowVideo((prev) => !prev)}
+            style={{
+              marginTop: "10px",
+              padding: "8px 18px",
+              borderRadius: "999px",
+              border: "1px solid #444",
+              background: showVide ? "#7a2c2c" : "#1a1a1a",
+              color: "#fff",
+              cursor: "pointer"
+            }}
+          >
+            {showVide ? "Hide Scroll Video" : "Show Scroll Video"}
+          </button>
+        </div>
       </header>
 
-      {showVide && <ScrollVideo />}
 
       <BlendProfiles
         blends={blends}
@@ -81,21 +109,9 @@ function App() {
         selectedLeaves={selectedLeaves}
         onSelect={handleSelect}
       />
+
       <BlendResult blend={blend} />
 
-      {/* Guía, con animación */}
-      <AnimatePresence>
-        {showGuide && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <TobaccoGuidePage />
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
