@@ -1,26 +1,20 @@
-import "@styles/blend-profiles.css";
+import "../styles/blend-profiles.css";
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 export default function BlendCarouselPro({ blends, onSelectCombo }) {
-  const categories = [...new Set(blends.map(b => b.category))];
 
   return (
     <div className="blend-carousel-wrapper">
-      {categories.map((cat, cIndex) => {
-        const filtered = blends.filter(b => b.category === cat);
+        <h2 className=""> Blends </h2>
+      {/* <div className="blend-carousel-section"> */}
+        {/* <h2 className="blend-carousel-section-title"> Blends </h2> */}
 
-        return (
-          <div key={cIndex} className="blend-carousel-section">
-            <h2 className="blend-carousel-section-title">{cat}</h2>
-
-            <BlendCarouselRow 
-              items={filtered} 
-              onSelectCombo={onSelectCombo} 
-            />
-          </div>
-        );
-      })}
+        <BlendCarouselRow 
+          items={blends} 
+          onSelectCombo={onSelectCombo} 
+        />
+      {/* </div> */}
     </div>
   );
 }
@@ -28,6 +22,11 @@ export default function BlendCarouselPro({ blends, onSelectCombo }) {
 
 /// ROW COMPONENT WITH ALL FEATURES
 function BlendCarouselRow({ items, onSelectCombo }) {
+
+  const isMobile = window.innerWidth < 768;
+  const leftConstraint = isMobile ? -3040 : -2050;
+
+
   const [selected, setSelected] = useState(null);
   const scrollRef = useRef(null);
   const cardWidth = 260;
@@ -61,7 +60,7 @@ function BlendCarouselRow({ items, onSelectCombo }) {
         className="blend-carousel-row"
         ref={scrollRef}
         drag="x"
-        dragConstraints={{ left: -1000, right: 0 }}
+        dragConstraints={{ left: leftConstraint, right: 0 }}
         dragElastic={0.04}
         onDragEnd={onDragEnd}
       >

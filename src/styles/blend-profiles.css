@@ -1,5 +1,11 @@
+/* ===============================
+   WRAPPER GENERAL
+================================= */
 .blend-carousel-wrapper {
   padding: 20px;
+  width: 90vw;        /* límite horizontal con márgenes */
+  margin: 0 auto;     /* centrado */
+  overflow: hidden;
   display: grid;
   gap: 40px;
 }
@@ -11,25 +17,40 @@
   text-shadow: 0 0 8px #000;
 }
 
-/* Row container */
+/* ===============================
+   CONTENEDOR DEL CARRUSEL
+================================= */
 .blend-carousel-row-wrapper {
-  overflow: hidden;
+  width: 100%;
+  /* overflow: hidden; */
+  position: relative;
 }
 
+/* 🚀 Carrusel horizontal */
 .blend-carousel-row {
   display: flex;
   gap: 20px;
   padding: 10px 5px;
   cursor: grab;
+
+  /* deslizar horizontal */
   overflow-x: auto;
   scroll-behavior: smooth;
+
+  /* evitar overflow hacia la derecha */
+  max-width: 100%;
+  width: fit-content;
+
+  /* oculta scrollbar */
   scrollbar-width: none;
 }
 .blend-carousel-row::-webkit-scrollbar {
   display: none;
 }
 
-/* CARD */
+/* ===============================
+   TARJETAS
+================================= */
 .blend-carousel-card {
   position: relative;
   min-width: 260px;
@@ -38,9 +59,11 @@
   overflow: hidden;
   flex-shrink: 0;
   cursor: pointer;
+
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.12);
+
   transition: 0.25s;
   transform-style: preserve-3d;
 }
@@ -51,7 +74,7 @@
   transform: scale(1.05);
 }
 
-/* Background image */
+/* Imagen del background */
 .blend-carousel-card-bg img {
   width: 100%;
   height: 100%;
@@ -59,11 +82,12 @@
   opacity: 0.55;
 }
 
-/* Card content */
+/* Contenido */
 .blend-carousel-card-content {
   position: absolute;
   inset: 0;
   padding: 14px;
+
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -75,6 +99,7 @@
   font-size: 17px;
   color: #ffeec4;
 }
+
 .blend-carousel-card-content p {
   margin: 4px 0 8px;
   font-size: 13px;
@@ -87,6 +112,7 @@
   display: flex;
   gap: 6px;
 }
+
 .blend-carousel-badges span {
   padding: 3px 8px;
   background: #7a2c2c;
@@ -94,3 +120,17 @@
   font-size: 11px;
   color: white;
 }
+
+
+.blend-carousel-row {
+  padding: 10px 5px;
+  padding-right: 40px; /* 👈 Agregado: espacio para el último card */
+}
+
+
+
+
+
+
+
+

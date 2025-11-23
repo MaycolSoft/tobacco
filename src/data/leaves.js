@@ -1,35 +1,3 @@
-// export const leaves = [
-//   // Kentucky
-//   { id: 1, name: "American Kentucky", family: "Kentucky", image: "/images/american-kentucky.png" },
-//   { id: 2, name: "Italian Kentucky", family: "Kentucky", image: "/images/italian-kentucky.png" },
-//   { id: 3, name: "Tennessee Fire-Cured", family: "Kentucky", image: "/images/tennessee-kentucky.png" },
-//   { id: 4, name: "Dark Fire-Cured Kentucky", family: "Kentucky", image: "/images/dark-kentucky.png" },
-//   { id: 5, name: "Cavendish Kentucky", family: "Kentucky", image: "/images/cavendish-kentucky.png" },
-
-//   // Burley
-//   { id: 6, name: "White Burley", family: "Burley", image: "/images/white-burley.png" },
-//   { id: 7, name: "Red Burley", family: "Burley", image: "/images/red-burley.png" },
-//   { id: 8, name: "Dark Burley", family: "Burley", image: "/images/dark-burley.png" },
-//   { id: 9, name: "Light Air-Cured Burley", family: "Burley", image: "/images/light-burley.png" },
-//   { id: 10, name: "Aged Burley Leaf", family: "Burley", image: "/images/aged-burley.png" },
-
-//   // Virginia
-//   { id: 11, name: "Bright Virginia", family: "Virginia", image: "/images/bright-virginia.png" },
-//   { id: 12, name: "Red Virginia", family: "Virginia", image: "/images/red-virginia.png" },
-//   { id: 13, name: "Lemon Virginia", family: "Virginia", image: "/images/lemon-virginia.png" },
-//   { id: 14, name: "Orange Virginia", family: "Virginia", image: "/images/orange-virginia.png" },
-//   { id: 15, name: "Virginia Gold", family: "Virginia", image: "/images/gold-virginia.png" },
-//   { id: 16, name: "Flue-Cured Virginia", family: "Virginia", image: "/images/flue-virginia.png" },
-
-//   // Oriental
-//   { id: 17, name: "Izmir Oriental", family: "Oriental", image: "/images/izmir-oriental.png" },
-//   { id: 18, name: "Basma Oriental", family: "Oriental", image: "/images/basma-oriental.png" },
-//   { id: 19, name: "Samsun Oriental", family: "Oriental", image: "/images/samsun-oriental.png" },
-//   { id: 20, name: "Katerini Oriental", family: "Oriental", image: "/images/katerini-oriental.png" },
-//   { id: 21, name: "Yenidje Oriental", family: "Oriental", image: "/images/yenidje-oriental.png" }
-// ];
-
-
 
 export const leaves = [
   // Kentucky
@@ -44,7 +12,7 @@ export const leaves = [
     aroma: "smoky",
     description:
       "A dark, fire-cured leaf with intense smoky notes, often used to give strength and depth to a blend.",
-    image: "/images/american-kentucky.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/kentucky/KENTUCKY1_WcduHf9.png-190x150.jpg"
   },
   {
     id: 2,
@@ -57,7 +25,7 @@ export const leaves = [
     aroma: "earthy, smoky",
     description:
       "Traditional Italian fire-cured Kentucky with earthy and smoky character, common in strong cigars.",
-    image: "/images/italian-kentucky.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/kentucky/KENTUCKY1_WcduHf9.png-190x150.jpg"
   },
   {
     id: 3,
@@ -70,7 +38,7 @@ export const leaves = [
     aroma: "campfire smoke",
     description:
       "Rich Tennessee fire-cured leaf with heavy campfire aromas, used sparingly for powerful blends.",
-    image: "/images/tennessee-kentucky.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/kentucky/KENTUCKY1_WcduHf9.png-190x150.jpg"
   },
   {
     id: 4,
@@ -83,7 +51,7 @@ export const leaves = [
     aroma: "heavy smoke",
     description:
       "Extremely dark, slow-burning fire-cured leaf, ideal for adding body and slow combustion.",
-    image: "/images/dark-kentucky.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/kentucky/KENTUCKY1_WcduHf9.png-190x150.jpg"
   },
   {
     id: 5,
@@ -96,7 +64,7 @@ export const leaves = [
     aroma: "sweet smoky",
     description:
       "A processed Kentucky leaf with softened edges and a sweeter smoky profile, often used in pipe-style aromatics.",
-    image: "/images/cavendish-kentucky.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/kentucky/KENTUCKY1_WcduHf9.png-190x150.jpg"
   },
 
   // Burley
@@ -111,7 +79,7 @@ export const leaves = [
     aroma: "nutty",
     description:
       "A classic neutral Burley with nutty notes and good burning qualities, used as a base in many blends.",
-    image: "/images/white-burley.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/burley/HOJAS_TIPO_BURLEY_3.jpg-190x150.jpg"
   },
   {
     id: 7,
@@ -124,7 +92,7 @@ export const leaves = [
     aroma: "earthy, cocoa",
     description:
       "Richer Burley with more body and cocoa-like undertones, ideal to add fullness to a blend.",
-    image: "/images/red-burley.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/burley/HOJAS_TIPO_BURLEY_3.jpg-190x150.jpg"
   },
   {
     id: 8,
@@ -137,7 +105,7 @@ export const leaves = [
     aroma: "chocolate, earthy",
     description:
       "Dark, full-flavored Burley that delivers chocolate and earthy tones with a stronger impact.",
-    image: "/images/dark-burley.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/burley/HOJAS_TIPO_BURLEY_3.jpg-190x150.jpg"
   },
   {
     id: 9,
@@ -150,7 +118,7 @@ export const leaves = [
     aroma: "soft, toasted",
     description:
       "A softer air-cured Burley offering gentle toasted notes and good burning behavior.",
-    image: "/images/light-burley.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/burley/HOJAS_TIPO_BURLEY_3.jpg-190x150.jpg"
   },
   {
     id: 10,
@@ -163,7 +131,7 @@ export const leaves = [
     aroma: "smooth, rounded",
     description:
       "Burley leaf aged for years to round off harshness, providing a smooth, refined taste.",
-    image: "/images/aged-burley.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/burley/HOJAS_TIPO_BURLEY_3.jpg-190x150.jpg"
   },
 
   // Virginia
@@ -178,7 +146,7 @@ export const leaves = [
     aroma: "sweet, hay-like",
     description:
       "A bright, naturally sweet Virginia with hay and citrus notes, common in many light blends.",
-    image: "/images/bright-virginia.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
   },
   {
     id: 12,
@@ -191,7 +159,7 @@ export const leaves = [
     aroma: "dark fruit, bread",
     description:
       "Deeper, matured Virginia with darker sweetness and bready, fruity character.",
-    image: "/images/red-virginia.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
   },
   {
     id: 13,
@@ -204,7 +172,7 @@ export const leaves = [
     aroma: "citrus, grassy",
     description:
       "Light, citrusy Virginia that brightens a blend with high notes and gentle sweetness.",
-    image: "/images/lemon-virginia.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
   },
   {
     id: 14,
@@ -217,7 +185,7 @@ export const leaves = [
     aroma: "sweet, toasty",
     description:
       "Balanced Virginia leaf sitting between bright and red, with toasty and sweet flavors.",
-    image: "/images/orange-virginia.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
   },
   {
     id: 15,
@@ -230,7 +198,7 @@ export const leaves = [
     aroma: "honey, hay",
     description:
       "Golden flue-cured leaf with honey-like sweetness and clean, fragrant aroma.",
-    image: "/images/gold-virginia.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
   },
   {
     id: 16,
@@ -243,7 +211,7 @@ export const leaves = [
     aroma: "sweet, aromatic",
     description:
       "General flue-cured Virginia grade that burns evenly and provides a sweet aromatic base.",
-    image: "/images/flue-virginia.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
   },
 
   // Oriental
@@ -258,7 +226,7 @@ export const leaves = [
     aroma: "spicy, incense-like",
     description:
       "Turkish Izmir leaf with spicy, incense-like aroma that adds complexity and perfume to blends.",
-    image: "/images/izmir-oriental.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/orientales/ORIENTAL1.png"
   },
   {
     id: 18,
@@ -271,7 +239,7 @@ export const leaves = [
     aroma: "sweet, very aromatic",
     description:
       "Highly aromatic Basma leaf with sweet, exotic aroma used in many Eastern-style mixtures.",
-    image: "/images/basma-oriental.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/orientales/ORIENTAL1.png"
   },
   {
     id: 19,
@@ -284,7 +252,7 @@ export const leaves = [
     aroma: "earthy, spicy",
     description:
       "Samsun tobacco brings earthy spice and depth to Oriental-forward blends.",
-    image: "/images/samsun-oriental.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/orientales/ORIENTAL1.png"
   },
   {
     id: 20,
@@ -297,7 +265,7 @@ export const leaves = [
     aroma: "floral, exotic",
     description:
       "A floral, exotic Oriental leaf that lifts a blend with high aromatic notes.",
-    image: "/images/katerini-oriental.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/orientales/ORIENTAL1.png"
   },
   {
     id: 21,
@@ -310,6 +278,6 @@ export const leaves = [
     aroma: "rich, incense-like",
     description:
       "Legendary Oriental leaf with rich, incense-like aroma, often used in small amounts for elegance.",
-    image: "/images/yenidje-oriental.png"
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/orientales/ORIENTAL1.png"
   }
 ];
