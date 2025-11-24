@@ -74,11 +74,19 @@
   transform: scale(1.05);
 }
 
+.blend-carousel-card-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute; /* para que ocupe todo el card */
+  inset: 0;
+}
+
 /* Imagen del background */
 .blend-carousel-card-bg img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover;   /* se ajusta sin deformarse */
+  object-position: center; /* centrada */
   opacity: 0.55;
 }
 

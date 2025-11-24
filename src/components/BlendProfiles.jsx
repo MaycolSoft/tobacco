@@ -5,17 +5,16 @@ import { motion } from "framer-motion";
 export default function BlendCarouselPro({ blends, onSelectCombo }) {
 
   return (
-    <div className="blend-carousel-wrapper">
-        <h2 className=""> Blends </h2>
-      {/* <div className="blend-carousel-section"> */}
-        {/* <h2 className="blend-carousel-section-title"> Blends </h2> */}
-
+    <>
+      <h2 style={{padding:"20px"}}> Blends </h2>
+      
+      <div className="blend-carousel-wrapper">
         <BlendCarouselRow 
           items={blends} 
           onSelectCombo={onSelectCombo} 
         />
-      {/* </div> */}
-    </div>
+      </div>
+    </>
   );
 }
 
