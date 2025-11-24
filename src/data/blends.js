@@ -2,7 +2,8 @@ export const blends = [
   {
     combination: [11, 13, 17],  
     name: "Bright & Mild",
-    description: "A smooth, aromatic blend combining fruity Virginia with light Oriental notes."
+    description: "A smooth, aromatic blend combining fruity Virginia with light Oriental notes.",
+    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/orientales/ORIENTAL1.png"
   },
   {
     combination: [1, 8, 19],
