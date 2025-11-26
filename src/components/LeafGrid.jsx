@@ -1,5 +1,5 @@
 import LeafCard from "./LeafCard";
-import "@/styles/leaf-grid.css";
+import "@styles/leaf-grid.css";
 
 export default function LeafGrid({ leaves, selectedLeaves, onSelect }) {
   return (

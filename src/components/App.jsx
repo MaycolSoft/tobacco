@@ -6,11 +6,14 @@ import LeafGrid from "@components/LeafGrid";
 import BlendResult from "@components/BlendResult";
 import TobaccoGuidePage from "@components/TobaccoGuidePage";
 import BlendProfiles from "@components/BlendProfiles";
+import MixingAnimation from "@components/MixingAnimation";
+import FloatingPrepButton from "@components/FloatingPrepButton";
 
 import { leaves } from "@/data/leaves";
 import { blends } from "@/data/blends";
 
 function App() {
+  const [isMixing, setIsMixing] = useState(false);
   const [selectedLeaves, setSelectedLeaves] = useState([]);
   const [showGuide, setShowGuide] = useState(false);
   const [showVide, setShowVideo] = useState(false);
@@ -21,14 +24,14 @@ function App() {
     );
   };
 
-  const findBlend = () => {
-    const sorted = [...selectedLeaves].sort((a, b) => a - b);
-    return blends.find(
-      (b) => JSON.stringify(sorted) === JSON.stringify(b.combination)
-    );
-  };
+  // const findBlend = () => {
+  //   const sorted = [...selectedLeaves].sort((a, b) => a - b);
+  //   return blends.find(
+  //     (b) => JSON.stringify(sorted) === JSON.stringify(b.combination)
+  //   );
+  // };
 
-  const blend = findBlend();
+  // const blend = findBlend();
 
   if(showVide){
     return <ScrollVideo />
@@ -51,6 +54,11 @@ function App() {
       </AnimatePresence>
     );
   }
+
+  if (isMixing) {
+  return <MixingAnimation onFinish={() => setShowVideo(true)} />;
+}
+
 
   return (
     <div>
@@ -110,7 +118,12 @@ function App() {
         onSelect={handleSelect}
       />
 
-      <BlendResult blend={blend} />
+      {/* <BlendResult blend={blend} /> */}
+
+      <FloatingPrepButton
+        visible={selectedLeaves.length > 0}
+        onClick={() => setIsMixing(true)}
+      />
 
     </div>
   );

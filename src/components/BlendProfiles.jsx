@@ -44,6 +44,19 @@ function BlendCarouselRow({ items, onSelectCombo }) {
   };
 
   const handleSelect = (index, blend) => {
+
+    // if Select same, deselect
+    if(selected === index){
+      setSelected(null);
+      onSelectCombo([]);
+      scrollRef.current.scrollTo({
+        left: 0,
+        behavior: "smooth"
+      });
+      return;
+    }
+
+
     setSelected(index);
     onSelectCombo(blend.combination);
 
