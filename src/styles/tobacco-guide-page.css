@@ -1,3 +1,11 @@
 .tobacco-guide-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
   background: #050505;
+  padding-bottom: 60px; /* opcional */
+  z-index: 9999;
 }
