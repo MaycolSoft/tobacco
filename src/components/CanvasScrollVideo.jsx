@@ -11,7 +11,7 @@ export default function CanvasScrollVideo() {
   // 🔥 AUTOMATIC FRAME COUNT (WebP)
   // const frames = import.meta.glob("/public/frames/*.webp", { eager: true });
 
-  const CDN = "https://jxkykig75xced3qz.public.blob.vercel-storage.com";
+  const CDN = "https://cdn.mbsoft.freeddns.org";
   const frameCount = 1701;
 
   const imgPath = (i) =>
