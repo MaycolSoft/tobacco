@@ -21,6 +21,7 @@ const MainLayout = ({ children }) => {
     "/reservation": { title: "Reservation", subtitle: "Reservation" },
     "/testimonial": { title: "Testimonial", subtitle: "Testimonial" },
     "/contact": { title: "Contact Us", subtitle: "Contact" },
+    "/craft-your-cigar": { title: "Craft Your Cigar", subtitle: "Craft Your Cigar" },
   };
 
   const currentConfig = pageConfig[pathname];

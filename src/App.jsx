@@ -15,6 +15,7 @@ import Menu from '@/pages/Menu';
 import Reservation from '@/pages/Reservation';
 import Testimonial from '@/pages/Testimonial';
 import Contact from '@/pages/Contact';
+import CraftYourCigar from '@/pages/CraftYourCigar';
 
 function App() {
   return (
@@ -33,7 +34,8 @@ function App() {
           {/* Rutas de interacción */}
           <Route path="/reservation" element={<Reservation />} />
           <Route path="/testimonial" element={<Testimonial />} />
-          <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/craft-your-cigar" element={<ProtectedRoute><CraftYourCigar /></ProtectedRoute>} />
 
 
           {/* Ruta para manejar errores 404 - Opcional */}
