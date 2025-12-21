@@ -3,17 +3,19 @@ import { useLocation } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Navbar from '@components/layout/Navbar';
 import Footer from '@components/layout/Footer';
+import { useLayoutStore } from '@/store/useLayoutStore'; // Tu store de Zustand
 
 const MainLayout = ({ children }) => {
   const location = useLocation();
   const { pathname } = location;
+  
+  // Suscripción al estado global
+  const isVisualExperience = useLayoutStore((state) => state.isVisualExperience);
 
-  // Scroll al inicio cada vez que cambie la ruta
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  // Configuración de títulos según la ruta
   const pageConfig = {
     "/about": { title: "About Us", subtitle: "About" },
     "/service": { title: "Our Cigars", subtitle: "Cigars" },
@@ -26,11 +28,16 @@ const MainLayout = ({ children }) => {
 
   const currentConfig = pageConfig[pathname];
 
+  // SI ES UNA EXPERIENCIA VISUAL: Renderizamos solo el children (el video)
+  if (isVisualExperience) {
+    return <main>{children}</main>;
+  }
+
+  // SI ES UNA PÁGINA NORMAL: Renderizamos todo el Layout
   return (
     <>
       <Navbar />
 
-      {/* Solo mostramos el Header si la ruta existe en nuestra configuración (No se muestra en Home "/") */}
       {currentConfig && (
         <Header title={currentConfig.title} subtitle={currentConfig.subtitle} />
       )}
