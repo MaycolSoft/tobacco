@@ -69,7 +69,7 @@ const Navbar = () => {
 
             {user ? (
               <>
-                <Link to="/admin/inventory" className={`nav-item nav-link ${isActive('/admin/inventory')}`}>Inventario</Link>
+                <Link to="/craft-your-cigar" className={`nav-item nav-link ${isActive('/craft-your-cigar')}`}>Craft Your Cigar</Link>
                 <button onClick={handleLogout} className="nav-item nav-link btn btn-link" style={{ cursor: 'pointer' }}>
                   Salir ({user.username})
                 </button>
