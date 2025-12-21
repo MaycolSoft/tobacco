@@ -8,13 +8,13 @@ import Login from '@pages/Login';
 import MainLayout from '@components/layout/MainLayout';
 
 // Páginas
-import Home from '@pages/Home';
-import About from '@pages/About';
-import Service from '@pages/Service';
-import Menu from '@pages/Menu';
-import Reservation from '@pages/Reservation';
-import Testimonial from '@pages/Testimonial';
-import Contact from '@pages/Contact';
+import Home from '@/pages/Home';
+import About from '@/pages/About';
+import Service from '@/pages/Service';
+import Menu from '@/pages/Menu';
+import Reservation from '@/pages/Reservation';
+import Testimonial from '@/pages/Testimonial';
+import Contact from '@/pages/Contact';
 
 function App() {
   return (

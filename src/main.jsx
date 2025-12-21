@@ -6,8 +6,6 @@ import App from "./App.jsx";
 import CentralLogViewer from '@components/CentralLogViewer.jsx'
 import ErrorBoundary from "@components/ErrorBoundary";
 
-import MainLayout from "@components/layout/MainLayout";
-
 
 createRoot(document.getElementById('root')).render(
   <>
