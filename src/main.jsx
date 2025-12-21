@@ -1,9 +1,12 @@
 
 import React from "react";
 import { createRoot } from 'react-dom/client'
-import App from "@components/App";
+// import App from "@components/App";
+import App from "./App.jsx";
 import CentralLogViewer from '@components/CentralLogViewer.jsx'
 import ErrorBoundary from "@components/ErrorBoundary";
+
+import MainLayout from "@components/layout/MainLayout";
 
 
 createRoot(document.getElementById('root')).render(
@@ -18,7 +21,7 @@ createRoot(document.getElementById('root')).render(
         window.location.reload();
       }}
     >
-      <App />
+      <App/>
       <CentralLogViewer /> 
     </ErrorBoundary>
   </>
