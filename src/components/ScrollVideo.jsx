@@ -6,10 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function ScrollVideo({ selectedLeaves = [] }) {
+export default function ScrollVideo({ videoInfo={} }) {
   const canvasRef = useRef(null);
   const frameRef = useRef({ index: 0 });
-  const imagesRef = useRef([]);
+  const imagesRef = useRef([]);  
   
   // Estados de carga y UI
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -17,9 +17,10 @@ export default function ScrollVideo({ selectedLeaves = [] }) {
   const [showCanvas, setShowCanvas] = useState(false);
   const [totalDownloaded, setTotalDownloaded] = useState(0);
 
-  const CDN = "https://cdn.mbsoft.freeddns.org";
-  const frameCount = 1701;
-  const criticalBatch = 300; 
+
+  const CDN = videoInfo?.name == null ? "https://cdn.mbsoft.freeddns.org" : `https://cdn.mbsoft.freeddns.org/${videoInfo.name}`;
+  const frameCount = videoInfo?.length == null ? 1701 : videoInfo.length;
+  const criticalBatch = 300;   
 
   const imgPath = (i) => `${CDN}/frame_${String(i).padStart(4, "0")}.webp`;
 
@@ -136,6 +137,28 @@ export default function ScrollVideo({ selectedLeaves = [] }) {
           >
             <div style={smokeStyle} />
             <div style={{ textAlign: 'center', zIndex: 10 }}>
+              <motion.h1 
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+                style={{ 
+                  color: '#d4af37', 
+                  letterSpacing: '8px', // Bajamos de 12 a 8 para legibilidad
+                  fontSize: '2.2rem', 
+                  marginBottom: '15px',
+                  fontWeight: '300', // Un peso más fino se ve más elegante
+                  textTransform: 'uppercase',
+                  textShadow: '0 0 20px rgba(212, 175, 55, 0.3)', // Brillo suave constante
+                  background: 'linear-gradient(90deg, #d4af37 0%, #fff 50%, #d4af37 100%)',
+                  backgroundSize: '200% auto',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  animation: 'shimmer 4s linear infinite', // Necesitas definir el keyframe shimmer en tu CSS
+                }}
+              >
+                {videoInfo?.displayName ?? ''}
+              </motion.h1>
+              
               <motion.h2 
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 2, repeat: Infinity }}
@@ -195,10 +218,10 @@ const smokeStyle = {
 
 const titleStyle = { color: '#d4af37', letterSpacing: '8px', fontSize: '0.8rem', marginBottom: '20px' };
 
-const progressContainer = { width: '280px', height: '1px', background: 'rgba(212, 175, 55, 0.2)', position: 'relative' };
+const progressContainer = {  height: '1px', background: 'rgba(212, 175, 55, 0.2)', position: 'relative' };
 
 const progressBar = { height: '100%', background: '#d4af37', boxShadow: '0 0 15px #d4af37' };
 
-const statusContainer = { marginTop: '10px', display: 'flex', justifyContent: 'space-between', width: '280px', color: '#444', fontSize: '9px', fontWeight: 'bold' };
+const statusContainer = { marginTop: '10px', display: 'flex', justifyContent: 'space-between',  color: '#444', fontSize: '9px', fontWeight: 'bold' };
 
 const debugStyle = { position: 'fixed', bottom: '20px', left: '20px', zIndex: 6000, background: 'rgba(0,0,0,0.7)', color: '#d4af37', padding: '8px 12px', borderRadius: '5px', fontSize: '10px', fontFamily: 'monospace' };
