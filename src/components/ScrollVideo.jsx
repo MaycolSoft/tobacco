@@ -2,16 +2,62 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { motion, AnimatePresence } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollToPlugin);
+
+const FloatingSteps = ({ steps, onStepClick, currentFrame }) => {
+  return (
+    <motion.div 
+      initial={{ x: 50, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      style={stepsContainerStyle}
+    >
+      {steps.map((frame, index) => {
+        // Lógica: Si el frame actual está entre este paso y el siguiente, está activo
+        const nextStepFrame = steps[index + 1] || 999999; 
+        const isThisStepActive = currentFrame >= frame && currentFrame < nextStepFrame;
+
+        return (
+          <motion.button 
+            key={index} 
+            onClick={() => onStepClick(frame)}
+            // Framer motion para animar suavemente el cambio de estado
+            animate={{
+              backgroundColor: isThisStepActive ? '#d4af37' : 'rgba(0, 0, 0, 0.6)',
+              color: isThisStepActive ? '#000' : '#d4af37',
+              scale: isThisStepActive ? 1.15 : 1,
+            }}
+            style={{
+              ...stepButtonStyle,
+              boxShadow: isThisStepActive ? '0 0 20px #d4af37' : '0 0 10px rgba(0,0,0,0.2)',
+              border: isThisStepActive ? '1px solid #fff' : '1px solid #d4af37',
+            }}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <span style={{
+              ...stepLabelStyle,
+              color: isThisStepActive ? '#000' : '#d4af37'
+            }}>PASO</span>
+            {index + 1}
+          </motion.button>
+        );
+      })}
+    </motion.div>
+  );
+};
+
 
 export default function ScrollVideo({ videoInfo={} }) {
   const canvasRef = useRef(null);
   const frameRef = useRef({ index: 0 });
-  const imagesRef = useRef([]);  
+  const imagesRef = useRef([]);
   
   // Estados de carga y UI
+  const [activeStep, setActiveStep] = useState(null);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [showCanvas, setShowCanvas] = useState(false);
@@ -49,6 +95,35 @@ export default function ScrollVideo({ videoInfo={} }) {
     ctx.clearRect(0, 0, cW, cH);
     ctx.drawImage(img, x, y, w, h);
   }
+
+
+
+  const goToStep = (frameTarget) => {
+    if (!showCanvas) return;
+
+    const currentFrame = frameRef.current.index;
+    const frameDistance = Math.abs(frameTarget - currentFrame);
+    
+    // Lógica de duración dinámica:
+    // Mínimo 0.8s para que no sea brusco
+    // Máximo 2.5s para que no sea aburrido
+    // Proporción: 1.5s por cada 1000 frames de distancia
+    const dynamicDuration = Math.min(Math.max(frameDistance / 1000 * 1.5, 0.8), 2.5);
+
+    const progress = frameTarget / (frameCount - 1);
+    const scroller = document.querySelector("#video-root");
+    if (!scroller) return;
+
+    const scrollTarget = (scroller.scrollHeight - window.innerHeight) * progress;
+
+    gsap.to(scroller, {
+      scrollTo: scrollTarget,
+      duration: dynamicDuration,
+      ease: "power2.inOut", // Aceleración y desaceleración suave
+      overwrite: "auto"     // Evita conflictos si el usuario hace click en varios botones rápido
+    });
+  };
+
 
   // EFECTO 1: Manejo de Carga de Imágenes y Resize
   useEffect(() => {
@@ -110,11 +185,21 @@ export default function ScrollVideo({ videoInfo={} }) {
         end: "bottom bottom",
       },
       onUpdate: () => {
-        const img = imagesRef.current[frameRef.current.index];
+        const currentIndex = Math.round(frameRef.current.index);
+
+        // 1. Dibujar el frame (Siempre usando el entero más cercano)
+        const img = imagesRef.current[currentIndex];
         if (img && img.complete) {
           drawContain(ctx, img, canvasRef.current);
         }
-      },
+
+        // 2. Actualizar el estado de la UI (Solo si el número entero cambió)
+        // Usamos una función de actualización para comparar con el valor real previo
+        setActiveStep(prev => {
+          if (prev !== currentIndex) return currentIndex;
+          return prev;
+        });
+      }
     });
 
     return () => {
@@ -183,7 +268,7 @@ export default function ScrollVideo({ videoInfo={} }) {
       </AnimatePresence>
 
       <div style={debugStyle}>
-        Assets: {totalDownloaded} / {frameCount}
+        Assets: {totalDownloaded} / {frameCount} | Actual Frame: {activeStep}
       </div>
 
       <canvas
@@ -200,6 +285,14 @@ export default function ScrollVideo({ videoInfo={} }) {
           pointerEvents: "none"
         }}
       />
+
+      {showCanvas && videoInfo?.steps && (
+        <FloatingSteps 
+          steps={videoInfo.steps} 
+          onStepClick={goToStep}
+          currentFrame={activeStep}
+        />
+      )}
     </div>
   );
 }
@@ -225,3 +318,41 @@ const progressBar = { height: '100%', background: '#d4af37', boxShadow: '0 0 15p
 const statusContainer = { marginTop: '10px', display: 'flex', justifyContent: 'space-between',  color: '#444', fontSize: '9px', fontWeight: 'bold' };
 
 const debugStyle = { position: 'fixed', bottom: '20px', left: '20px', zIndex: 6000, background: 'rgba(0,0,0,0.7)', color: '#d4af37', padding: '8px 12px', borderRadius: '5px', fontSize: '10px', fontFamily: 'monospace' };
+
+const stepsContainerStyle = {
+  position: 'fixed',
+  right: '30px',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '15px',
+  zIndex: 7000
+};
+
+const stepButtonStyle = {
+  background: 'rgba(0, 0, 0, 0.6)',
+  border: '1px solid #d4af37',
+  color: '#d4af37',
+  width: '50px',
+  height: '50px',
+  borderRadius: '50%',
+  cursor: 'pointer',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '14px',
+  fontWeight: 'bold',
+  transition: 'all 0.3s ease',
+  backdropFilter: 'blur(5px)',
+  boxShadow: '0 0 10px rgba(212, 175, 55, 0.2)'
+};
+
+const stepLabelStyle = {
+  fontSize: '7px',
+  letterSpacing: '1px',
+  marginBottom: '-2px',
+  opacity: 0.8
+};
+
