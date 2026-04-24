@@ -121,62 +121,62 @@ const AnatomiaHoja = ({ leaf }) => {
 
   return (
     <section className="th-section">
-    <div ref={containerRef} className="th-viewport">
-      <div className="th-dev-hint">Editor de Anatomía: {sections.length} Puntos Activos</div>
+      <div ref={containerRef} className="th-viewport">
+        <div className="th-dev-hint">Editor de Anatomía: {sections.length} Puntos Activos</div>
 
-      <div className="th-canvas">
-        <div className="th-leaf-wrapper">
-          <img ref={leafRef} src={"https://png.pngtree.com/png-clipart/20220716/ourmid/pngtree-banana-yellow-fruit-banana-skewers-png-image_5944324.png"} alt="Hoja de Tabaco" className="th-leaf-main" />
-          
-          <svg ref={svgRef} className="th-svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
-            {sections.map((s, i) => (
-              <g 
-                key={i} 
-                ref={el => markersRef.current[i] = el} 
-                className="th-marker-group"
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  const moveHandler = (ev) => handleDrag(i, ev);
-                  window.addEventListener('mousemove', moveHandler);
-                  window.addEventListener('mouseup', () => window.removeEventListener('mousemove', moveHandler), { once: true });
-                }}
-              >
-                <circle cx={coords[i].x} cy={coords[i].y} r="7" fill="transparent" />
-                <circle cx={coords[i].x} cy={coords[i].y} r="1.2" fill="#d4af37" />
-                <circle cx={coords[i].x} cy={coords[i].y} r="3" stroke="#d4af37" strokeWidth="0.5" fill="none" className="th-pulse-ring" />
-              </g>
-            ))}
-          </svg>
-        </div>
+        <div className="th-canvas">
+          <div className="th-leaf-wrapper">
+            <img ref={leafRef} src={leaf?.fullImg ?? 'https://png.pngtree.com/png-clipart/20220716/ourmid/pngtree-banana-yellow-fruit-banana-skewers-png-image_5944324.png'} alt="Hoja de Tabaco" className="th-leaf-main" />
 
-        <div className="th-overlay-content">
-          {sections.map((s, i) => {
-            const isRight = s.side === 'right';
-            return (
-              <div 
-                key={i} 
-                ref={el => textBlocksRef.current[i] = el}
-                className={`th-floating-text th-side-${s.side}`}
-                style={{ 
-                  top: `${coords[i].y}%`, 
-                  left: isRight ? `${coords[i].x + 6}%` : 'auto',
-                  right: !isRight ? `${(100 - coords[i].x) + 6}%` : 'auto',
-                }}
-              >
-                <div className="th-text-box">
-                  <span className="th-tag-label">{s.tag}</span>
-                  <h2>{s.title}</h2>
-                  <p>{s.desc}</p>
-                  <div className="th-stats-chips">
-                    {s.stats.map(stat => <span key={stat} className="th-chip">{stat}</span>)}
+            <svg ref={svgRef} className="th-svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
+              {sections.map((s, i) => (
+                <g 
+                  key={i} 
+                  ref={el => markersRef.current[i] = el} 
+                  className="th-marker-group"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    const moveHandler = (ev) => handleDrag(i, ev);
+                    window.addEventListener('mousemove', moveHandler);
+                    window.addEventListener('mouseup', () => window.removeEventListener('mousemove', moveHandler), { once: true });
+                  }}
+                >
+                  <circle cx={coords[i].x} cy={coords[i].y} r="7" fill="transparent" />
+                  <circle cx={coords[i].x} cy={coords[i].y} r="1.2" fill="#d4af37" />
+                  <circle cx={coords[i].x} cy={coords[i].y} r="3" stroke="#d4af37" strokeWidth="0.5" fill="none" className="th-pulse-ring" />
+                </g>
+              ))}
+            </svg>
+          </div>
+
+          <div className="th-overlay-content">
+            {sections.map((s, i) => {
+              const isRight = s.side === 'right';
+              return (
+                <div 
+                  key={i} 
+                  ref={el => textBlocksRef.current[i] = el}
+                  className={`th-floating-text th-side-${s.side}`}
+                  style={{ 
+                    top: `${coords[i].y}%`, 
+                    left: isRight ? `${coords[i].x + 6}%` : 'auto',
+                    right: !isRight ? `${(100 - coords[i].x) + 6}%` : 'auto',
+                  }}
+                >
+                  <div className="th-text-box">
+                    <span className="th-tag-label">{s.tag}</span>
+                    <h2>{s.title}</h2>
+                    <p>{s.desc}</p>
+                    <div className="th-stats-chips">
+                      {s.stats.map(stat => <span key={stat} className="th-chip">{stat}</span>)}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
     </section>
   );
 };
