@@ -10,7 +10,8 @@
       "@utils/*": ["./src/utils/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@assets/*": ["./src/assets/*"]
-    }
+    },
+    "jsx": "react-jsx"
   },
   "include": [ "src/**/*" ] // Incluye todos los archivos en la carpeta 'src'
 }
