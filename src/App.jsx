@@ -16,6 +16,7 @@ import Reservation from '@/pages/Reservation';
 import Testimonial from '@/pages/Testimonial';
 import Contact from '@/pages/Contact';
 import CraftYourCigar from '@/pages/CraftYourCigar';
+import AnatomiaHoja from '@/pages/AnatomiaHoja';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/" element={<Home />} />
           
           {/* Rutas de información */}
+          <Route path="/anatomia-hoja" element={<AnatomiaHoja />} />
           <Route path="/about" element={<About />} />
           <Route path="/service" element={<Service />} />
           <Route path="/menu" element={<Menu />} />
