@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // import leafImage from '@/assets/capa-habana.webp';
-import leafImage from '@/assets/capa-habana2.png';
+// import leafImage from '@/assets/capa-habana2.png';
 import '@/styles/AnatomiaHoja.css';
 
 
 
 gsap.registerPlugin(ScrollTrigger);
 
-const AnatomiaHoja = () => {
+const AnatomiaHoja = ({ leaf }) => {
   const containerRef = useRef(null);
   const leafRef = useRef(null);
   const svgRef = useRef(null);
@@ -114,7 +114,7 @@ const AnatomiaHoja = () => {
 
       <div className="th-canvas">
         <div className="th-leaf-wrapper">
-          <img ref={leafRef} src={leafImage} alt="Hoja de Tabaco" className="th-leaf-main" />
+          <img ref={leafRef} src={leaf?.fullImg} alt="Hoja de Tabaco" className="th-leaf-main" />
           
           <svg ref={svgRef} className="th-svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
             {sections.map((s, i) => (

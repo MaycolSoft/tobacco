@@ -45,8 +45,8 @@ const Navbar = () => {
             <Link to="/about" className={`nav-item nav-link ${isActive('/about')}`}>
               About
             </Link>
-            <Link to="/anatomia-hoja" className={`nav-item nav-link ${isActive('/anatomia-hoja')}`}>
-              Anatomía de la Hoja
+            <Link to="/leaf-library" className={`nav-item nav-link ${isActive('/leaf-library')}`}>
+              Leaf Library
             </Link>
             <Link to="/service" className={`nav-item nav-link ${isActive('/service')}`}>
               Cigars

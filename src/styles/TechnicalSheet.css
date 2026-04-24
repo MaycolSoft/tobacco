@@ -1,0 +1,131 @@
+.ts-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  padding: 40px;
+}
+
+.ts-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1100px;
+  width: 100%;
+  gap: 60px;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.ts-image-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ts-main-img {
+  max-height: 70vh;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 50px rgba(212, 175, 55, 0.15));
+}
+
+.ts-info-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ts-category {
+  color: #d4af37;
+  font-weight: 700;
+  letter-spacing: 3px;
+  font-size: 0.8rem;
+}
+
+.ts-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  margin: 10px 0;
+}
+
+.ts-origin-tag {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.ts-origin-tag span { color: #fff; }
+
+.ts-description {
+  margin: 30px 0;
+  color: #aaa;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+/* Stats Styling */
+.ts-stats-grid {
+  margin-bottom: 40px;
+}
+
+.ts-stat-item {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.ts-stat-label { width: 100px; font-size: 0.75rem; font-weight: bold; color: #888; text-transform: uppercase; }
+
+.ts-progress-bar {
+  flex: 1;
+  height: 4px;
+  background: #222;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ts-progress-fill {
+  height: 100%;
+  background: #d4af37;
+  border-radius: 2px;
+}
+
+.ts-stat-value { font-size: 0.8rem; color: #fff; font-weight: bold; width: 40px; }
+
+/* Pairing & Button */
+.ts-pairing h4 { font-size: 0.8rem; text-transform: uppercase; color: #d4af37; margin-bottom: 15px; }
+
+.ts-pairing-tags { display: flex; gap: 10px; margin-bottom: 40px; }
+
+.ts-pairing-tags span {
+  padding: 6px 14px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.ts-select-btn {
+  background: #d4af37;
+  color: #000;
+  border: none;
+  padding: 18px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.ts-select-btn:hover { background: #fff; transform: scale(1.02); }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile responsive */
+@media (max-width: 900px) {
+  .ts-container { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+  .ts-stat-item { flex-direction: column; gap: 5px; }
+  .ts-pairing-tags { justify-content: center; }
+  .ts-main-img { max-height: 40vh; }
+}
