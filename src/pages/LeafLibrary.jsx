@@ -268,7 +268,7 @@ const LeafSelector = () => {
     ? LEAF_INVENTORY
     : LEAF_INVENTORY.filter(leaf => leaf.category === filter);
 
-    
+
   return (
     <section className="ls-container">
       <header className="ls-header">
@@ -320,7 +320,7 @@ const LeafSelector = () => {
 
       {/* Fullscreen Modal */}
       {activeView && (
-        <div className={`ls-overlay ${activeView === 'inmersive' ? 'is-inmersive' : ''}`}>
+        <div className="ls-overlay">
           <button className="ls-close-trigger" onClick={handleCloseView}>
             <span className="ls-close-icon">&times;</span>
             <span className="ls-close-label">VOLVER AL SELECTOR</span>
