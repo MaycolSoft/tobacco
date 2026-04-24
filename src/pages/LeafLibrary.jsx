@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import InmersiveView from './InmersiveView'; // Previously AnatomiaHoja
-import TechnicalSheet from './TechnicalSheet'; // The modal version
+import InmersiveView from '@pages/InmersiveView'; // Previously AnatomiaHoja
+import TechnicalSheet from '@pages/TechnicalSheet'; // The modal version
 import '@styles/LeafSelector.css';
 
 /**

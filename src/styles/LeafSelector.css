@@ -254,3 +254,29 @@
     display: none;
   }
 }
+
+
+
+/* LeafSelector.css */
+
+.ls-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 99999;
+  
+  /* CRÍTICO: El overlay DEBE tener scroll activo */
+  overflow-y: auto; 
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* Suavidad en iOS */
+}
+
+.ls-overlay-viewport {
+  width: 100%;
+  /* No fijes el height a 100vh aquí, deja que el contenido (GSAP) dicte el largo */
+  min-height: 100%; 
+  position: relative;
+}
+
+
+
