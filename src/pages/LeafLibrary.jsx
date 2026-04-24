@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import InmersiveView from '@pages/InmersiveView'; // Previously AnatomiaHoja
-import TechnicalSheet from '@pages/TechnicalSheet'; // The modal version
+import React, { useState, useEffect, useMemo } from 'react';
+import InmersiveView from '@pages/InmersiveView';
+import TechnicalSheet from '@pages/TechnicalSheet';
 import { useLayoutStore } from '@/store/useLayoutStore';
-import '@styles/LeafSelector.css';
+import '@styles/LeafLibrary.css';
 
 /**
  * LEAF_INVENTORY
@@ -234,49 +234,61 @@ const LEAF_INVENTORY = [
  * Manages the grid of tobacco leaves and handles the fullscreen overlay
  * for both inmersive and technical views.
  */
+const VIEW = {
+  INMERSIVE: 'inmersive',
+  TECHNICAL: 'technical',
+};
 
 const LeafSelector = () => {
   const setVisualExperience = useLayoutStore((state) => state.setVisualExperience);
+
   const [activeView, setActiveView] = useState(null);
   const [selectedLeaf, setSelectedLeaf] = useState(null);
   const [filter, setFilter] = useState('ALL');
 
-
   useEffect(() => {
     setVisualExperience(true);
-    return () => {
-      setVisualExperience(false);
+    return () => setVisualExperience(false);
+  }, [setVisualExperience]);
+
+  // ESC cerrar
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') handleCloseView();
     };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
   }, []);
+
+  // Scroll lock
+  useEffect(() => {
+    const shouldLock = activeView && activeView !== 'inmersive';
+
+    document.body.classList.toggle('no-scroll', shouldLock);
+  }, [activeView]);
 
   const handleOpenView = (leaf, viewType) => {
     setSelectedLeaf(leaf);
     setActiveView(viewType);
-
-    if (viewType !== 'inmersive') {
-      document.body.style.overflow = 'hidden';
-    }
   };
 
   const handleCloseView = () => {
     setActiveView(null);
     setSelectedLeaf(null);
-    document.body.style.overflow = '';
   };
 
-  const filteredLeaves = filter === 'ALL'
-    ? LEAF_INVENTORY
-    : LEAF_INVENTORY.filter(leaf => leaf.category === filter);
-
+  const filteredLeaves = useMemo(() => {
+    if (filter === 'ALL') return LEAF_INVENTORY;
+    return LEAF_INVENTORY.filter((leaf) => leaf.category === filter);
+  }, [filter]);
 
   return (
     <section className="ls-container">
       <header className="ls-header">
         <h1 className="ls-title">Selección de Hojas</h1>
 
-        {/* Category Filters */}
         <nav className="ls-filters">
-          {['ALL', 'CAPA', 'CAPOTE', 'TRIPA'].map(cat => (
+          {['ALL', 'CAPA', 'CAPOTE', 'TRIPA'].map((cat) => (
             <button
               key={cat}
               className={`ls-filter-btn ${filter === cat ? 'active' : ''}`}
@@ -301,15 +313,23 @@ const LeafSelector = () => {
                 <h3>{leaf.name}</h3>
                 <span className="ls-origin">{leaf.origin}</span>
               </div>
-              <p>{leaf.description}</p>
+
+              <p className="ls-desc">{leaf.description}</p>
 
               <div className="ls-card-actions">
                 {leaf.hasInmersive && (
-                  <button onClick={() => handleOpenView(leaf, 'inmersive')} className="ls-btn ls-btn-primary">
+                  <button
+                    onClick={() => handleOpenView(leaf, VIEW.INMERSIVE)}
+                    className="ls-btn ls-btn-primary"
+                  >
                     Anatomía
                   </button>
                 )}
-                <button onClick={() => handleOpenView(leaf, 'technical')} className="ls-btn ls-btn-outline">
+
+                <button
+                  onClick={() => handleOpenView(leaf, VIEW.TECHNICAL)}
+                  className="ls-btn ls-btn-outline"
+                >
                   Ficha Técnica
                 </button>
               </div>
@@ -318,16 +338,19 @@ const LeafSelector = () => {
         ))}
       </div>
 
-      {/* Fullscreen Modal */}
-      {activeView && (
+      {activeView && selectedLeaf && (
         <div className="ls-overlay">
-          <button className="ls-close-trigger" onClick={handleCloseView}>
+          <button
+            className="ls-close-trigger"
+            onClick={handleCloseView}
+            aria-label="Cerrar vista"
+          >
             <span className="ls-close-icon">&times;</span>
-            <span className="ls-close-label">VOLVER AL SELECTOR</span>
+            <span className="ls-close-label">VOLVER</span>
           </button>
 
           <main className="ls-overlay-viewport">
-            {activeView === 'inmersive' ? (
+            {activeView === VIEW.INMERSIVE ? (
               <InmersiveView leaf={selectedLeaf} />
             ) : (
               <TechnicalSheet leaf={selectedLeaf} />
