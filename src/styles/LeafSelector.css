@@ -185,17 +185,6 @@
   color: #000;
 }
 
-/* --- FULLSCREEN OVERLAY --- */
-.ls-overlay {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  z-index: 99999;
-  width: 100vw;
-  height: 100vh;
-  overflow-x: hidden;
-  /* El overflow-y se manejará dentro de los componentes hijos si es necesario */
-}
 
 .ls-close-trigger {
   position: fixed;
@@ -234,10 +223,6 @@
   font-weight: bold;
 }
 
-.ls-overlay-viewport {
-  width: 100%;
-  height: 100%;
-}
 
 /* Mobile Adjustments */
 @media (max-width: 768px) {
@@ -256,27 +241,33 @@
 }
 
 
-
-/* LeafSelector.css */
-
 .ls-overlay {
   position: fixed;
   inset: 0;
   background: #000;
   z-index: 99999;
-  
-  /* CRÍTICO: El overlay DEBE tener scroll activo */
-  overflow-y: auto; 
+  overflow-y: auto;
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch; /* Suavidad en iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
 .ls-overlay-viewport {
   width: 100%;
-  /* No fijes el height a 100vh aquí, deja que el contenido (GSAP) dicte el largo */
-  min-height: 100%; 
+  min-height: 100vh;
+  display: block;
   position: relative;
 }
 
+.ls-overlay.is-inmersive {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  overflow: visible;
+  z-index: 99999;
+}
 
-
+.ls-overlay.is-inmersive .ls-overlay-viewport {
+  min-height: 100vh;
+  overflow: visible;
+}
