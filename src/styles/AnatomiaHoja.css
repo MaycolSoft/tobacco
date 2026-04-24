@@ -1,0 +1,214 @@
+/* AnatomiaHoja.css */
+
+.th-viewport {
+  background: #000;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.th-canvas {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- ESCENA VISUAL --- */
+.th-leaf-wrapper {
+  position: relative;
+  height: 90vh;
+  z-index: 1;
+}
+
+.th-leaf-main {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 50px rgba(139, 69, 19, 0.15));
+  will-change: transform, opacity;
+}
+
+/* --- MARCADORES (PUNTOS) --- */
+.th-svg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: all; /* Importante para el drag */
+  z-index: 5;
+}
+
+.th-marker-group {
+  cursor: move;
+  will-change: opacity, transform;
+}
+
+.th-pulse-ring {
+  transform-origin: center;
+  animation: th-ripple 2s infinite;
+}
+
+@keyframes th-ripple {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* --- TEXTO FLOTANTE --- */
+.th-overlay-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.th-floating-text {
+  position: absolute;
+  width: 280px;
+  pointer-events: auto;
+  transition: none; /* Evita lag al arrastrar */
+  z-index: 20;
+  /* Glow negro para legibilidad sobre la hoja */
+  text-shadow: 0 2px 10px rgba(0,0,0,1), 
+               0 0 20px rgba(0,0,0,0.8),
+               0 0 40px rgba(0,0,0,0.9);
+}
+
+.th-side-left {
+  text-align: right;
+}
+
+.th-step-no {
+  color: #d4af37;
+  font-family: monospace;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.th-floating-text h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  margin: 0;
+  color: #fff;
+  line-height: 1;
+  -webkit-text-stroke: 0.5px rgba(255,255,255,0.1);
+}
+
+.th-floating-text p {
+  font-size: 1.1rem;
+  color: #eee;
+  line-height: 1.4;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 10px;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+/* --- MODO EDITOR HINT --- */
+.th-dev-hint {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(212, 175, 55, 0.15);
+  color: #d4af37;
+  padding: 8px 16px;
+  border: 1px solid #d4af37;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  z-index: 100;
+  pointer-events: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  backdrop-filter: blur(4px);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .th-floating-text {
+    width: 85%;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    text-align: center;
+  }
+  
+  .th-side-left {
+    text-align: center;
+  }
+
+  .th-leaf-main {
+    opacity: 0.3; /* Menos opacidad en móvil para leer mejor */
+  }
+
+  .th-floating-text h2 {
+    font-size: 2.2rem;
+  }
+}
+
+
+
+/* ... (bases anteriores se mantienen) ... */
+
+.th-text-box {
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-left: 2px solid #d4af37;
+  border-radius: 0 8px 8px 0;
+}
+
+.th-side-left .th-text-box {
+  border-left: none;
+  border-right: 2px solid #d4af37;
+  border-radius: 8px 0 0 8px;
+}
+
+.th-tag-label {
+  color: #d4af37;
+  font-family: monospace;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.th-floating-text h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  margin: 5px 0 10px 0;
+  color: #fff;
+  line-height: 1;
+}
+
+.th-stats-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 15px;
+}
+
+.th-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .th-text-box { border: none; background: rgba(0,0,0,0.5); }
+  .th-floating-text h2 { font-size: 1.8rem; }
+}

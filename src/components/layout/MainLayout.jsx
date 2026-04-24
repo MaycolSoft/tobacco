@@ -17,6 +17,7 @@ const MainLayout = ({ children }) => {
   }, [pathname]);
 
   const pageConfig = {
+    "/anatomia-hoja": { title: "Anatomía de la Hoja", subtitle: "Anatomía de la Hoja" },
     "/about": { title: "About Us", subtitle: "About" },
     "/service": { title: "Our Cigars", subtitle: "Cigars" },
     "/menu": { title: "Our Blends", subtitle: "Blends" },
