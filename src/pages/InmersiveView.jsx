@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-// import leafImage from '@/assets/capa-habana.webp';
-// import leafImage from '@/assets/capa-habana2.png';
 import '@/styles/AnatomiaHoja.css';
 
 
@@ -80,6 +78,8 @@ const AnatomiaHoja = ({ leaf }) => {
   };
 
   useEffect(() => {
+    if (!containerRef.current) return;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -88,8 +88,8 @@ const AnatomiaHoja = ({ leaf }) => {
           end: "+=500%",
           scrub: 1,
           pin: true,
-          anticipatePin: 1
-        }
+          anticipatePin: 1,
+        },
       });
 
       tl.fromTo(leafRef.current, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 2 });
@@ -104,17 +104,29 @@ const AnatomiaHoja = ({ leaf }) => {
       });
 
       tl.to(leafRef.current, { scale: 1.1, opacity: 0, filter: "blur(20px)", duration: 2 });
-    }, containerRef);
-    return () => ctx.revert();
+    }, containerRef.current);
+
+    return () => {
+      const triggers = ScrollTrigger.getAll();
+
+      triggers.forEach((trigger) => {
+        if (trigger.trigger === containerRef.current) {
+          trigger.kill(true);
+        }
+      });
+
+      ctx.revert();
+    };
   }, []);
 
   return (
+    <section className="th-section">
     <div ref={containerRef} className="th-viewport">
       <div className="th-dev-hint">Editor de Anatomía: {sections.length} Puntos Activos</div>
 
       <div className="th-canvas">
         <div className="th-leaf-wrapper">
-          <img ref={leafRef} src={leaf?.fullImg} alt="Hoja de Tabaco" className="th-leaf-main" />
+          <img ref={leafRef} src={"https://png.pngtree.com/png-clipart/20220716/ourmid/pngtree-banana-yellow-fruit-banana-skewers-png-image_5944324.png"} alt="Hoja de Tabaco" className="th-leaf-main" />
           
           <svg ref={svgRef} className="th-svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
             {sections.map((s, i) => (
@@ -165,6 +177,7 @@ const AnatomiaHoja = ({ leaf }) => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

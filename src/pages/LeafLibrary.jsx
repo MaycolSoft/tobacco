@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InmersiveView from '@pages/InmersiveView'; // Previously AnatomiaHoja
 import TechnicalSheet from '@pages/TechnicalSheet'; // The modal version
+import { useLayoutStore } from '@/store/useLayoutStore';
 import '@styles/LeafSelector.css';
 
 /**
@@ -235,26 +236,39 @@ const LEAF_INVENTORY = [
  */
 
 const LeafSelector = () => {
+  const setVisualExperience = useLayoutStore((state) => state.setVisualExperience);
   const [activeView, setActiveView] = useState(null);
   const [selectedLeaf, setSelectedLeaf] = useState(null);
   const [filter, setFilter] = useState('ALL');
 
+
+  useEffect(() => {
+    setVisualExperience(true);
+    return () => {
+      setVisualExperience(false);
+    };
+  }, []);
+
   const handleOpenView = (leaf, viewType) => {
     setSelectedLeaf(leaf);
     setActiveView(viewType);
-    document.body.style.overflow = 'hidden';
+
+    if (viewType !== 'inmersive') {
+      document.body.style.overflow = 'hidden';
+    }
   };
 
   const handleCloseView = () => {
     setActiveView(null);
     setSelectedLeaf(null);
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = '';
   };
 
   const filteredLeaves = filter === 'ALL'
     ? LEAF_INVENTORY
     : LEAF_INVENTORY.filter(leaf => leaf.category === filter);
 
+    
   return (
     <section className="ls-container">
       <header className="ls-header">
@@ -306,7 +320,7 @@ const LeafSelector = () => {
 
       {/* Fullscreen Modal */}
       {activeView && (
-        <div className="ls-overlay">
+        <div className={`ls-overlay ${activeView === 'inmersive' ? 'is-inmersive' : ''}`}>
           <button className="ls-close-trigger" onClick={handleCloseView}>
             <span className="ls-close-icon">&times;</span>
             <span className="ls-close-label">VOLVER AL SELECTOR</span>
