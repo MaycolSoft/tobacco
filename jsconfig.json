@@ -1,16 +1,16 @@
+// jsconfig.json
 {
   "compilerOptions": {
-    "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"],
-      "@store/*": ["store/*"],
-      "@pages/*": ["pages/*"],
-      "@components/*": ["components/*"],
-      "@styles/*": ["styles/*"],
-      "@utils/*": ["utils/*"],
-      "@hooks/*": ["hooks/*"],
-      "@assets/*": ["assets/*"]
+      "@/*": ["./src/*"],
+      "@store/*": ["./src/store/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@components/*": ["./src/components/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@assets/*": ["./src/assets/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": [ "src/**/*" ] // Incluye todos los archivos en la carpeta 'src'
 }
