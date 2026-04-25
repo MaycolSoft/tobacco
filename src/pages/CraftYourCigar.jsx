@@ -5,9 +5,7 @@ import ScrollVideo from '@components/ScrollVideo.jsx';
 import LeafGrid from "@components/LeafGrid";
 import TobaccoGuidePage from "@components/TobaccoGuidePage";
 import BlendProfiles from "@components/BlendProfiles";
-// import MixingAnimation from "@components/MixingAnimation";
 import FloatingPrepButton from "@components/FloatingPrepButton";
-import { useLayoutStore } from '@/store/useLayoutStore';
 
 import { leaves } from "@/data/leaves";
 import { blends } from "@/data/blends";
@@ -109,7 +107,6 @@ const VideoSelectorPanel = ({ onSelect }) => {
 
 
 function CraftYourCigar() {
-  const setVisualExperience = useLayoutStore((state) => state.setVisualExperience);
   const [selectedLeaves, setSelectedLeaves] = useState([]);
   const [showGuide, setShowGuide] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
@@ -120,13 +117,6 @@ function CraftYourCigar() {
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
-
-  useEffect(() => {
-    setVisualExperience(true);
-    return () => {
-      setVisualExperience(false);
-    };
-  }, []);
 
 
   return (
@@ -144,7 +134,6 @@ function CraftYourCigar() {
             <button 
               onClick={() => { 
                 setShowVideo(false);
-                setVisualExperience(false); // Muestra Navbar/Footer
               }}
               style={backButtonStyle}
             >

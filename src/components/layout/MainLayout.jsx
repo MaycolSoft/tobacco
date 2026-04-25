@@ -1,56 +1,44 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { getRouteConfig } from '@/config/routesConfig';
+import { useLayoutStore } from '@/store/useLayoutStore';
 import Header from '@/components/layout/Header';
 import Navbar from '@components/layout/Navbar';
 import Footer from '@components/layout/Footer';
-import { useLayoutStore } from '@/store/useLayoutStore'; // Tu store de Zustand
+
 
 const MainLayout = ({ children }) => {
-  const location = useLocation();
-  const { pathname } = location;
-  
-  // Suscripción al estado global
-  const isVisualExperience = useLayoutStore((state) => state.isVisualExperience);
+  const { pathname } = useLocation();
+  const { currentConfig, loadPageConfig } = useLayoutStore();
 
   useEffect(() => {
+    // Al cambiar de ruta, cargamos su config guardada o la default
+    const defaultConfig = getRouteConfig(pathname);
+    loadPageConfig(pathname, defaultConfig);
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const pageConfig = {
-    "/leaf-library": { title: "Biblioteca de Hojas", subtitle: "Biblioteca de Hojas" },
-    "/about": { title: "About Us", subtitle: "About" },
-    "/service": { title: "Our Cigars", subtitle: "Cigars" },
-    "/menu": { title: "Our Blends", subtitle: "Blends" },
-    "/reservation": { title: "Reservation", subtitle: "Reservation" },
-    "/testimonial": { title: "Testimonial", subtitle: "Testimonial" },
-    "/contact": { title: "Contact Us", subtitle: "Contact" },
-    "/craft-your-cigar": { title: "Craft Your Cigar", subtitle: "Craft Your Cigar" },
-  };
+  const { showNavbar, showFooter, showHeader, headerData, headerSticky } = currentConfig;
 
-  const currentConfig = pageConfig[pathname];
-
-  // SI ES UNA EXPERIENCIA VISUAL: Renderizamos solo el children (el video)
-  if (isVisualExperience) {
-    return <main>{children}</main>;
-  }
-
-  // SI ES UNA PÁGINA NORMAL: Renderizamos todo el Layout
   return (
-    <>
-      <Navbar />
-
-      {currentConfig && (
-        <Header title={currentConfig.title} subtitle={currentConfig.subtitle} />
+    <div className="app-layout-wrapper">
+      {showNavbar && <Navbar isSticky={!showHeader} />}
+      
+      {showHeader && (
+        <Header 
+          title={headerData?.title || ""} 
+          subtitle={headerData?.subtitle || ""} 
+          Icon={headerData?.icon} 
+          isSticky={headerSticky}
+        />
       )}
 
-      <main>{children}</main>
+      <main className={`main-content ${!showHeader && showNavbar ? 'no-header-padding' : ''}`}>
+        {children}
+      </main>
 
-      <Footer />
-
-      <a href="#" className="btn btn-lg btn-primary btn-lg-square back-to-top">
-        <i className="fa fa-angle-double-up"></i>
-      </a>
-    </>
+      {showFooter && <Footer />}
+    </div>
   );
 };
 
