@@ -6,6 +6,7 @@ import Login from '@pages/Login';
 
 // Layout
 import MainLayout from '@components/layout/MainLayout';
+import LayoutControlPanel from '@components/LayoutControlPanel';
 
 // Páginas
 import Home from '@/pages/Home';
@@ -21,6 +22,7 @@ import LeafLibrary from '@/pages/LeafLibrary';
 function App() {
   return (
     <Router>
+      <LayoutControlPanel />
       <MainLayout>
         <Routes>
           {/* Ruta principal */}

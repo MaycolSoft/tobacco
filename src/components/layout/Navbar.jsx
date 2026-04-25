@@ -1,25 +1,32 @@
-
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@store/authStore';
+import { useLayoutStore } from '@/store/useLayoutStore';
+
 
 const Navbar = () => {
+  const { currentConfig } = useLayoutStore();
+  const { navbarSticky } = currentConfig;
+  
   const location = useLocation();
-
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate('/'); // Enviamos al usuario a la home tras salir
+    navigate('/');
   };
 
   // Función para determinar si el enlace está activo
-  const isActive = (path) => location.pathname === path ? "active" : "";
+  const isActive = (path) => (location.pathname === path ? "active" : "");
+
 
   return (
-    <div className="container-fluid p-0 nav-bar">
-      <nav className="navbar navbar-expand-lg bg-none navbar-dark py-3">
+    <div 
+      className={`container-fluid p-0 nav-bar ${navbarSticky ? 'navbar-sticky' : ''}`}
+      style={navbarSticky ? { position: 'relative', background: '#050505' } : { position: 'absolute' }}
+    >
+      <nav className={`navbar navbar-expand-lg py-3 navbar-dark  `}>
         {/* Logo - Redirige al Home */}
         <Link to="/" className="navbar-brand px-lg-4 m-0">
           <h1 className="m-0 display-4 text-uppercase text-white">
@@ -72,13 +79,24 @@ const Navbar = () => {
 
             {user ? (
               <>
-                <Link to="/craft-your-cigar" className={`nav-item nav-link ${isActive('/craft-your-cigar')}`}>Craft Your Cigar</Link>
-                <button onClick={handleLogout} className="nav-item nav-link btn btn-link" style={{ cursor: 'pointer' }}>
+                <Link 
+                  to="/craft-your-cigar" 
+                  className={`nav-item nav-link ${isActive('/craft-your-cigar')}`}
+                >
+                  Craft Your Cigar
+                </Link>
+                <button 
+                  onClick={handleLogout} 
+                  className="nav-item nav-link btn btn-link border-0 text-white" 
+                  style={{ cursor: 'pointer', verticalAlign: 'middle' }}
+                >
                   Salir ({user.username})
                 </button>
               </>
             ) : (
-              <Link to="/login" className={`nav-item nav-link ${isActive('/login')}`}>Entrar</Link>
+              <Link to="/login" className={`nav-item nav-link ${isActive('/login')}`}>
+                Entrar
+              </Link>
             )}
           </div>
         </div>

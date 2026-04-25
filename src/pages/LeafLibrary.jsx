@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import InmersiveView from '@pages/InmersiveView';
 import TechnicalSheet from '@pages/TechnicalSheet';
-import { useLayoutStore } from '@/store/useLayoutStore';
 import '@styles/LeafLibrary.css';
 
 /**
@@ -240,16 +239,10 @@ const VIEW = {
 };
 
 const LeafSelector = () => {
-  const setVisualExperience = useLayoutStore((state) => state.setVisualExperience);
 
   const [activeView, setActiveView] = useState(null);
   const [selectedLeaf, setSelectedLeaf] = useState(null);
   const [filter, setFilter] = useState('ALL');
-
-  useEffect(() => {
-    setVisualExperience(true);
-    return () => setVisualExperience(false);
-  }, [setVisualExperience]);
 
   // ESC cerrar
   useEffect(() => {
@@ -285,7 +278,7 @@ const LeafSelector = () => {
   return (
     <section className="ls-container">
       <header className="ls-header">
-        <h1 className="ls-title">Selección de Hojas</h1>
+        {/* <h1 className="ls-title">Selección de Hojas</h1> */}
 
         <nav className="ls-filters">
           {['ALL', 'CAPA', 'CAPOTE', 'TRIPA'].map((cat) => (
@@ -322,7 +315,7 @@ const LeafSelector = () => {
                     onClick={() => handleOpenView(leaf, VIEW.INMERSIVE)}
                     className="ls-btn ls-btn-primary"
                   >
-                    Anatomía
+                    Inmersiva
                   </button>
                 )}
 
