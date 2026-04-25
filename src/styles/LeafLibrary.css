@@ -63,6 +63,9 @@
   border-radius: 14px;
   overflow: hidden;
   transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .ls-card:hover {
@@ -73,6 +76,7 @@
 .ls-card-visual {
   height: 260px;
   overflow: hidden;
+  position: relative;
 }
 
 .ls-card-visual img {
@@ -80,6 +84,7 @@
   height: 100%;
   object-fit: cover;
   transition: 0.4s;
+  display: block;
 }
 
 .ls-card:hover img {
@@ -96,6 +101,9 @@
   padding: 4px 10px;
   font-size: 0.65rem;
   font-weight: bold;
+  z-index: 10; /* Asegura visibilidad */
+  border-radius: 4px; /* Opcional: estética */
+  pointer-events: none;
 }
 
 /* CONTENT */
