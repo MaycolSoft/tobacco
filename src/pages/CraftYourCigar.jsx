@@ -37,16 +37,50 @@ const listVideos = [
 ];
 
 
-const VideoSelectorPanel = ({ onSelect }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  // Helper to clean folder names for display
+const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
   const formatName = (name) => {
     return name.replace("/", "").replaceAll("_", " ");
   };
 
   return (
-    <div className="craft-you-cigar-video-selector-container">
+    <>
+      <div className="craft-you-cigar-video-selector-header">
+        <span className="craft-you-cigar-video-selector-title">Available Sequences</span>
+        <span className="craft-you-cigar-video-selector-count">
+          {listVideos.length} Folders
+        </span>
+      </div>
+
+      <div className="craft-you-cigar-video-selector-scroll-container">
+        {listVideos.map((video, index) => (
+          <motion.button
+            key={index}
+            whileHover={{ x: 5 }}
+            whileTap={{ scale: 0.98 }}
+            className="craft-you-cigar-video-selector-item-button"
+            onClick={() => {
+              onSelect(video);
+              if (setIsOpen) setIsOpen(false);
+            }}
+          >
+            <div className="craft-you-cigar-video-selector-item-name">
+              {formatName(video.name)}
+            </div>
+            <div className="craft-you-cigar-video-selector-item-length">
+              {video.length} frames
+            </div>
+          </motion.button>
+        ))}
+      </div>
+    </>
+  );
+};
+
+const ButtonFlotanteItem = ({ openName = "Open", closeName = "Close", onClick, children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="craft-you-cigar-video-selector-group">
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -56,34 +90,10 @@ const VideoSelectorPanel = ({ onSelect }) => {
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
             className="craft-you-cigar-video-selector-panel"
           >
-            <div className="craft-you-cigar-video-selector-header">
-              <span className="craft-you-cigar-video-selector-title">Available Sequences</span>
-              <span className="craft-you-cigar-video-selector-count">
-                {listVideos.length} Folders
-              </span>
-            </div>
-
-            <div className="craft-you-cigar-video-selector-scroll-container">
-              {listVideos.map((video, index) => (
-                <motion.button
-                  key={index}
-                  whileHover={{ x: 5 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="craft-you-cigar-video-selector-item-button"
-                  onClick={() => {
-                    onSelect(video);
-                    setIsOpen(false); // Optional: close on selection
-                  }}
-                >
-                  <div className="craft-you-cigar-video-selector-item-name">
-                    {formatName(video.name)}
-                  </div>
-                  <div className="craft-you-cigar-video-selector-item-length">
-                    {video.length} frames
-                  </div>
-                </motion.button>
-              ))}
-            </div>
+            {/* Pasa la función setIsOpen al hijo de forma segura si es un componente de React */}
+            {React.isValidElement(children)
+              ? React.cloneElement(children, { setIsOpen })
+              : children}
           </motion.div>
         )}
       </AnimatePresence>
@@ -91,13 +101,20 @@ const VideoSelectorPanel = ({ onSelect }) => {
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className={`craft-you-cigar-video-selector-toggle-btn ${
-          isOpen ? "is-active" : "is-closed"
-        }`}
-        onClick={() => setIsOpen(!isOpen)}
+        className={`craft-you-cigar-video-selector-toggle-btn ${isOpen ? "is-active" : "is-closed"
+          }`}
+        onClick={onClick ? onClick : () => setIsOpen((prev) => !prev)}
       >
-        {isOpen ? "✕ Close List" : "List Videos"}
+        {isOpen ? `✕ ${closeName}` : `${openName}`}
       </motion.button>
+    </div>
+  );
+};
+
+const MultiButtonFlotanteContainer = ({ children }) => {
+  return (
+    <div className="craft-you-cigar-video-selector-container">
+      {children}
     </div>
   );
 };
@@ -120,7 +137,7 @@ function CraftYourCigar() {
 
 
   return (
-    <div className="craft-container pt-1">
+    <div className="craft-container">
       
       {showVideo && (
         <AnimatePresence>
@@ -147,11 +164,20 @@ function CraftYourCigar() {
       {/* Contenido principal oculto si el video está activo para evitar doble scroll */}
       {!showVideo && (
         <>
-          <header style={{ textAlign: "center", padding: "20px" }}>
-            <h1>Tobacco Leaf Selector</h1>
-            <p>Select real tobacco leaves to form a blend.</p>
-            <button onClick={() => setShowGuide(true)}>Show Tobacco Guide</button>
-          </header>
+          {/* <div className="ls-craft-header">
+            <div className="ls-craft-header-accent" />
+            <h1 className="ls-craft-header-title">Tobacco Leaf Selector</h1>
+            <p className="ls-craft-header-subtitle">
+              Select real tobacco leaves to form a blend.
+            </p>
+            <button
+              className="ls-craft-guide-btn"
+              onClick={() => setShowGuide(true)}
+            >
+              <span className="ls-guide-btn-text">Show Tobacco Guide</span>
+              <span className="ls-guide-btn-icon">→</span>
+            </button>
+          </div> */}
 
           <BlendProfiles blends={blends} onSelectCombo={setSelectedLeaves} />
           <LeafGrid leaves={leaves} selectedLeaves={selectedLeaves} onSelect={handleSelect} />
@@ -161,10 +187,20 @@ function CraftYourCigar() {
             onClick={() => {setVideoInfo(listVideos[1]); setShowVideo(true);} }
           />
 
-          {/* EL NUEVO COMPONENTE FLOTANTE */}
-          <VideoSelectorPanel 
-            onSelect={(videoSelected)=>{ setVideoInfo(videoSelected); setShowVideo(true);}}
-          />
+
+          
+
+          <MultiButtonFlotanteContainer>
+            <ButtonFlotanteItem openName="Open Video Selector" closeName="Close Video Selector">
+              <VideoSelectorPanel 
+                listVideos={listVideos}
+                onSelect={(videoSelected) => { setVideoInfo(videoSelected); setShowVideo(true); }} 
+              />
+            </ButtonFlotanteItem>
+
+            <ButtonFlotanteItem openName="Open Guide" closeName="Close Guide" onClick={() => setShowGuide(true)}>
+            </ButtonFlotanteItem>
+          </MultiButtonFlotanteContainer>
 
           <AnimatePresence>
             {showGuide && (

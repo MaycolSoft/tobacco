@@ -1,283 +1,227 @@
+/**
+ * LEAF_INVENTORY
+ * Comprehensive list based on processed assets.
+ * Optimized for MasterBlenderGrid mapping.
+ */
 
 export const leaves = [
-  // Kentucky
+  // --- CAPAS (WRAPPERS) ---
   {
-    id: 1,
-    name: "American Kentucky",
-    family: "Kentucky",
-    role: "filler",
-    color: "dark brown",
-    curing: "fire",
-    strength: "strong",
-    aroma: "smoky",
-    description:
-      "A dark, fire-cured leaf with intense smoky notes, often used to give strength and depth to a blend.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/kentucky/KENTUCKY1_WcduHf9.png-190x150.jpg"
+    id: 'capa-habana',
+    category: 'CAPA',
+    name: 'Habana',
+    origin: 'Ecuador / Cuba',
+    fullImg: '/assets/full/CAPA HABANA.png',
+    thumbImg: '/assets/thumbs/thumb_CAPA HABANA.webp',
+    description: 'Elegancia brillante, dulzor natural y notas especiadas.',
+    hasInmersive: true
   },
   {
-    id: 2,
-    name: "Italian Kentucky",
-    family: "Kentucky",
-    role: "filler",
-    color: "dark brown",
-    curing: "fire",
-    strength: "strong",
-    aroma: "earthy, smoky",
-    description:
-      "Traditional Italian fire-cured Kentucky with earthy and smoky character, common in strong cigars.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/kentucky/KENTUCKY1_WcduHf9.png-190x150.jpg"
-  },
-  {
-    id: 3,
-    name: "Tennessee Fire-Cured",
-    family: "Kentucky",
-    role: "filler",
-    color: "very dark brown",
-    curing: "fire",
-    strength: "very strong",
-    aroma: "campfire smoke",
-    description:
-      "Rich Tennessee fire-cured leaf with heavy campfire aromas, used sparingly for powerful blends.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/kentucky/KENTUCKY1_WcduHf9.png-190x150.jpg"
-  },
-  {
-    id: 4,
-    name: "Dark Fire-Cured Kentucky",
-    family: "Kentucky",
-    role: "filler",
-    color: "black-brown",
-    curing: "fire",
-    strength: "very strong",
-    aroma: "heavy smoke",
-    description:
-      "Extremely dark, slow-burning fire-cured leaf, ideal for adding body and slow combustion.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/kentucky/KENTUCKY1_WcduHf9.png-190x150.jpg"
-  },
-  {
-    id: 5,
-    name: "Cavendish Kentucky",
-    family: "Kentucky",
-    role: "filler",
-    color: "dark brown",
-    curing: "fire + processed",
-    strength: "medium-strong",
-    aroma: "sweet smoky",
-    description:
-      "A processed Kentucky leaf with softened edges and a sweeter smoky profile, often used in pipe-style aromatics.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/kentucky/KENTUCKY1_WcduHf9.png-190x150.jpg"
+    id: 'capa-pensilvania',
+    category: 'CAPA',
+    name: 'Pensilvania',
+    origin: 'USA',
+    fullImg: '/assets/full/CAPA PENSILVANIA.png',
+    thumbImg: '/assets/thumbs/thumb_CAPA PENSILVANIA.webp',
+    description: 'Fuerza alta, cuerpo robusto y sabores oscuros a cacao.',
+    hasInmersive: true
   },
 
-  // Burley
+  // --- CAPOTES (BINDERS) ---
   {
-    id: 6,
-    name: "White Burley",
-    family: "Burley",
-    role: "filler",
-    color: "light brown",
-    curing: "air",
-    strength: "medium",
-    aroma: "nutty",
-    description:
-      "A classic neutral Burley with nutty notes and good burning qualities, used as a base in many blends.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/burley/HOJAS_TIPO_BURLEY_3.jpg-190x150.jpg"
+    id: 'capote-criollo-98',
+    category: 'CAPOTE',
+    name: 'Criollo 98',
+    origin: 'Dominican Republic',
+    fullImg: '/assets/full/CAPOTE CRIOLLO 98.png',
+    thumbImg: '/assets/thumbs/thumb_CAPOTE CRIOLLO 98.webp',
+    description: 'Excelente elasticidad y combustión uniforme.',
+    hasInmersive: false
   },
   {
-    id: 7,
-    name: "Red Burley",
-    family: "Burley",
-    role: "filler",
-    color: "reddish brown",
-    curing: "air",
-    strength: "medium-strong",
-    aroma: "earthy, cocoa",
-    description:
-      "Richer Burley with more body and cocoa-like undertones, ideal to add fullness to a blend.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/burley/HOJAS_TIPO_BURLEY_3.jpg-190x150.jpg"
+    id: 'capote-habano',
+    category: 'CAPOTE',
+    name: 'Habano',
+    origin: 'Nicaragua',
+    fullImg: '/assets/full/CAPOTE HABANO.png',
+    thumbImg: '/assets/thumbs/thumb_CAPOTE HABANO.webp',
+    description: 'Aporta estructura y un sutil toque de madera.',
+    hasInmersive: false
   },
   {
-    id: 8,
-    name: "Dark Burley",
-    family: "Burley",
-    role: "filler",
-    color: "dark brown",
-    curing: "air",
-    strength: "strong",
-    aroma: "chocolate, earthy",
-    description:
-      "Dark, full-flavored Burley that delivers chocolate and earthy tones with a stronger impact.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/burley/HOJAS_TIPO_BURLEY_3.jpg-190x150.jpg"
+    id: 'capote-indonesia',
+    category: 'CAPOTE',
+    name: 'Indonesia',
+    origin: 'Indonesia',
+    fullImg: '/assets/full/CAPOTE INDONESIA.png',
+    thumbImg: '/assets/thumbs/thumb_CAPOTE INDONESIA.webp',
+    description: 'Perfil neutro que permite resaltar la tripa.',
+    hasInmersive: false
   },
   {
-    id: 9,
-    name: "Light Air-Cured Burley",
-    family: "Burley",
-    role: "filler",
-    color: "medium brown",
-    curing: "air",
-    strength: "medium",
-    aroma: "soft, toasted",
-    description:
-      "A softer air-cured Burley offering gentle toasted notes and good burning behavior.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/burley/HOJAS_TIPO_BURLEY_3.jpg-190x150.jpg"
+    id: 'capote-pensilvania',
+    category: 'CAPOTE',
+    name: 'Pensilvania',
+    origin: 'USA',
+    fullImg: '/assets/full/CAPOTE PENSILVANIA_.png',
+    thumbImg: '/assets/thumbs/thumb_CAPOTE PENSILVANIA_.webp',
+    description: 'Resistente y con carácter para ligas fuertes.',
+    hasInmersive: false
   },
   {
-    id: 10,
-    name: "Aged Burley Leaf",
-    family: "Burley",
-    role: "filler",
-    color: "medium-dark brown",
-    curing: "air, long-aged",
-    strength: "medium",
-    aroma: "smooth, rounded",
-    description:
-      "Burley leaf aged for years to round off harshness, providing a smooth, refined taste.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/burley/HOJAS_TIPO_BURLEY_3.jpg-190x150.jpg"
+    id: 'capote-sumatra-ecuador',
+    category: 'CAPOTE',
+    name: 'Sumatra Ecuador',
+    origin: 'Ecuador',
+    fullImg: '/assets/full/CAPOTE SUMATRA ECUADOR_.png',
+    thumbImg: '/assets/thumbs/thumb_CAPOTE SUMATRA ECUADOR_.webp',
+    description: 'Combustión lenta y ceniza blanca firme.',
+    hasInmersive: false
   },
 
-  // Virginia
+  // --- TRIPAS (FILLERS) ---
   {
-    id: 11,
-    name: "Bright Virginia",
-    family: "Virginia",
-    role: "filler",
-    color: "bright yellow",
-    curing: "flue / hot air",
-    strength: "mild-medium",
-    aroma: "sweet, hay-like",
-    description:
-      "A bright, naturally sweet Virginia with hay and citrus notes, common in many light blends.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
+    id: 'tripa-broad-leaf',
+    category: 'TRIPA',
+    name: 'Broad Leaf',
+    origin: 'USA',
+    fullImg: '/assets/full/TRIPA BROAD LEAF.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA BROAD LEAF.webp',
+    description: 'Notas terrosas y dulzor de tabaco añejo.',
+    hasInmersive: false
   },
   {
-    id: 12,
-    name: "Red Virginia",
-    family: "Virginia",
-    role: "filler",
-    color: "red-brown",
-    curing: "flue",
-    strength: "medium",
-    aroma: "dark fruit, bread",
-    description:
-      "Deeper, matured Virginia with darker sweetness and bready, fruity character.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
+    id: 'tripa-corojo-ligero',
+    category: 'TRIPA',
+    name: 'Corojo Ligero',
+    origin: 'Nicaragua',
+    fullImg: '/assets/full/TRIPA COROJO LIGERO.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA COROJO LIGERO.webp',
+    description: 'Fuerza intensa y pimienta blanca marcada.',
+    hasInmersive: false
   },
   {
-    id: 13,
-    name: "Lemon Virginia",
-    family: "Virginia",
-    role: "filler",
-    color: "light yellow",
-    curing: "flue",
-    strength: "mild",
-    aroma: "citrus, grassy",
-    description:
-      "Light, citrusy Virginia that brightens a blend with high notes and gentle sweetness.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
+    id: 'tripa-hba-abano',
+    category: 'TRIPA',
+    name: 'HBA Abano',
+    origin: 'Various',
+    fullImg: '/assets/full/TRIPA HBA ABANO.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA HBA ABANO.webp',
+    description: 'Cuerpo medio y humo denso aromático.',
+    hasInmersive: false
   },
   {
-    id: 14,
-    name: "Orange Virginia",
-    family: "Virginia",
-    role: "filler",
-    color: "orange-gold",
-    curing: "flue",
-    strength: "mild-medium",
-    aroma: "sweet, toasty",
-    description:
-      "Balanced Virginia leaf sitting between bright and red, with toasty and sweet flavors.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
+    id: 'tripa-kentuky',
+    category: 'TRIPA',
+    name: 'Kentucky Fire Cured',
+    origin: 'USA',
+    fullImg: '/assets/full/TRIPA KENTUKY.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA KENTUKY.webp',
+    description: 'Sabor ahumado único y potencia rústica.',
+    hasInmersive: false
   },
   {
-    id: 15,
-    name: "Virginia Gold",
-    family: "Virginia",
-    role: "filler",
-    color: "golden",
-    curing: "flue",
-    strength: "mild",
-    aroma: "honey, hay",
-    description:
-      "Golden flue-cured leaf with honey-like sweetness and clean, fragrant aroma.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
+    id: 'tripa-ligero-criollo-98',
+    category: 'TRIPA',
+    name: 'Ligero Criollo 98',
+    origin: 'Dominican Republic',
+    fullImg: '/assets/full/TRIPA LIGERO CRIOLLO 98.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA LIGERO CRIOLLO 98.webp',
+    description: 'Concentración máxima de nicotina y aceites.',
+    hasInmersive: false
   },
   {
-    id: 16,
-    name: "Flue-Cured Virginia",
-    family: "Virginia",
-    role: "filler",
-    color: "gold to orange",
-    curing: "flue",
-    strength: "mild-medium",
-    aroma: "sweet, aromatic",
-    description:
-      "General flue-cured Virginia grade that burns evenly and provides a sweet aromatic base.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/virginia/HOJAS%20TIPO%20VIRGINIA.jpg"
-  },
-
-  // Oriental
-  {
-    id: 17,
-    name: "Izmir Oriental",
-    family: "Oriental",
-    role: "filler",
-    color: "yellow-brown",
-    curing: "sun",
-    strength: "mild",
-    aroma: "spicy, incense-like",
-    description:
-      "Turkish Izmir leaf with spicy, incense-like aroma that adds complexity and perfume to blends.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/orientales/ORIENTAL1.png"
+    id: 'tripa-ligero-cubano',
+    category: 'TRIPA',
+    name: 'Ligero Cubano',
+    origin: 'Cuba',
+    fullImg: '/assets/full/TRIPA LIGERO CUBANO.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA LIGERO CUBANO.webp',
+    description: 'El alma del sabor cubano tradicional.',
+    hasInmersive: false
   },
   {
-    id: 18,
-    name: "Basma Oriental",
-    family: "Oriental",
-    role: "filler",
-    color: "yellow-gold",
-    curing: "sun",
-    strength: "mild",
-    aroma: "sweet, very aromatic",
-    description:
-      "Highly aromatic Basma leaf with sweet, exotic aroma used in many Eastern-style mixtures.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/orientales/ORIENTAL1.png"
+    id: 'tripa-ligero-nicaragua',
+    category: 'TRIPA',
+    name: 'Ligero Nicaragua',
+    origin: 'Nicaragua',
+    fullImg: '/assets/full/TRIPA LIGERO NICARAGUA.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA LIGERO NICARAGUA.webp',
+    description: 'Fortaleza volcánica con cuerpo pleno.',
+    hasInmersive: false
   },
   {
-    id: 19,
-    name: "Samsun Oriental",
-    family: "Oriental",
-    role: "filler",
-    color: "brown-gold",
-    curing: "sun",
-    strength: "mild-medium",
-    aroma: "earthy, spicy",
-    description:
-      "Samsun tobacco brings earthy spice and depth to Oriental-forward blends.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/orientales/ORIENTAL1.png"
+    id: 'tripa-olor-ligero',
+    category: 'TRIPA',
+    name: 'Olor Ligero',
+    origin: 'Dominican Republic',
+    fullImg: '/assets/full/TRIPA OLOR LIGERO_.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA OLOR LIGERO_.webp',
+    description: 'Estructura potente con gran perfil aromático.',
+    hasInmersive: false
   },
   {
-    id: 20,
-    name: "Katerini Oriental",
-    family: "Oriental",
-    role: "filler",
-    color: "yellow-brown",
-    curing: "sun",
-    strength: "mild",
-    aroma: "floral, exotic",
-    description:
-      "A floral, exotic Oriental leaf that lifts a blend with high aromatic notes.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/orientales/ORIENTAL1.png"
+    id: 'tripa-olor-seco',
+    category: 'TRIPA',
+    name: 'Olor Seco',
+    origin: 'Dominican Republic',
+    fullImg: '/assets/full/TRIPA OLOR SECO.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA OLOR SECO.webp',
+    description: 'Aroma refinado y combustión equilibrada.',
+    hasInmersive: false
   },
   {
-    id: 21,
-    name: "Yenidje Oriental",
-    family: "Oriental",
-    role: "filler",
-    color: "light brown",
-    curing: "sun",
-    strength: "mild",
-    aroma: "rich, incense-like",
-    description:
-      "Legendary Oriental leaf with rich, incense-like aroma, often used in small amounts for elegance.",
-    image: "https://tabacopedia.com/es/Tipos%20de%20Tabaco/orientales/ORIENTAL1.png"
+    id: 'tripa-pensilvania',
+    category: 'TRIPA',
+    name: 'Pensilvania Filler',
+    origin: 'USA',
+    fullImg: '/assets/full/TRIPA PENSILVANIA.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA PENSILVANIA.webp',
+    description: 'Cuerpo pesado y notas de frutos secos.',
+    hasInmersive: false
+  },
+  {
+    id: 'tripa-seco-criollo-98',
+    category: 'TRIPA',
+    name: 'Seco Criollo 98',
+    origin: 'Dominican Republic',
+    fullImg: '/assets/full/TRIPA SECO CRIOLLO 98.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA SECO CRIOLLO 98.webp',
+    description: 'Matices complejos con fortaleza moderada.',
+    hasInmersive: false
+  },
+  {
+    id: 'tripa-seco-cubano',
+    category: 'TRIPA',
+    name: 'Seco Cubano',
+    origin: 'Cuba',
+    fullImg: '/assets/full/TRIPA SECO CUBANO.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA SECO CUBANO.webp',
+    description: 'Aroma primario elegante y combustión fácil.',
+    hasInmersive: false
+  },
+  {
+    id: 'tripa-seco-nicaragua',
+    category: 'TRIPA',
+    name: 'Seco Nicaragua',
+    origin: 'Nicaragua',
+    fullImg: '/assets/full/TRIPA SECO NICARAGUA.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA SECO NICARAGUA.webp',
+    description: 'Equilibrio perfecto entre sabor y quema.',
+    hasInmersive: false
+  },
+  {
+    id: 'tripa-t-13-ligero',
+    category: 'TRIPA',
+    name: 'T 13 Ligero',
+    origin: 'Hybrid',
+    fullImg: '/assets/full/TRIPA T 13 LIGERO.png',
+    thumbImg: '/assets/thumbs/thumb_TRIPA T 13 LIGERO.webp',
+    description: 'Potencia experimental con gran retrogusto.',
+    hasInmersive: false
   }
 ];
+
+
+
+
