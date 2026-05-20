@@ -59,6 +59,8 @@ export default function ScrollVideo({ videoInfo={} }) {
   const canvasRef = useRef(null);
   const frameRef = useRef({ index: 0 });
   const imagesRef = useRef([]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const autoPlayTweenRef = useRef(null);
   
   // Estados de carga y UI
   const [activeStep, setActiveStep] = useState(null);
@@ -100,10 +102,55 @@ export default function ScrollVideo({ videoInfo={} }) {
     ctx.drawImage(img, x, y, w, h);
   }
 
+  // ==========================================
+  // 2. PLAY / PAUSE LOGIC FUNCTION
+  // ==========================================
+  // Place this function inside your ScrollVideo component:
+  const togglePlayPause = () => {
+    const scroller = document.querySelector("#video-root");
+    if (!scroller || !showCanvas) return;
 
+    if (isPlaying) {
+      if (autoPlayTweenRef.current) autoPlayTweenRef.current.kill();
+      setIsPlaying(false);
+    } else {
+      setIsPlaying(true);
+
+      const currentScroll = scroller.scrollTop;
+      const maxScroll = scroller.scrollHeight - window.innerHeight;
+
+      // 1. Validar si ya llegó al final para reiniciar
+      if ((maxScroll - currentScroll) <= 1) {
+        scroller.scrollTop = 0;
+      }
+
+      // 2. Definir la tasa de refresco (60 FPS)
+      const TARGET_FPS = 120;
+
+      // 3. Obtener la proporción actual del scroll (0 a 1)
+      const currentProgress = maxScroll > 0 ? (scroller.scrollTop / maxScroll) : 0;
+
+      // 4. Calcular cuántos frames quedan por reproducir desde el punto actual
+      const remainingFrames = frameCount * (1 - currentProgress);
+
+      // 5. El tiempo exacto en segundos para mantener velocidad lineal uniforme de 60fps
+      const dynamicDuration = remainingFrames / TARGET_FPS;
+
+      autoPlayTweenRef.current = gsap.to(scroller, {
+        scrollTo: maxScroll,
+        duration: dynamicDuration,
+        ease: "none", // Estrictamente lineal para simular reproducción de video real
+        overwrite: "auto",
+        onComplete: () => setIsPlaying(false)
+      });
+    }
+  };
 
   const goToStep = (frameTarget) => {
     if (!showCanvas) return;
+
+    if (autoPlayTweenRef.current) autoPlayTweenRef.current.kill();
+    setIsPlaying(false);
 
     const currentFrame = frameRef.current.index;
     const frameDistance = Math.abs(frameTarget - currentFrame);
@@ -297,6 +344,68 @@ export default function ScrollVideo({ videoInfo={} }) {
           currentFrame={activeStep}
         />
       )}
+
+      {showCanvas && (
+        <button
+          className="ls-controls-toggle"
+          onClick={togglePlayPause}
+          style={playPauseButtonStyle}
+        >
+          {isPlaying ? (
+            <svg className="ls-controls-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+            </svg>
+          ) : (
+            <svg className="ls-controls-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          )}
+        </button>
+      )}
+
+      <style>{`
+        :root {
+          --ls-bg: #050505;
+          --ls-gold: #D4AF37;
+          --ls-gold-muted: #997a20;
+        }
+
+        .ls-controls-toggle {
+          position: fixed;
+          bottom: 30px;
+          right: 30px;
+          z-index: 7000;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          background: rgba(5, 5, 5, 0.75);
+          border: 1px solid var(--ls-gold);
+          color: var(--ls-gold);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          backdrop-filter: blur(8px);
+          box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+          transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .ls-controls-toggle:hover {
+          transform: scale(1.1);
+          background: var(--ls-gold);
+          color: var(--ls-bg);
+          box-shadow: 0 0 25px var(--ls-gold);
+        }
+
+        .ls-controls-toggle:active {
+          transform: scale(0.95);
+        }
+
+        .ls-controls-icon {
+          display: block;
+          transition: transform 0.2s ease;
+        }
+      `}</style>
     </div>
   );
 }
@@ -358,5 +467,25 @@ const stepLabelStyle = {
   letterSpacing: '1px',
   marginBottom: '-2px',
   opacity: 0.8
+};
+
+const playPauseButtonStyle = {
+  position: 'fixed',
+  bottom: '30px',
+  right: '30px',
+  zIndex: 7000,
+  width: '50px',
+  height: '50px',
+  borderRadius: '50%',
+  background: 'rgba(5, 5, 5, 0.75)',
+  border: '1px solid #d4af37',
+  color: '#d4af37',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backdropFilter: 'blur(8px)',
+  boxShadow: '0 0 15px rgba(212, 175, 55, 0.15)',
+  transition: 'all 0.3s cubic-bezier(0.25, 1, 0.5, 1)'
 };
 
