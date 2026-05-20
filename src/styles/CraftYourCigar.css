@@ -1,14 +1,23 @@
-/* Container for the floating UI */
+
 .craft-you-cigar-video-selector-container {
   position: fixed;
   bottom: 100px;
   right: 30px;
-  z-index: 5000;
+  z-index: 50;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+  gap: 20px;
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+  pointer-events: none;
+}
+
+.craft-you-cigar-video-selector-group {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 15px;
-  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+  pointer-events: auto;
 }
 
 /* Glassmorphism Main Panel */
@@ -61,10 +70,11 @@
   gap: 6px;
 }
 
-/* Custom Scrollbar for the list */
+/* Custom Scrollbar */
 .craft-you-cigar-video-selector-scroll-container::-webkit-scrollbar {
   width: 4px;
 }
+
 .craft-you-cigar-video-selector-scroll-container::-webkit-scrollbar-thumb {
   background: rgba(212, 175, 55, 0.3);
   border-radius: 10px;
@@ -82,6 +92,7 @@
   justify-content: space-between;
   align-items: center;
   transition: all 0.25s ease;
+  width: 100%;
 }
 
 .craft-you-cigar-video-selector-item-button:hover {
@@ -120,7 +131,6 @@
   gap: 8px;
 }
 
-/* Active/Open state for the toggle button */
 .craft-you-cigar-video-selector-toggle-btn.is-active {
   background-color: #d4af37;
   color: #000;
@@ -129,4 +139,139 @@
 .craft-you-cigar-video-selector-toggle-btn.is-closed {
   background-color: rgba(0, 0, 0, 0.85);
   color: #d4af37;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* HEADER */
+:root {
+  --ls-bg: #050505;
+  --ls-gold: #D4AF37;
+  --ls-gold-muted: #997a20;
+  --ls-glass: rgba(15, 15, 15, 0.7);
+  --ls-glass-border: rgba(212, 175, 55, 0.15);
+  --ls-font-heading: 'Playfair Display', serif;
+  --ls-font-body: 'Inter', sans-serif;
+  --ls-transition-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.ls-craft-header {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px 20px 40px 20px;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+.ls-craft-header-accent {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--ls-gold), transparent);
+  margin-bottom: 24px;
+}
+
+.ls-craft-header-title {
+  font-family: var(--ls-font-heading);
+  color: #ffffff;
+  font-size: 2.2rem;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0 0 14px 0;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.ls-craft-header-subtitle {
+  font-family: var(--ls-font-body);
+  color: #a0a0a0;
+  font-size: 0.95rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  max-width: 500px;
+  line-height: 1.6;
+  margin: 0 0 28px 0;
+}
+
+.ls-craft-guide-btn {
+  position: relative;
+  background: var(--ls-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--ls-glass-border);
+  padding: 12px 28px;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: var(--ls-transition-smooth);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.ls-guide-btn-text {
+  font-family: var(--ls-font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: var(--ls-transition-smooth);
+}
+
+.ls-guide-btn-icon {
+  font-family: var(--ls-font-body);
+  font-size: 0.9rem;
+  color: var(--ls-gold);
+  transition: var(--ls-transition-smooth);
+}
+
+.ls-craft-guide-btn:hover {
+  border-color: var(--ls-gold);
+  background: rgba(212, 175, 55, 0.05);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.15);
+}
+
+.ls-craft-guide-btn:hover .ls-guide-btn-text {
+  color: var(--ls-gold);
+}
+
+.ls-craft-guide-btn:hover .ls-guide-btn-icon {
+  transform: translateX(4px);
+}
+
+.ls-craft-guide-btn:active {
+  transform: scale(0.98);
+}
+
+@media (min-width: 768px) {
+  .ls-craft-header {
+    padding: 80px 40px 50px 40px;
+  }
+  
+  .ls-craft-header-title {
+    font-size: 3rem;
+  }
+  
+  .ls-craft-header-subtitle {
+    font-size: 1.05rem;
+  }
 }
