@@ -260,7 +260,12 @@ export default function ScrollVideo({ videoInfo={} }) {
   }, [showCanvas]); // Se dispara cuando termina el loading
 
   return (
-    <div className="scroll-container" style={{ height: "1200vh", background: "#000" }}>
+    <div className="scroll-container" 
+      style={{
+        height: "1200vh",
+        background: "#D6C8B9"
+      }}
+    >
       
       <AnimatePresence>
         {!showCanvas && (
@@ -332,8 +337,10 @@ export default function ScrollVideo({ videoInfo={} }) {
           height: "100vh",
           opacity: showCanvas ? 1 : 0,
           transition: "opacity 2s ease-in-out",
-          background: "black",
-          pointerEvents: "none"
+          pointerEvents: "none",
+          background: "transparent",
+          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+          maskImage: "linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)"
         }}
       />
        
@@ -404,6 +411,18 @@ export default function ScrollVideo({ videoInfo={} }) {
         .ls-controls-icon {
           display: block;
           transition: transform 0.2s ease;
+        }
+
+        ::-webkit-scrollbar {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+        }
+
+        /* Para Firefox y IE/Edge antiguo */
+        * {
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
         }
       `}</style>
     </div>
