@@ -8,21 +8,26 @@ import { motion, AnimatePresence } from "framer-motion";
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);
 
-const FloatingSteps = ({ steps, onStepClick, currentFrame }) => {
+
+const FloatingSteps = ({ frameCount, onStepClick, currentFrame }) => {
+  // Genera dinámicamente un arreglo con los 5 índices equidistantes basados exactamente en el total de imágenes
+  const steps = Array.from({ length: 5 }, (_, index) => {
+    return Math.round(((frameCount - 1) / 4) * index);
+  });
+
   return (
-    <motion.div 
+    <motion.div
       initial={{ x: 50, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       style={stepsContainerStyle}
-    >
+    >      
       {steps.map((frame, index) => {
-        // Lógica: Si el frame actual está entre este paso y el siguiente, está activo
-        const nextStepFrame = steps[index + 1] || 999999; 
+        const nextStepFrame = steps[index + 1] || 999999;
         const isThisStepActive = currentFrame >= frame && currentFrame < nextStepFrame;
 
         return (
-          <motion.button 
-            key={index} 
+          <motion.button
+            key={index}
             onClick={() => onStepClick(frame)}
             // Framer motion para animar suavemente el cambio de estado
             animate={{
@@ -48,8 +53,7 @@ const FloatingSteps = ({ steps, onStepClick, currentFrame }) => {
       })}
     </motion.div>
   );
-};
-
+}
 
 export default function ScrollVideo({ videoInfo={} }) {
   const canvasRef = useRef(null);
@@ -285,10 +289,10 @@ export default function ScrollVideo({ videoInfo={} }) {
           pointerEvents: "none"
         }}
       />
-
-      {showCanvas && videoInfo?.steps && (
-        <FloatingSteps 
-          steps={videoInfo.steps} 
+       
+      {showCanvas && (
+        <FloatingSteps
+          frameCount={frameCount}
           onStepClick={goToStep}
           currentFrame={activeStep}
         />
