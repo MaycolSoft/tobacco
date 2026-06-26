@@ -1,14 +1,3 @@
-:root {
-  --ls-bg: #050505;
-  --ls-gold: #D4AF37;
-  --ls-gold-muted: #997a20;
-  --ls-glass: rgba(15, 15, 15, 0.75);
-  --ls-glass-border: rgba(212, 175, 55, 0.15);
-  --ls-font-heading: 'Playfair Display', serif;
-  --ls-font-body: 'Inter', sans-serif;
-  --ls-transition-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
 .ls-blend-section {
   position: relative;
   width: 100%;

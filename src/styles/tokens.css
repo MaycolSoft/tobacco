@@ -1,0 +1,70 @@
+/**
+ * Design Tokens — fuente única de verdad para colores, tipografía y transiciones.
+ * Importar en main.jsx para que aplique globalmente.
+ * Para cambiar el tema: editar solo este archivo.
+ */
+
+:root {
+  /* ── Fondos ── */
+  --ls-bg:          #050505;    /* fondo principal de página */
+  --ls-bg-card:     #111111;    /* fondo de tarjetas */
+  --ls-bg-surface:  #1a1a1a;    /* superficies elevadas (modales, drawers) */
+  --ls-glass:       rgba(15, 15, 15, 0.75);
+
+  /* ── Acento bronce ── */
+  --ls-gold:        #8B5E3C;
+  --ls-gold-muted:  #5C3D22;
+  --ls-gold-subtle: rgba(139, 94, 60, 0.08);
+  --ls-gold-border: rgba(139, 94, 60, 0.22);
+
+  /* Alias para compatibilidad con archivos existentes */
+  --ls-glass-border: var(--ls-gold-border);
+
+  /* ── Texto ── */
+  --ls-text-primary:   #ffffff;
+  --ls-text-secondary: #a0a0a0;
+  --ls-text-dim:       #666666;
+  --ls-text-on-gold:   #ffffff;   /* bronce oscuro → texto blanco sobre él */
+
+  /* ── Tipografía — familias ── */
+  --ls-font-heading: 'Playfair Display', serif;
+  --ls-font-body:    'Inter', sans-serif;
+
+  /* ── Tipografía — escala Major Third (×1.25) ── */
+  --font-size-xs:   0.64rem;   /* ~10px  — badges, labels        */
+  --font-size-sm:   0.8rem;    /* ~13px  — texto secundario       */
+  --font-size-base: 1rem;      /* ~16px  — párrafos               */
+  --font-size-md:   1.25rem;   /* ~20px  — intro / lead text      */
+  --font-size-lg:   1.563rem;  /* ~25px  — h3                     */
+  --font-size-xl:   1.953rem;  /* ~31px  — h2                     */
+  --font-size-2xl:  2.441rem;  /* ~39px  — h1                     */
+  --font-size-3xl:  3.052rem;  /* ~49px  — display / hero         */
+
+  /* ── Tipografía — pesos ── */
+  --font-weight-light:   300;
+  --font-weight-regular: 400;
+  --font-weight-medium:  500;
+  --font-weight-bold:    700;
+
+  /* ── Tipografía — interlineado ── */
+  --line-height-tight:  1.15;  /* títulos grandes */
+  --line-height-snug:   1.35;  /* subtítulos      */
+  --line-height-normal: 1.6;   /* párrafos        */
+  --line-height-loose:  1.85;  /* texto muy legible */
+
+  /* ── Tipografía — espaciado de letras ── */
+  --letter-spacing-tight:   -0.02em;
+  --letter-spacing-normal:   0em;
+  --letter-spacing-wide:     0.05em;
+  --letter-spacing-wider:    0.1em;
+  --letter-spacing-widest:   0.2em;
+
+  /* ── Botones — tier colors ── */
+  --ls-btn-primary:   #8B5E3C;   /* tier primary (fill) */
+  --ls-btn-secondary: #8B5E3C;   /* tier secondary (border + text) */
+  --ls-btn-ghost:     #8B5E3C;   /* tier ghost (hover text) */
+
+  /* ── Transiciones ── */
+  --ls-transition-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  --ls-transition-fast:   all 0.25s ease;
+}

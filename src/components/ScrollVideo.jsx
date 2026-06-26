@@ -29,24 +29,12 @@ const FloatingSteps = ({ frameCount, onStepClick, currentFrame }) => {
           <motion.button
             key={index}
             onClick={() => onStepClick(frame)}
-            // Framer motion para animar suavemente el cambio de estado
-            animate={{
-              backgroundColor: isThisStepActive ? '#d4af37' : 'rgba(0, 0, 0, 0.6)',
-              color: isThisStepActive ? '#000' : '#d4af37',
-              scale: isThisStepActive ? 1.15 : 1,
-            }}
-            style={{
-              ...stepButtonStyle,
-              boxShadow: isThisStepActive ? '0 0 20px #d4af37' : '0 0 10px rgba(0,0,0,0.2)',
-              border: isThisStepActive ? '1px solid #fff' : '1px solid #d4af37',
-            }}
+            animate={{ scale: isThisStepActive ? 1.15 : 1 }}
+            className={`sv-step-btn ${isThisStepActive ? 'sv-step-btn--active' : ''}`}
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
           >
-            <span style={{
-              ...stepLabelStyle,
-              color: isThisStepActive ? '#000' : '#d4af37'
-            }}>PASO</span>
+            <span className="sv-step-label">PASO</span>
             {index + 1}
           </motion.button>
         );
@@ -61,7 +49,7 @@ export default function ScrollVideo({ videoInfo={} }) {
   const imagesRef = useRef([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const autoPlayTweenRef = useRef(null);
-  
+
   // Estados de carga y UI
   const [activeStep, setActiveStep] = useState(null);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -69,9 +57,19 @@ export default function ScrollVideo({ videoInfo={} }) {
   const [showCanvas, setShowCanvas] = useState(false);
   const [totalDownloaded, setTotalDownloaded] = useState(0);
 
+  // Control de velocidad de scroll
+  const [scrollHeight, setScrollHeight] = useState(() =>
+    parseInt(localStorage.getItem('sv-scroll-height') || '1200', 10)
+  );
+  const [showSpeedPanel, setShowSpeedPanel] = useState(false);
 
-  const CDN = videoInfo?.name == null ? "https://cdn.mbsoft.freeddns.org" : `https://cdn.mbsoft.freeddns.org/${videoInfo.name}`;
-  const frameCount = videoInfo?.length == null ? 1701 : videoInfo.length;
+  const handleScrollHeightChange = (val) => {
+    setScrollHeight(val);
+    localStorage.setItem('sv-scroll-height', String(val));
+  };
+
+  const CDN = `https://cdn.mbsoft.freeddns.org/${videoInfo.name}`;
+  const frameCount = videoInfo.length;
   const criticalBatch = 300;   
 
   const imgPath = (i) => `${CDN}/frame_${String(i).padStart(4, "0")}.webp`;
@@ -257,12 +255,18 @@ export default function ScrollVideo({ videoInfo={} }) {
       anim.kill();
       ScrollTrigger.getAll().forEach(t => t.kill());
     };
-  }, [showCanvas]); // Se dispara cuando termina el loading
+  }, [showCanvas]);
+
+  // Recalcular ScrollTrigger DESPUÉS de que React aplique el nuevo height al DOM
+  useEffect(() => {
+    if (!showCanvas) return;
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  }, [scrollHeight, showCanvas]);
 
   return (
-    <div className="scroll-container" 
+    <div className="scroll-container"
       style={{
-        height: "1200vh",
+        height: `${scrollHeight}vh`,
         background: "#D6C8B9"
       }}
     >
@@ -345,72 +349,174 @@ export default function ScrollVideo({ videoInfo={} }) {
       />
        
       {showCanvas && (
-        <FloatingSteps
-          frameCount={frameCount}
-          onStepClick={goToStep}
-          currentFrame={activeStep}
-        />
+        <div style={controlsColumnStyle}>
+          <FloatingSteps
+            frameCount={frameCount}
+            onStepClick={goToStep}
+            currentFrame={activeStep}
+          />
+          <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.12)', borderRadius: 1 }} />
+          <button
+            className="ls-controls-toggle"
+            onClick={togglePlayPause}
+          >
+            {isPlaying ? (
+              <svg className="ls-controls-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+              </svg>
+            ) : (
+              <svg className="ls-controls-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )}
+          </button>
+        </div>
       )}
 
       {showCanvas && (
-        <button
-          className="ls-controls-toggle"
-          onClick={togglePlayPause}
-          style={playPauseButtonStyle}
-        >
-          {isPlaying ? (
-            <svg className="ls-controls-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+        <div style={speedControlStyle}>
+          <button
+            className="sv-gear-btn"
+            onClick={() => setShowSpeedPanel(p => !p)}
+            title="Velocidad de scroll"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.02 7.02 0 0 0-1.62-.94l-.36-2.54A.484.484 0 0 0 14 2h-4a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.37 1.03.7 1.62.94l.36 2.54c.05.24.27.41.48.41h4c.22 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
             </svg>
-          ) : (
-            <svg className="ls-controls-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-              <path d="M8 5v14l11-7z" />
-            </svg>
+          </button>
+
+          {showSpeedPanel && (
+            <div className="sv-speed-panel">
+              <div className="sv-speed-label">
+                <span>VELOCIDAD</span>
+                <span className="sv-speed-value">{scrollHeight}vh</span>
+              </div>
+              <input
+                type="range"
+                min={150}
+                max={3000}
+                step={100}
+                value={scrollHeight}
+                onChange={e => handleScrollHeightChange(Number(e.target.value))}
+                className="sv-speed-slider"
+              />
+              <div className="sv-speed-hints">
+                <span>Rápido</span>
+                <span>Lento</span>
+              </div>
+            </div>
           )}
-        </button>
+        </div>
       )}
 
       <style>{`
-        :root {
-          --ls-bg: #050505;
-          --ls-gold: #D4AF37;
-          --ls-gold-muted: #997a20;
-        }
-
         .ls-controls-toggle {
-          position: fixed;
-          bottom: 30px;
-          right: 30px;
-          z-index: 7000;
           width: 50px;
           height: 50px;
           border-radius: 50%;
           background: rgba(5, 5, 5, 0.75);
-          border: 1px solid var(--ls-gold);
-          color: var(--ls-gold);
+          border: 1px solid var(--ls-btn-secondary);
+          color: var(--ls-btn-secondary);
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
           backdrop-filter: blur(8px);
-          box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
           transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
-
         .ls-controls-toggle:hover {
           transform: scale(1.1);
-          background: var(--ls-gold);
-          color: var(--ls-bg);
-          box-shadow: 0 0 25px var(--ls-gold);
+          background: var(--ls-btn-primary);
+          color: var(--ls-text-on-gold);
+          box-shadow: 0 0 25px var(--ls-btn-primary);
         }
-
-        .ls-controls-toggle:active {
-          transform: scale(0.95);
+        .ls-controls-toggle:active { transform: scale(0.95); }
+        .ls-controls-icon { display: block; transition: transform 0.2s ease; }
+        .sv-step-btn {
+          background: rgba(0, 0, 0, 0.6);
+          border: 1px solid var(--ls-btn-secondary);
+          color: var(--ls-btn-secondary);
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          font-weight: bold;
+          backdrop-filter: blur(5px);
+          transition: border-color 0.3s ease, color 0.3s ease;
         }
-
-        .ls-controls-icon {
-          display: block;
-          transition: transform 0.2s ease;
+        .sv-step-btn--active {
+          background: var(--ls-btn-primary);
+          color: var(--ls-text-on-gold);
+          border-color: transparent;
+          box-shadow: 0 0 20px var(--ls-btn-primary);
+        }
+        .sv-step-label {
+          font-size: 7px;
+          letter-spacing: 1px;
+          margin-bottom: -2px;
+          opacity: 0.8;
+        }
+        .sv-gear-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: rgba(5,5,5,0.75);
+          border: 1px solid var(--ls-btn-secondary);
+          color: var(--ls-btn-secondary);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          backdrop-filter: blur(8px);
+          transition: all 0.25s ease;
+        }
+        .sv-gear-btn:hover {
+          background: var(--ls-btn-primary);
+          color: var(--ls-text-on-gold);
+          border-color: transparent;
+        }
+        .sv-speed-panel {
+          position: absolute;
+          bottom: 44px;
+          left: 0;
+          background: rgba(8,8,8,0.88);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 10px;
+          padding: 14px 16px;
+          width: 200px;
+          backdrop-filter: blur(12px);
+        }
+        .sv-speed-label {
+          display: flex;
+          justify-content: space-between;
+          font-size: 9px;
+          letter-spacing: 1.5px;
+          color: rgba(255,255,255,0.5);
+          text-transform: uppercase;
+          margin-bottom: 10px;
+        }
+        .sv-speed-value {
+          color: var(--ls-btn-secondary);
+          font-weight: bold;
+        }
+        .sv-speed-slider {
+          width: 100%;
+          accent-color: var(--ls-btn-primary);
+          cursor: pointer;
+        }
+        .sv-speed-hints {
+          display: flex;
+          justify-content: space-between;
+          font-size: 8px;
+          color: rgba(255,255,255,0.3);
+          margin-top: 6px;
+          letter-spacing: 1px;
         }
 
         ::-webkit-scrollbar {
@@ -451,60 +557,30 @@ const statusContainer = { marginTop: '10px', display: 'flex', justifyContent: 's
 
 const debugStyle = { position: 'fixed', bottom: '20px', left: '20px', zIndex: 6000, background: 'rgba(0,0,0,0.7)', color: '#d4af37', padding: '8px 12px', borderRadius: '5px', fontSize: '10px', fontFamily: 'monospace' };
 
-const stepsContainerStyle = {
+const controlsColumnStyle = {
   position: 'fixed',
   right: '30px',
   top: '50%',
   transform: 'translateY(-50%)',
   display: 'flex',
   flexDirection: 'column',
+  alignItems: 'center',
   gap: '15px',
-  zIndex: 7000
+  zIndex: 7000,
 };
 
-const stepButtonStyle = {
-  background: 'rgba(0, 0, 0, 0.6)',
-  border: '1px solid #d4af37',
-  color: '#d4af37',
-  width: '50px',
-  height: '50px',
-  borderRadius: '50%',
-  cursor: 'pointer',
+const speedControlStyle = {
+  position: 'fixed',
+  bottom: '20px',
+  left: '20px',
+  zIndex: 7000,
+};
+
+const stepsContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: '14px',
-  fontWeight: 'bold',
-  transition: 'all 0.3s ease',
-  backdropFilter: 'blur(5px)',
-  boxShadow: '0 0 10px rgba(212, 175, 55, 0.2)'
+  gap: '15px',
 };
 
-const stepLabelStyle = {
-  fontSize: '7px',
-  letterSpacing: '1px',
-  marginBottom: '-2px',
-  opacity: 0.8
-};
-
-const playPauseButtonStyle = {
-  position: 'fixed',
-  bottom: '30px',
-  right: '30px',
-  zIndex: 7000,
-  width: '50px',
-  height: '50px',
-  borderRadius: '50%',
-  background: 'rgba(5, 5, 5, 0.75)',
-  border: '1px solid #d4af37',
-  color: '#d4af37',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backdropFilter: 'blur(8px)',
-  boxShadow: '0 0 15px rgba(212, 175, 55, 0.15)',
-  transition: 'all 0.3s cubic-bezier(0.25, 1, 0.5, 1)'
-};
 

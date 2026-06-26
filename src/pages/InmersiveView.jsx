@@ -204,7 +204,7 @@ const InmersiveView = ({ leaf }) => {
 
   return (
     <section className="th-section">
-      <button className="th-play-toggle" onClick={toggleAutoScroll}>
+      <button className="th-play-toggle btn btn-primary btn-pill" onClick={toggleAutoScroll}>
         {isPlaying ? 'Pausar' : 'Continuar'}
       </button>
 

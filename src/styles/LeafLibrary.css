@@ -1,9 +1,9 @@
 .ls-container {
   padding: 2px 5%;
-  background: #050505;
+  background: var(--ls-bg);
   min-height: 100vh;
-  color: #fff;
-  font-family: 'Inter', sans-serif;
+  color: var(--ls-text-primary);
+  font-family: var(--ls-font-body);
 }
 
 .no-scroll {
@@ -17,9 +17,9 @@
 }
 
 .ls-title {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--ls-font-heading);
   font-size: 3rem;
-  color: #d4af37;
+  color: var(--ls-gold);
 }
 
 /* FILTERS */
@@ -34,18 +34,18 @@
 .ls-filter-btn {
   background: none;
   border: none;
-  color: #666;
+  color: var(--ls-text-dim);
   cursor: pointer;
   padding: 6px 12px;
   border-bottom: 2px solid transparent;
-  transition: 0.25s;
+  transition: var(--ls-transition-fast);
   font-size: 0.75rem;
   letter-spacing: 1px;
 }
 
 .ls-filter-btn.active {
-  color: #d4af37;
-  border-color: #d4af37;
+  color: var(--ls-gold);
+  border-color: var(--ls-gold);
 }
 
 /* GRID */
@@ -59,10 +59,10 @@
 
 /* CARD */
 .ls-card {
-  background: #111;
+  background: var(--ls-bg-card);
   border-radius: 14px;
   overflow: hidden;
-  transition: 0.3s;
+  transition: var(--ls-transition-fast);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -96,13 +96,13 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  background: #d4af37;
-  color: #000;
+  background: var(--ls-gold);
+  color: var(--ls-text-on-gold);
   padding: 4px 10px;
   font-size: 0.65rem;
   font-weight: bold;
-  z-index: 10; /* Asegura visibilidad */
-  border-radius: 4px; /* Opcional: estética */
+  z-index: 10;
+  border-radius: 4px;
   pointer-events: none;
 }
 
@@ -119,20 +119,19 @@
   background: linear-gradient(90deg, #f53c13, #ff7a3c);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--ls-font-heading);
   letter-spacing: 0.5px;
 }
 
 .ls-origin {
   font-size: 0.7rem;
-  color: #d4af37;
+  color: var(--ls-gold);
 }
 
-/* TEXT FIX */
 .ls-desc {
   margin: 10px 0 20px;
   font-size: 0.85rem;
-  color: #aaa;
+  color: var(--ls-text-secondary);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -147,36 +146,20 @@
 }
 
 .ls-btn {
+  /* layout only — override inline-flex de .btn para que flex: 1 funcione */
   flex: 1;
-  padding: 10px;
-  font-size: 0.7rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.25s;
-}
-
-.ls-btn-primary {
-  background: #d4af37;
-  border: none;
-  color: #000;
-}
-
-.ls-btn-outline {
-  background: transparent;
-  border: 1px solid #444;
-  color: #fff;
-}
-
-.ls-btn-outline:hover {
-  background: #fff;
-  color: #000;
+  display: flex;
+  justify-content: center;
+  padding: 10px 10px;
+  letter-spacing: 0.06em;
+  font-size: 0.68rem;
 }
 
 /* OVERLAY */
 .ls-overlay {
   position: fixed;
   inset: 0;
-  background: #000;
+  background: var(--ls-text-on-gold);
   z-index: 9999;
   animation: fadeIn 0.2s ease;
 }
@@ -190,14 +173,26 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  background: rgba(0,0,0,0.6);
-  border: none;
-  color: #fff;
-  padding: 8px 15px;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--ls-btn-secondary);
+  color: var(--ls-btn-secondary);
+  padding: 8px 16px;
   border-radius: 30px;
   cursor: pointer;
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  transition: var(--ls-transition-fast);
+  font-size: var(--font-size-sm);
+  font-family: var(--ls-font-body);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+}
+.ls-close-trigger:hover {
+  filter: brightness(1.25);
+  background: rgba(0, 0, 0, 0.9);
 }
 
 .ls-close-icon {
@@ -207,7 +202,7 @@
 /* ANIMATION */
 @keyframes fadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 
 /* MOBILE */

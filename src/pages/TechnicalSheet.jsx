@@ -57,7 +57,7 @@ const TechnicalSheet = ({ leaf }) => {
             </div>
           </div>
 
-          <button className="ts-select-btn" onClick={() => alert('Hoja seleccionada para el blend')}>
+          <button className="ts-select-btn btn btn-primary" onClick={() => alert('Hoja seleccionada para el blend')}>
             SELECCIONAR PARA MI PURO
           </button>
         </div>

@@ -105,17 +105,14 @@
 }
 
 .ts-select-btn {
-  background: #d4af37;
-  color: #000;
-  border: none;
+  /* visual delegado a .btn.btn-primary — solo overrides de layout */
   padding: 18px;
-  font-weight: 900;
   letter-spacing: 2px;
-  cursor: pointer;
-  transition: 0.3s;
+  font-weight: 900;
+  width: 100%;
+  border-radius: 0;
 }
-
-.ts-select-btn:hover { background: #fff; transform: scale(1.02); }
+.ts-select-btn:hover { transform: scale(1.02); }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
