@@ -18,7 +18,7 @@ export default function FloatingPrepButton({ visible, onClick }) {
           }}
         >
           <button
-            className="prep-button"
+            className="prep-button btn btn-primary btn-pill"
             onClick={onClick}
           >
             Iniciar preparación

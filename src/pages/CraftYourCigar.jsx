@@ -97,10 +97,9 @@ const ButtonFlotanteItem = ({ openName = "Open", closeName = "Close", onClick, c
       </AnimatePresence>
 
       <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className={`craft-you-cigar-video-selector-toggle-btn ${isOpen ? "is-active" : "is-closed"
-          }`}
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
+        className={`btn btn-pill ${isOpen ? "btn-primary" : "btn-secondary"}`}
         onClick={onClick ? onClick : () => setIsOpen((prev) => !prev)}
       >
         {isOpen ? `✕ ${closeName}` : `${openName}`}
@@ -127,30 +126,26 @@ function CraftYourCigar() {
   const [showVideo, setShowVideo] = useState(false);
   const [videoInfo, setVideoInfo] = useState(null);
 
-  const handleSelect = (id) => {
-    setSelectedLeaves((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
-  };
+
 
 
   return (
     <div className="craft-container">
-      
+
       {showVideo && (
         <AnimatePresence>
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={immersiveOverlay}
-            id="video-root" // ID para que GSAP sepa donde está el scroll
+            className="craft-immersive-overlay"
+            id="video-root"
           >
-            <button 
-              onClick={() => { 
+            <button
+              onClick={() => {
                 setShowVideo(false);
               }}
-              style={backButtonStyle}
+              className="craft-back-btn btn btn-secondary btn-pill"
             >
               ✕ Volver a Mezclar
             </button>
@@ -162,29 +157,17 @@ function CraftYourCigar() {
       {/* Contenido principal oculto si el video está activo para evitar doble scroll */}
       {!showVideo && (
         <>
-          {/* <div className="ls-craft-header">
-            <div className="ls-craft-header-accent" />
-            <h1 className="ls-craft-header-title">Tobacco Leaf Selector</h1>
-            <p className="ls-craft-header-subtitle">
-              Select real tobacco leaves to form a blend.
-            </p>
-            <button
-              className="ls-craft-guide-btn"
-              onClick={() => setShowGuide(true)}
-            >
-              <span className="ls-guide-btn-text">Show Tobacco Guide</span>
-              <span className="ls-guide-btn-icon">→</span>
-            </button>
-          </div> */}
 
           <BlendProfiles blends={blends} onSelectCombo={setSelectedLeaves} />
-          <LeafGrid leaves={leaves} selectedLeaves={selectedLeaves} onSelect={handleSelect} />
+          <LeafGrid
+            leaves={leaves}
+            onComplete={(sel) => setSelectedLeaves([...sel.TRIPA, ...sel.CAPOTE, ...sel.CAPA])}
+          />
 
           <FloatingPrepButton
             visible={selectedLeaves.length > 0}
             onClick={() => {setVideoInfo(listVideos[1]); setShowVideo(true);} }
           />
-
 
           
 
@@ -202,8 +185,8 @@ function CraftYourCigar() {
 
           <AnimatePresence>
             {showGuide && (
-              <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} style={guideModalStyle}>
-                <button onClick={() => setShowGuide(false)} style={backButtonStyle} >Cerrar Guía</button>
+              <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="craft-guide-modal">
+                <button onClick={() => setShowGuide(false)} className="craft-back-btn btn btn-secondary btn-pill">Cerrar Guía</button>
                 <TobaccoGuidePage />
               </motion.div>
             )}
@@ -216,43 +199,5 @@ function CraftYourCigar() {
 }
 
 
-
-const guideModalStyle = {
-  position: "fixed",
-  bottom: 0,
-  left: 0,
-  width: "100%",
-  height: "90vh",
-  background: "#1a1a1a",
-  zIndex: 2000,
-  borderTop: "2px solid #d4af37",
-  overflowY: "auto"
-};
-
-const immersiveOverlay = {
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100vw',
-  height: '100vh',
-  zIndex: 9999,
-  background: '#000',
-  overflowY: 'auto', // 🔥 CRÍTICO: Permite el scroll dentro del overlay
-  overflowX: 'hidden',
-};
-
-const backButtonStyle = {
-  position: "fixed", 
-  top: "20px",
-  left: "20px",
-  zIndex: 10000,
-  padding: "10px 20px",
-  borderRadius: "20px",
-  background: "rgba(0,0,0,0.7)",
-  color: "#d4af37",
-  border: "1px solid #d4af37",
-  cursor: "pointer",
-  backdropFilter: "blur(5px)"
-};
 
 export default CraftYourCigar;

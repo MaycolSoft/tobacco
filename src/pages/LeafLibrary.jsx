@@ -92,7 +92,7 @@ const LeafSelector = () => {
                 {leaf.hasInmersive && (
                   <button
                     onClick={() => handleOpenView(leaf, VIEW.INMERSIVE)}
-                    className="ls-btn ls-btn-primary"
+                    className="ls-btn btn btn-primary"
                   >
                     Inmersiva
                   </button>
@@ -100,7 +100,7 @@ const LeafSelector = () => {
 
                 <button
                   onClick={() => handleOpenView(leaf, VIEW.TECHNICAL)}
-                  className="ls-btn ls-btn-outline"
+                  className="ls-btn btn btn-secondary"
                 >
                   Ficha Técnica
                 </button>

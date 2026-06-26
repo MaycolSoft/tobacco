@@ -1,0 +1,185 @@
+/**
+ * Typography — estilos semánticos globales.
+ * Estiliza los tags HTML nativos directamente para que todo el proyecto
+ * herede la jerarquía sin necesidad de agregar clases.
+ */
+
+/* ── Base ── */
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--ls-font-body);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color: var(--ls-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Headings ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--ls-font-heading);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--ls-text-primary);
+  margin: 0 0 0.5em 0;
+}
+
+h1 { font-size: var(--font-size-2xl); }
+h2 { font-size: var(--font-size-xl);  }
+h3 { font-size: var(--font-size-lg);  }
+h4 { font-size: var(--font-size-md);  }
+h5 { font-size: var(--font-size-base); font-weight: var(--font-weight-medium); letter-spacing: var(--letter-spacing-wider); text-transform: uppercase; }
+h6 { font-size: var(--font-size-sm);  font-weight: var(--font-weight-medium); letter-spacing: var(--letter-spacing-widest); text-transform: uppercase; color: var(--ls-gold); }
+
+/* ── Párrafos ── */
+p {
+  font-family: var(--ls-font-body);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--ls-text-secondary);
+  margin: 0 0 1em 0;
+}
+
+/* ── Énfasis ── */
+strong, b {
+  font-weight: var(--font-weight-bold);
+  color: var(--ls-text-primary);
+}
+
+em, i {
+  font-style: italic;
+  color: var(--ls-text-secondary);
+}
+
+/* ── Clases utilitarias — cuando necesitas más control ── */
+
+/* Display: hero sections, portadas */
+.text-display {
+  font-family: var(--ls-font-heading);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* Lead: párrafo introductorio destacado */
+.text-lead {
+  font-family: var(--ls-font-body);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-light);
+  line-height: var(--line-height-loose);
+  color: var(--ls-text-secondary);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+/* Caption: pies de foto, notas */
+.text-caption {
+  font-family: var(--ls-font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--ls-text-dim);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+}
+
+/* Label: etiquetas, badges de UI */
+.text-label {
+  font-family: var(--ls-font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-widest);
+  text-transform: uppercase;
+}
+
+/* Gold accent: texto con el color dorado */
+.text-gold {
+  color: var(--ls-gold);
+}
+
+/* Muted: texto atenuado */
+.text-muted {
+  color: var(--ls-text-dim);
+}
+
+/* ─────────────────────────────────────────
+   BUTTON TIERS — sistema de 3 niveles
+   Uso: <button className="btn btn-primary">
+        <button className="btn btn-secondary btn-pill">
+   ───────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 26px;
+  border-radius: 4px;
+  font-family: var(--ls-font-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: var(--ls-transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Primary — acción principal, relleno */
+.btn-primary {
+  background: var(--ls-btn-primary);
+  color: var(--ls-text-on-gold);
+  border-color: var(--ls-btn-primary);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+.btn-primary:hover {
+  filter: brightness(1.18);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+  filter: brightness(0.95);
+}
+
+/* Secondary — acciones importantes, borde */
+.btn-secondary {
+  background: transparent;
+  color: var(--ls-btn-secondary);
+  border-color: var(--ls-btn-secondary);
+  backdrop-filter: blur(8px);
+}
+.btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.25);
+  filter: brightness(1.15);
+}
+
+/* Ghost — acciones de navegación/cierre, sin borde */
+.btn-ghost {
+  background: transparent;
+  color: var(--ls-text-secondary);
+  border-color: transparent;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.btn-ghost:hover {
+  color: var(--ls-btn-ghost);
+}
+
+/* Pill — opcional, combinable con cualquier tier */
+.btn-pill {
+  border-radius: 50px;
+}
+
+/* Disabled — aplica a todos */
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}

@@ -1,6 +1,8 @@
 
 import React from "react";
 import { createRoot } from 'react-dom/client'
+import '@styles/tokens.css';
+import '@styles/typography.css';
 // import App from "@components/App";
 import App from "./App.jsx";
 import CentralLogViewer from '@components/CentralLogViewer.jsx'
