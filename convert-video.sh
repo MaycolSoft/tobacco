@@ -15,10 +15,10 @@ for video in "$INPUT_DIR"/*.mp4; do
     echo "Procesando: $video_name"
     echo "------------------------------------------------"
 
-    # Se eliminó la redirección a /dev/null para que puedas ver el avance en tiempo real
+    # Configuración optimizada para mantener el 100% de la calidad original (Lossless)
     ffmpeg -i "$video" \
         -threads 8 \
-        -c:v libwebp -lossless 0 -q:v 75 -compression_level 4 \
+        -c:v libwebp -lossless 1 -compression_level 6 \
         -fps_mode passthrough \
         "$target_folder/frame_%04d.webp" -y
 done
