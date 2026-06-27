@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { motion, AnimatePresence } from "framer-motion";
+import { getOrDownloadFrame, blobToImage } from "@/data/frameCache";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);
@@ -178,42 +179,89 @@ export default function ScrollVideo({ videoInfo={} }) {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
+
+    let cancelled = false;
     let loadedCount = 0;
+
+    const criticalTarget = Math.min(criticalBatch, frameCount);
 
     const setSize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      if (imagesRef.current[frameRef.current.index]) {
-        drawContain(ctx, imagesRef.current[frameRef.current.index], canvas);
+
+      const currentImage = imagesRef.current[frameRef.current.index];
+
+      if (currentImage) {
+        drawContain(ctx, currentImage, canvas);
       }
     };
 
     window.addEventListener("resize", setSize);
     setSize();
 
-    // Precarga de imágenes
-    for (let i = 0; i < frameCount; i++) {
-      const img = new Image();
-      img.src = imgPath(i + 1);
-      img.onload = () => {
-        loadedCount++;
-        setTotalDownloaded(loadedCount);
-        if (loadedCount <= criticalBatch) {
-          const progress = Math.round((loadedCount / criticalBatch) * 100);
-          setLoadingProgress(progress);
-          if (loadedCount === criticalBatch) {
-            setTimeout(() => {
-              setIsReady(true);
-              setTimeout(() => setShowCanvas(true), 800);
-            }, 1000);
+    async function loadFrame(frameNumber) {
+      const url = imgPath(frameNumber);
+      const key = `${videoInfo.name}:frame:${String(frameNumber).padStart(4, "0")}`;
+
+      const { blob, fromCache } = await getOrDownloadFrame({
+        key,
+        url,
+        videoName: videoInfo.name,
+        frame: frameNumber,
+      });
+
+      const img = await blobToImage(blob);
+
+      if (cancelled) return;
+
+      imagesRef.current[frameNumber - 1] = img;
+
+      loadedCount++;
+
+      setTotalDownloaded(loadedCount);
+
+      if (loadedCount <= criticalTarget) {
+        const progress = Math.round((loadedCount / criticalTarget) * 100);
+        setLoadingProgress(progress);
+      }
+
+      if (loadedCount === criticalTarget) {
+        setIsReady(true);
+
+        setTimeout(() => {
+          if (!cancelled) {
+            setShowCanvas(true);
           }
-        }
-      };
-      imagesRef.current[i] = img;
+        }, 800);
+      }
+
+      return fromCache;
     }
 
-    return () => window.removeEventListener("resize", setSize);
-  }, []);
+    async function preloadFrames() {
+      try {
+        // Primero carga los frames críticos.
+        for (let i = 1; i <= criticalTarget; i++) {
+          await loadFrame(i);
+        }
+
+        // Luego carga el resto en segundo plano.
+        for (let i = criticalTarget + 1; i <= frameCount; i++) {
+          if (cancelled) break;
+          loadFrame(i).catch(console.error);
+        }
+      } catch (error) {
+        console.error("Error cargando frames:", error);
+      }
+    }
+
+    preloadFrames();
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener("resize", setSize);
+    };
+  }, [frameCount, videoInfo.name]);
 
   // EFECTO 2: Inicialización de GSAP (Solo cuando el canvas es visible)
   useEffect(() => {
