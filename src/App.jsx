@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from '@components/ProtectedRoute';
 import Login from '@pages/Login';
+import Seo from '@components/Seo';
 
 // Layout
 import MainLayout from '@components/layout/MainLayout';
@@ -22,6 +23,7 @@ import LeafLibrary from '@/pages/LeafLibrary';
 function App() {
   return (
     <Router>
+      <Seo />
       <LayoutControlPanel />
       <MainLayout>
         <Routes>

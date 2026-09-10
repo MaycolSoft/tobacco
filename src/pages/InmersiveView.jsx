@@ -1,321 +1,124 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowLeft, ArrowRight, Play, Pause, RotateCcw } from 'lucide-react';
+import { getLeafChapters } from '@/data/leafPresentation';
 import '@/styles/AnatomiaHoja.css';
 
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-
-const InmersiveView = ({ leaf }) => {
-  const containerRef = useRef(null);
-  const leafRef = useRef(null);
-  const svgRef = useRef(null);
-  const autoScrollRef = useRef(null);
-
-  const markersRef = useRef([]);
-  const textBlocksRef = useRef([]);
-
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  // Default marker positions
-  const defaultCoords = [
-    { x: 50, y: 15 },
-    { x: 45, y: 40 },
-    { x: 55, y: 65 },
-    { x: 50, y: 85 },
-  ];
-
-  const [coords, setCoords] = useState(() => {
-    const saved = localStorage.getItem('leaf-marker-final');
-    return saved ? JSON.parse(saved) : defaultCoords;
-  });
-
-  // Leaf information sections
-  const sections = [
-    {
-      title: 'Identidad Premium',
-      tag: 'APARIENCIA',
-      desc: 'Presenta una apariencia brillante y aceitosa. Es el estándar de oro en estética para cigarros de alta gama.',
-      stats: ['Brillo Intenso', 'Textura Fina'],
-      side: 'right',
-    },
-    {
-      title: 'Perfil Aromático',
-      tag: 'SABORES',
-      desc: 'Aporta un dulzor natural elegante con notas marcadas de madera tostada, cacao y tierra.',
-      stats: ['Pimienta', 'Madera', 'Cacao'],
-      side: 'left',
-    },
-    {
-      title: 'Cuerpo y Humo',
-      tag: 'ESTRUCTURA',
-      desc: 'Proporciona una fuerza media–alta con un humo denso y altamente aromático que llena el paladar.',
-      stats: ['Cuerpo Denso', 'Fuerza 4/5'],
-      side: 'right',
-    },
-    {
-      title: 'Combustión',
-      tag: 'DINÁMICA',
-      desc: 'Su quema es moderada–lenta, permitiendo que la evolución del sabor sea constante y placentera.',
-      stats: ['Quema Lenta', 'Ceniza Firme'],
-      side: 'left',
-    },
-  ];
-
-  // Pause automatic scroll
-  const pauseAutoScroll = () => {
-    autoScrollRef.current?.pause();
-    setIsPlaying(false);
-  };
-
-  // Resume automatic scroll
-  const playAutoScroll = () => {
-    autoScrollRef.current?.play();
-    setIsPlaying(true);
-  };
-
-  // Toggle play / pause
-  const toggleAutoScroll = () => {
-    if (isPlaying) {
-      pauseAutoScroll();
-    } else {
-      playAutoScroll();
-    }
-  };
-
-  // Marker drag handler
-  const handleDrag = (index, e) => {
-    const svg = svgRef.current;
-    if (!svg) return;
-
-    const point = svg.createSVGPoint();
-
-    point.x = e.clientX;
-    point.y = e.clientY;
-
-    const cursorPoint = point.matrixTransform(svg.getScreenCTM().inverse());
-
-    setCoords((prevCoords) => {
-      const newCoords = [...prevCoords];
-
-      newCoords[index] = {
-        x: Math.max(5, Math.min(95, cursorPoint.x)),
-        y: Math.max(5, Math.min(95, cursorPoint.y)),
-      };
-
-      localStorage.setItem('leaf-marker-final', JSON.stringify(newCoords));
-
-      return newCoords;
-    });
-  };
+export default function InmersiveView({ leaf, onComplete }) {
+  const chapters = getLeafChapters(leaf);
+  const [step, setStep] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [finished, setFinished] = useState(false);
+  const [imageState, setImageState] = useState('loading');
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const elapsed = useRef(0);
+  const stageRef = useRef(null);
+  const touchStart = useRef(null);
+  const wheelGesture = useRef({ distance: 0, last: 0, locked: false });
+  const chapter = chapters[step];
 
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top top',
-          end: '+=500%',
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-        },
-      });
-
-      // Initial leaf entrance
-      tl.fromTo(
-        leafRef.current,
-        { scale: 0.8, opacity: 1 },
-        { scale: 1, opacity: 1, duration: 2 }
-      );
-
-      // Marker and text sequence
-      sections.forEach((_, i) => {
-        gsap.set(markersRef.current[i], {
-          opacity: 0,
-          scale: 0,
-        });
-
-        gsap.set(textBlocksRef.current[i], {
-          opacity: 0,
-          x: i % 2 === 0 ? 40 : -40,
-          filter: 'blur(12px)',
-        });
-
-        tl.to(markersRef.current[i], {
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-        })
-          .to(
-            textBlocksRef.current[i],
-            {
-              opacity: 1,
-              x: 0,
-              filter: 'blur(0px)',
-              duration: 1.5,
-            },
-            '<'
-          )
-          .to(
-            [markersRef.current[i], textBlocksRef.current[i]],
-            {
-              opacity: 0,
-              duration: 1,
-            },
-            '+=1.8'
-          );
-      });
-
-      // Final leaf exit
-      tl.to(leafRef.current, {
-        scale: 1.1,
-        opacity: 0,
-        filter: 'blur(20px)',
-        duration: 2,
-      });
-
-      // Start automatic cinematic scroll
-      requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
-
-        setTimeout(() => {
-          const st = tl.scrollTrigger;
-
-          if (!st) return;
-
-          autoScrollRef.current = gsap.to(window, {
-            scrollTo: st.end,
-            duration: 18,
-            ease: 'power1.inOut',
-            paused: true, // 👈 CLAVE
-          });
-        }, 500);
-      });
-    }, containerRef.current);
-
-    return () => {
-      autoScrollRef.current?.kill();
-      ctx.revert();
-    };
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => { setReducedMotion(query.matches); if (query.matches) setPlaying(false); };
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
   }, []);
 
+  useEffect(() => {
+    if (!playing || imageState !== 'loaded') return;
+    let last = performance.now();
+    const timer = window.setInterval(() => {
+      const now = performance.now();
+      if (!document.hidden) elapsed.current += now - last;
+      last = now;
+      setProgress(Math.min(elapsed.current / 9000, 1));
+      if (elapsed.current >= 9000) {
+        elapsed.current = 0;
+        if (step < chapters.length - 1) { setStep(value => value + 1); setProgress(0); }
+        else { setPlaying(false); setFinished(true); setProgress(1); }
+      }
+    }, 100);
+    return () => window.clearInterval(timer);
+  }, [playing, step, chapters.length, imageState]);
+
+  const goTo = (index) => {
+    setStep(index); setPlaying(false); setFinished(false); setProgress(0); elapsed.current = 0;
+  };
+  const togglePlay = () => {
+    if (finished) { goTo(0); setPlaying(true); }
+    else setPlaying(value => !value);
+  };
+
+  // Scroll drives the chapters only over the image on desktop; the page keeps its own scroll.
+  useEffect(() => {
+    const stage = stageRef.current;
+    const onWheel = (event) => {
+      if (event.ctrlKey || !window.matchMedia('(min-width: 801px) and (hover: hover)').matches) return;
+      const direction = Math.sign(event.deltaY);
+      const next = step + direction;
+      const now = performance.now();
+      const gesture = wheelGesture.current;
+      const idle = now - gesture.last;
+      gesture.last = now;
+      if (idle > 180) { gesture.distance = 0; gesture.locked = false; }
+      if (gesture.locked) { event.preventDefault(); return; }
+      if (!direction || next < 0 || next >= chapters.length) return;
+      event.preventDefault();
+      gesture.distance += event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? stage.clientHeight : 1);
+      if (Math.abs(gesture.distance) < 65) return;
+      gesture.locked = true;
+      setStep(next); setPlaying(false); setFinished(false); setProgress(0); elapsed.current = 0;
+    };
+    stage.addEventListener('wheel', onWheel, { passive: false });
+    return () => stage.removeEventListener('wheel', onWheel);
+  }, [step, chapters.length]);
+
   return (
-    <section className="th-section">
-      <button className="th-play-toggle btn btn-primary btn-pill" onClick={toggleAutoScroll}>
-        {isPlaying ? 'Pausar' : 'Continuar'}
-      </button>
-
-      <div
-        ref={containerRef}
-        className="th-viewport"
-      >
-        <div className="th-dev-hint">
-          Editor de Anatomía: {sections.length} Puntos Activos
+    <section className="th-experience" aria-label={`Exploración de ${leaf.name}`}>
+      <div ref={stageRef} className={`th-stage th-stage-${step} ${reducedMotion ? 'th-reduced' : ''}`}
+        onTouchStart={event => { const touch = event.touches[0]; touchStart.current = { x: touch.clientX, y: touch.clientY }; }}
+        onTouchEnd={event => {
+          if (!touchStart.current) return;
+          const touch = event.changedTouches[0];
+          const dx = touch.clientX - touchStart.current.x;
+          const dy = touch.clientY - touchStart.current.y;
+          touchStart.current = null;
+          const next = step + (dx < 0 ? 1 : -1);
+          if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.5 && next >= 0 && next < chapters.length) goTo(next);
+        }} onTouchCancel={() => { touchStart.current = null; }}>
+        <div className="th-scene-caption"><span>Estudio de la hoja</span><span>0{step + 1} / 04</span></div>
+        <div className="th-leaf-frame">
+          <img src={leaf.fullImg} alt={`Detalle de la hoja ${leaf.name}`} className={`th-leaf ${imageState === 'loaded' ? 'is-loaded' : ''}`} onLoad={() => setImageState('loaded')} onError={() => setImageState('error')} />
+          {imageState === 'loading' && <span className="th-image-status" role="status">Preparando la hoja…</span>}
+          {imageState === 'error' && <span className="th-image-status" role="status">No se pudo cargar la imagen de esta hoja.</span>}
+          {imageState === 'loaded' && <span className="th-point" style={{ left: `${chapter.x}%`, top: `${chapter.y}%` }} aria-hidden="true"><span />0{step + 1}</span>}
         </div>
-
-        <div className="th-canvas">
-          <div className="th-leaf-wrapper">
-            <div className="th-leaf-img-wrap">
-              <img
-                ref={leafRef}
-                src={
-                  leaf?.fullImg ??
-                  'https://png.pngtree.com/png-clipart/20220716/ourmid/pngtree-banana-yellow-fruit-banana-skewers-png-image_5944324.png'
-                }
-                alt="Hoja de Tabaco"
-                className="th-leaf-main"
-                onLoad={(e) => {
-                  e.currentTarget.classList.add('loaded');
-                  ScrollTrigger.refresh();
-                }}
-              />
-
-              <div className="th-leaf-skeleton" />
-            </div>
-
-            <svg
-              ref={svgRef}
-              className="th-svg-overlay"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-            >
-              {sections.map((s, i) => (
-                <g
-                  key={s.title}
-                  ref={(el) => {
-                    markersRef.current[i] = el;
-                  }}
-                  className="th-marker-group"
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-
-                    const moveHandler = (ev) => handleDrag(i, ev);
-
-                    window.addEventListener('mousemove', moveHandler);
-                    window.addEventListener(
-                      'mouseup',
-                      () => window.removeEventListener('mousemove', moveHandler),
-                      { once: true }
-                    );
-                  }}
-                >
-                  <circle cx={coords[i].x} cy={coords[i].y} r="7" fill="transparent" />
-                  <circle cx={coords[i].x} cy={coords[i].y} r="1.2" fill="#d4af37" />
-                  <circle
-                    cx={coords[i].x}
-                    cy={coords[i].y}
-                    r="3"
-                    stroke="#d4af37"
-                    strokeWidth="0.5"
-                    fill="none"
-                    className="th-pulse-ring"
-                  />
-                </g>
-              ))}
-            </svg>
+        <span className="th-image-name" aria-hidden="true">{leaf.name}</span>
+      </div>
+      <div className="th-story">
+        <nav className="th-chapters" aria-label="Capítulos de la experiencia">
+          {chapters.map((item, index) => <button key={item.label} className={step === index ? 'active' : ''} aria-current={step === index ? 'step' : undefined} onClick={() => goTo(index)}><span>0{index + 1}</span>{item.label}</button>)}
+        </nav>
+        <div className="th-narrative" key={step} aria-live="polite" aria-atomic="true">
+          <span className="ls-eyebrow">Capítulo 0{step + 1} · {chapter.label}</span>
+          <h3>{chapter.title}</h3>
+          <p>{chapter.text}</p>
+          <span className="th-detail">{chapter.detail}</span>
+        </div>
+        <div className="th-playback">
+          <div className="th-progress" aria-hidden="true"><span style={{ width: `${finished ? 100 : (step + progress) / chapters.length * 100}%` }} /></div>
+          <div className="th-controls">
+            <button className="th-play" onClick={togglePlay} disabled={imageState !== 'loaded'}>
+              {finished ? <RotateCcw size={17} /> : playing ? <Pause size={17} /> : <Play size={17} />}
+              {finished ? 'Volver a explorar' : playing ? 'Pausar recorrido' : progress > 0 ? 'Continuar recorrido' : 'Reproducir recorrido'}
+            </button>
+            <div className="th-step-controls"><button disabled={step === 0} onClick={() => goTo(step - 1)} aria-label="Capítulo anterior"><ArrowLeft size={19} /></button><button disabled={step === chapters.length - 1} onClick={() => goTo(step + 1)} aria-label="Capítulo siguiente"><ArrowRight size={19} /></button></div>
           </div>
-
-          <div className="th-overlay-content">
-            {sections.map((s, i) => {
-              const isRight = s.side === 'right';
-
-              return (
-                <div
-                  key={s.title}
-                  ref={(el) => {
-                    textBlocksRef.current[i] = el;
-                  }}
-                  className={`th-floating-text th-side-${s.side}`}
-                  style={{
-                    top: `${coords[i].y}%`,
-                    left: isRight ? `${coords[i].x + 6}%` : 'auto',
-                    right: !isRight ? `${100 - coords[i].x + 6}%` : 'auto',
-                  }}
-                >
-                  <div className="th-text-box">
-                    <span className="th-tag-label">{s.tag}</span>
-                    <h2>{s.title}</h2>
-                    <p>{s.desc}</p>
-
-                    <div className="th-stats-chips">
-                      {s.stats.map((stat) => (
-                        <span key={stat} className="th-chip">
-                          {stat}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <p className="th-play-hint">{finished ? 'Has llegado al final del recorrido.' : <>Explora a tu ritmo o activa la reproducción guiada.<span className="th-desktop-hint"> También puedes desplazar sobre la hoja para cambiar de capítulo.</span><span className="th-touch-hint"> Desliza la hoja hacia los lados para cambiar de capítulo.</span></>}</p>
+          {finished && onComplete && <button className="th-finish" onClick={onComplete}>Volver a la ficha de la hoja <ArrowRight size={16} /></button>}
         </div>
       </div>
     </section>
   );
-};
-
-export default InmersiveView;
+}

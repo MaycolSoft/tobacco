@@ -1,0 +1,14 @@
+{
+  "name": "Tabacalera Tamboril",
+  "short_name": "Tamboril",
+  "description": "Una colección visual de hojas de tabaco, sus orígenes y el arte de crear cigarros.",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
