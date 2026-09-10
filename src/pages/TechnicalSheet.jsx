@@ -1,70 +1,38 @@
-import React from 'react';
+import { useState } from 'react';
+import { ArrowUpRight, Sparkles, MapPin, Leaf, Layers } from 'lucide-react';
+import { leafCategories, getLeafOrigin } from '@/data/leafPresentation';
 import '@styles/TechnicalSheet.css';
 
-/**
- * TechnicalSheet: Vista analítica para hojas y mezclas.
- * Enfocada en métricas de sabor, fortaleza y combustión.
- */
-const TechnicalSheet = ({ leaf }) => {
-  // Datos simulados (En un entorno real, estos vendrían del objeto leaf)
-  const stats = [
-    { label: 'Fortaleza', value: '85%' },
-    { label: 'Combustión', value: '92%' },
-    { label: 'Aroma', value: '78%' },
-    { label: 'Aceites', value: '60%' },
-  ];
-
+export default function TechnicalSheet({ leaf, onExplore }) {
+  const category = leafCategories[leaf.category];
+  const [imageState, setImageState] = useState('loading');
   return (
     <div className="ts-wrapper">
-      <div className="ts-container">
-
-        {/* Visual Side */}
-        <div className="ts-image-side">
-          <img src={leaf.fullImg} alt={leaf.name} className="ts-main-img" />
-        </div>
-
-        {/* Info Side */}
-        <div className="ts-info-side">
-          <header className="ts-header">
-            <span className="ts-category">{leaf.category}</span>
-            <h2 className="ts-title">{leaf.name}</h2>
-            <p className="ts-origin-tag">Origen: <span>{leaf.origin}</span></p>
-          </header>
-
-          <div className="ts-description">
-            <p>{leaf.description}</p>
+      <figure className="ts-image-side">
+        <span className="ts-specimen-label">Colección de hojas / {category.label}</span>
+        <img src={leaf.fullImg} alt={`Hoja completa de ${leaf.name}`} className={`ts-main-img ${imageState === 'loaded' ? 'is-loaded' : ''}`} onLoad={() => setImageState('loaded')} onError={() => setImageState('error')} />
+        {imageState !== 'loaded' && <span className="ts-image-status" role="status">{imageState === 'error' ? 'No se pudo cargar la imagen de esta hoja.' : 'Preparando la hoja…'}</span>}
+        <figcaption>{leaf.name}<span>{getLeafOrigin(leaf)}</span></figcaption>
+      </figure>
+      <div className="ts-info-side">
+        <span className="ls-eyebrow">{category.label} · {getLeafOrigin(leaf)}</span>
+        <h3 className="ts-title">{leaf.name}</h3>
+        <p className="ts-description">{leaf.description}</p>
+        <dl className="ts-facts">
+          <div><dt><MapPin size={13} aria-hidden="true" />Origen</dt><dd>{getLeafOrigin(leaf)}</dd></div>
+          <div><dt><Leaf size={13} aria-hidden="true" />Familia</dt><dd>{category.label}</dd></div>
+          <div><dt><Layers size={13} aria-hidden="true" />En el cigarro</dt><dd>{category.position}</dd></div>
+        </dl>
+        <section className="ts-role">
+          <span className="ls-eyebrow">El arte de combinar</span>
+          <h4>{category.role}</h4>
+          <p>{category.detail}</p>
+          <div className="ts-layers" aria-label={`Posición en el cigarro: ${category.label}`}>
+            {['CAPA', 'CAPOTE', 'TRIPA'].map(key => <span key={key} className={key === leaf.category ? 'active' : ''}><i aria-hidden="true" />{leafCategories[key].label}</span>)}
           </div>
-
-          {/* Stats Grid */}
-          <div className="ts-stats-grid">
-            {stats.map((stat, index) => (
-              <div key={index} className="ts-stat-item">
-                <span className="ts-stat-label">{stat.label}</span>
-                <div className="ts-progress-bar">
-                  <div className="ts-progress-fill" style={{ width: stat.value }}></div>
-                </div>
-                <span className="ts-stat-value">{stat.value}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="ts-pairing">
-            <h4>Maridaje Recomendado</h4>
-            <div className="ts-pairing-tags">
-              <span>Café Espresso</span>
-              <span>Ron Añejo</span>
-              <span>Chocolate Amargo</span>
-            </div>
-          </div>
-
-          <button className="ts-select-btn btn btn-primary" onClick={() => alert('Hoja seleccionada para el blend')}>
-            SELECCIONAR PARA MI PURO
-          </button>
-        </div>
-
+        </section>
+        {onExplore && <button className="ts-explore" onClick={onExplore}><Sparkles size={18} /><span>Explorar la hoja<small>Un recorrido visual en cuatro capítulos</small></span><ArrowUpRight size={21} /></button>}
       </div>
     </div>
   );
-};
-
-export default TechnicalSheet;
+}
