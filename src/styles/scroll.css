@@ -1,0 +1,22 @@
+/* Native scrolling everywhere. Animations may move their own viewport explicitly. */
+html { scroll-behavior: auto; scrollbar-gutter: stable; }
+html, body, body * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ls-gold-muted) var(--ls-bg);
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: var(--ls-bg); }
+*::-webkit-scrollbar-thumb {
+  background: var(--ls-gold-muted); border: 2px solid var(--ls-bg); border-radius: 20px;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--ls-gold); }
+*::-webkit-scrollbar-corner { background: var(--ls-bg); }
+.ls-experience-body, .tg-scroll, #video-root,
+.craft-you-cigar-video-selector-scroll-container, .cp-content, .central-log-list {
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scroll-behavior: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  html, body, body * { scroll-behavior: auto !important; }
+}

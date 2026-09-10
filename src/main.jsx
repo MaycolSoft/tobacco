@@ -7,6 +7,8 @@ import '@styles/typography.css';
 import App from "./App.jsx";
 import CentralLogViewer from '@components/CentralLogViewer.jsx'
 import ErrorBoundary from "@components/ErrorBoundary";
+import '@styles/presentation-theme.css';
+import '@styles/scroll.css';
 
 
 createRoot(document.getElementById('root')).render(

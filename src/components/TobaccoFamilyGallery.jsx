@@ -1,78 +1,24 @@
-import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { leaves } from "@/data/leaves";
-import "@styles/tobacco-family-gallery.css";
-
-const families = ["Kentucky", "Burley", "Virginia", "Oriental"];
+import { useState } from 'react';
+import { MapPin } from 'lucide-react';
+import { leaves } from '@/data/leaves';
+import { leafCategories, getLeafOrigin } from '@/data/leafPresentation';
 
 export default function TobaccoFamilyGallery() {
-  const [activeFamily, setActiveFamily] = useState("Kentucky");
-
-  const filteredLeaves = useMemo(
-    () => leaves.filter((leaf) => leaf.family === activeFamily),
-    [activeFamily]
-  );
-
+  const [category, setCategory] = useState('TRIPA');
+  const filtered = leaves.filter(leaf => leaf.category === category);
   return (
-    <div className="tobacco-gallery-container">
-      <h2 className="tobacco-gallery-title">Tobacco Leaves by Family</h2>
-      <p className="tobacco-gallery-subtitle">
-        Select a family to explore real leaves, their appearance and role in a blend.
-      </p>
-
-      <div className="tobacco-gallery-tabs">
-        {families.map((family) => (
-          <button
-            key={family}
-            className={`tobacco-gallery-tab ${
-              family === activeFamily ? "tobacco-gallery-tab-active" : ""
-            }`}
-            onClick={() => setActiveFamily(family)}
-          >
-            {family}
-          </button>
-        ))}
+    <div className="tg-gallery">
+      <p className="tg-section-copy">Explora las hojas disponibles según el lugar que ocupan en tu mezcla.</p>
+      <div className="tg-gallery-tabs" aria-label="Filtrar hojas de la guía">
+        {['TRIPA', 'CAPOTE', 'CAPA'].map(key => <button key={key} aria-pressed={category === key} onClick={() => setCategory(key)}>{leafCategories[key].label}<span>{leaves.filter(leaf => leaf.category === key).length}</span></button>)}
       </div>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeFamily}
-          className="tobacco-gallery-grid"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -40 }}
-          transition={{ duration: 0.3 }}
-        >
-          {filteredLeaves.map((leaf) => (
-            <motion.div
-              key={leaf.id}
-              className="tobacco-gallery-card"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <div className="tobacco-gallery-image-wrapper">
-                <img
-                  src={leaf.image}
-                  alt={leaf.name}
-                  className="tobacco-gallery-image"
-                />
-              </div>
-              <div className="tobacco-gallery-card-body">
-                <h3 className="tobacco-gallery-card-title">{leaf.name}</h3>
-                <p className="tobacco-gallery-card-meta">
-                  Family: {leaf.family} • Role: {leaf.role}
-                </p>
-                <p className="tobacco-gallery-card-meta">
-                  Curing: {leaf.curing} • Color: {leaf.color}
-                </p>
-                <p className="tobacco-gallery-card-description">
-                  {leaf.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </AnimatePresence>
+      <p className="tg-gallery-count" role="status">{filtered.length} hojas de {leafCategories[category].label.toLowerCase()} en la colección</p>
+      <div className="tg-gallery-grid">
+        {filtered.map(leaf => <article className="tg-leaf-card" key={leaf.id}>
+          <div className="tg-leaf-image"><img src={leaf.thumbImg} alt={leaf.name} loading="lazy" /></div>
+          <div className="tg-leaf-copy"><span className="tg-leaf-origin"><MapPin size={11} aria-hidden="true" />{getLeafOrigin(leaf)}</span><h3>{leaf.name}</h3><p>{leaf.description}</p></div>
+        </article>)}
+      </div>
     </div>
   );
 }

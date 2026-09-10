@@ -1,7 +1,7 @@
 .tobacco-gallery-container {
   padding: 40px 30px;
-  background: #101010;
-  color: #eee;
+  background: var(--ls-bg);
+  color: var(--ls-text-primary);
 }
 
 .tobacco-gallery-title {
@@ -13,7 +13,7 @@
 .tobacco-gallery-subtitle {
   text-align: center;
   margin-bottom: 24px;
-  color: #ccc;
+  color: var(--ls-text-secondary);
 }
 
 .tobacco-gallery-tabs {
@@ -25,9 +25,9 @@
 }
 
 .tobacco-gallery-tab {
-  border: 1px solid #444;
-  background: #1a1a1a;
-  color: #eee;
+  border: 1px solid var(--ls-border);
+  background: var(--ls-bg-surface);
+  color: var(--ls-text-primary);
   padding: 8px 16px;
   border-radius: 999px;
   cursor: pointer;
@@ -36,12 +36,12 @@
 }
 
 .tobacco-gallery-tab:hover {
-  background: #2a2a2a;
+  background: var(--ls-bg-surface);
 }
 
 .tobacco-gallery-tab-active {
-  background: #7a2c2c;
-  border-color: #b56a4a;
+  background: var(--ls-gold-subtle);
+  border-color: var(--ls-gold);
 }
 
 .tobacco-gallery-grid {
@@ -51,10 +51,10 @@
 }
 
 .tobacco-gallery-card {
-  background: #181818;
+  background: var(--ls-bg-card);
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid #333;
+  border: 1px solid var(--ls-border);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -79,17 +79,17 @@
 .tobacco-gallery-card-title {
   font-size: 16px;
   margin-bottom: 4px;
-  color: #f0d2a6;
+  color: var(--ls-text-primary);
 }
 
 .tobacco-gallery-card-meta {
   font-size: 12px;
-  color: #aaa;
+  color: var(--ls-text-secondary);
   margin-bottom: 3px;
 }
 
 .tobacco-gallery-card-description {
   font-size: 13px;
   margin-top: 8px;
-  color: #ddd;
+  color: var(--ls-text-secondary);
 }

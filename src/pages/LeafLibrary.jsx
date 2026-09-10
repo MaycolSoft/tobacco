@@ -6,6 +6,7 @@ import TechnicalSheet from '@pages/TechnicalSheet';
 import { leaves } from '@/data/leaves';
 import { leafCategories, getLeafOrigin } from '@/data/leafPresentation';
 import '@styles/LeafLibrary.css';
+import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 
 export default function LeafLibrary() {
   const [filter, setFilter] = useState('ALL');
@@ -20,11 +21,10 @@ export default function LeafLibrary() {
   const selected = leaves.find(leaf => leaf.id === selectedId);
   const selectedIndex = filtered.findIndex(leaf => leaf.id === selectedId);
   const isOpen = Boolean(selected);
+  useBodyScrollLock(isOpen);
 
   useEffect(() => {
     if (!isOpen) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     const background = [...document.body.children].filter(element => element !== overlayRef.current && element instanceof HTMLElement);
     const previousInert = background.map(element => element.inert);
     background.forEach(element => { element.inert = true; });
@@ -41,7 +41,6 @@ export default function LeafLibrary() {
     document.addEventListener('keydown', onKeyDown);
     const trigger = triggerRef.current;
     return () => {
-      document.body.style.overflow = previousOverflow;
       background.forEach((element, index) => { element.inert = previousInert[index]; });
       document.removeEventListener('keydown', onKeyDown);
       trigger?.focus({ preventScroll: true });

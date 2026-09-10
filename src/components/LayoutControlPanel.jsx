@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom'; // Importante para la persistencia por ruta
 import { useLayoutStore } from '@/store/useLayoutStore';
+import { THEME_TOKEN_LABELS, BUTTON_TOKEN_LABELS, readBaseTokens, readSavedTokens, applyTokens, foregroundFor } from '@/config/designTheme';
 import {
   Settings, Eye, Layout, CreditCard,
   ChevronRight, Anchor, Type, Palette, RotateCcw, Square
@@ -47,52 +48,10 @@ const loadGoogleFont = (googleParam) => {
   document.head.appendChild(link);
 };
 
-const DEFAULT_TOKENS = {
-  '--ls-gold':         '#8B5E3C',
-  '--ls-bg':           '#050505',
-  '--ls-bg-card':      '#111111',
-  '--ls-bg-surface':   '#1a1a1a',
-  '--ls-text-primary': '#ffffff',
-  '--ls-btn-primary':   '#8B5E3C',
-  '--ls-btn-secondary': '#8B5E3C',
-  '--ls-btn-ghost':     '#8B5E3C',
-};
-
-const TOKEN_LABELS = {
-  '--ls-gold':         'Acento bronce',
-  '--ls-bg':           'Fondo página',
-  '--ls-bg-card':      'Fondo tarjetas',
-  '--ls-bg-surface':   'Superficies',
-  '--ls-text-primary': 'Texto principal',
-};
-
-const THEME_TOKEN_KEYS = ['--ls-gold', '--ls-bg', '--ls-bg-card', '--ls-bg-surface', '--ls-text-primary'];
-
-const BTN_TOKEN_LABELS = {
-  '--ls-btn-primary':   'Primario (fill)',
-  '--ls-btn-secondary': 'Secundario (borde)',
-  '--ls-btn-ghost':     'Ghost (hover)',
-};
-
-const BTN_TOKEN_KEYS = ['--ls-btn-primary', '--ls-btn-secondary', '--ls-btn-ghost'];
-
-const hexToRgb = (hex) => ({
-  r: parseInt(hex.slice(1, 3), 16),
-  g: parseInt(hex.slice(3, 5), 16),
-  b: parseInt(hex.slice(5, 7), 16),
-});
-
-const applyTokens = (tokens) => {
-  const root = document.documentElement;
-  Object.entries(tokens).forEach(([prop, value]) => {
-    root.style.setProperty(prop, value);
-  });
-  // Derivar tokens rgba desde el gold actual
-  const { r, g, b } = hexToRgb(tokens['--ls-gold']);
-  root.style.setProperty('--ls-gold-border',  `rgba(${r}, ${g}, ${b}, 0.15)`);
-  root.style.setProperty('--ls-glass-border',  `rgba(${r}, ${g}, ${b}, 0.15)`);
-  root.style.setProperty('--ls-gold-subtle',   `rgba(${r}, ${g}, ${b}, 0.05)`);
-};
+const TOKEN_LABELS = THEME_TOKEN_LABELS;
+const THEME_TOKEN_KEYS = Object.keys(TOKEN_LABELS);
+const BTN_TOKEN_LABELS = BUTTON_TOKEN_LABELS;
+const BTN_TOKEN_KEYS = Object.keys(BTN_TOKEN_LABELS);
 
 const LayoutControlPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -110,28 +69,24 @@ const LayoutControlPanel = () => {
   // Desestructuramos para facilitar el uso en el JSX
   const { showNavbar, showFooter, showHeader, navbarSticky, headerData } = currentConfig;
 
-  const [tokens, setTokens] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ls-design-tokens');
-      return saved ? JSON.parse(saved) : DEFAULT_TOKENS;
-    } catch {
-      return DEFAULT_TOKENS;
-    }
-  });
+  const [defaultTokens] = useState(readBaseTokens);
+  const [tokens, setTokens] = useState(() => readSavedTokens(defaultTokens));
 
-  useEffect(() => {
-    applyTokens(tokens);
-    localStorage.setItem('ls-design-tokens', JSON.stringify(tokens));
-  }, [tokens]);
+  useEffect(() => { applyTokens(tokens); }, [tokens]);
 
   const handleTokenChange = (prop, value) => {
-    setTokens((prev) => ({ ...prev, [prop]: value }));
+    setTokens(prev => {
+      const updated = { ...prev, [prop]: value };
+      if (prop === '--ls-gold') {
+        BTN_TOKEN_KEYS.forEach(key => {
+          if (prev[key].toLowerCase() === prev['--ls-gold'].toLowerCase()) updated[key] = value;
+        });
+      }
+      return updated;
+    });
   };
 
-  const resetTokens = () => {
-    setTokens(DEFAULT_TOKENS);
-    localStorage.removeItem('ls-design-tokens');
-  };
+  const resetTokens = () => setTokens({ ...defaultTokens });
 
   const [activePairing, setActivePairing] = useState(
     () => localStorage.getItem('ls-font-pairing') || 'legacy'
@@ -154,7 +109,7 @@ const LayoutControlPanel = () => {
 
   return (
     <div className={`cp-wrapper ${isOpen ? 'is-open' : ''}`}>
-      <button className="cp-trigger" onClick={() => setIsOpen(!isOpen)}>
+      <button className="cp-trigger" aria-label="Abrir o cerrar el UI Kit" aria-expanded={isOpen} onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? <ChevronRight size={20} /> : <Settings size={20} className="spin-slow" />}
       </button>
 
@@ -213,17 +168,22 @@ const LayoutControlPanel = () => {
           <div className="cp-label-row">
             <Palette size={12} />
             <p className="cp-label">Tema</p>
-            <button className="cp-reset-btn" onClick={resetTokens} title="Restaurar defaults">
+            <button className="cp-reset-btn" onClick={resetTokens} title="Restaurar paleta Tabaco editorial" aria-label="Restaurar paleta Tabaco editorial">
               <RotateCcw size={11} />
             </button>
           </div>
 
+          <p className="cp-theme-note">Base: Tabaco editorial. Los colores se comparten entre la biblioteca y el configurador.</p>
+          <button className="cp-base-button" onClick={resetTokens}>Aplicar paleta base</button>
           {THEME_TOKEN_KEYS.map((prop) => (
             <div key={prop} className="cp-color-row">
               <span className="cp-color-label">{TOKEN_LABELS[prop]}</span>
+              <code className="cp-color-value">{tokens[prop]}</code>
               <input
                 type="color"
                 className="cp-color-input"
+                aria-label={TOKEN_LABELS[prop] || BTN_TOKEN_LABELS[prop]}
+                title={tokens[prop]}
                 value={tokens[prop]}
                 onChange={(e) => handleTokenChange(prop, e.target.value)}
               />
@@ -238,7 +198,7 @@ const LayoutControlPanel = () => {
           </div>
 
           <div className="cp-btn-preview-row">
-            <span className="cp-btn-preview cp-btn-preview--primary" style={{ background: tokens['--ls-btn-primary'], color: '#fff' }}>
+            <span className="cp-btn-preview cp-btn-preview--primary" style={{ background: tokens['--ls-btn-primary'], color: foregroundFor(tokens['--ls-btn-primary']) }}>
               Primary
             </span>
             <span className="cp-btn-preview cp-btn-preview--secondary" style={{ borderColor: tokens['--ls-btn-secondary'], color: tokens['--ls-btn-secondary'] }}>
@@ -252,9 +212,12 @@ const LayoutControlPanel = () => {
           {BTN_TOKEN_KEYS.map((prop) => (
             <div key={prop} className="cp-color-row">
               <span className="cp-color-label">{BTN_TOKEN_LABELS[prop]}</span>
+              <code className="cp-color-value">{tokens[prop]}</code>
               <input
                 type="color"
                 className="cp-color-input"
+                aria-label={TOKEN_LABELS[prop] || BTN_TOKEN_LABELS[prop]}
+                title={tokens[prop]}
                 value={tokens[prop]}
                 onChange={(e) => handleTokenChange(prop, e.target.value)}
               />
@@ -286,6 +249,15 @@ const LayoutControlPanel = () => {
           </div>
         </div>
 
+        <div className="cp-section">
+          <p className="cp-label">Escena del video</p>
+          <label className="cp-color-row">
+            <span className="cp-color-label">Fondo de los fotogramas</span>
+            <input type="color" className="cp-color-input" value={tokens['--ls-video-bg']} title={tokens['--ls-video-bg']} onChange={event => handleTokenChange('--ls-video-bg', event.target.value)} />
+          </label>
+          <p className="cp-theme-note">El tono original se conserva para integrar las imágenes del video.</p>
+        </div>
+
         <div className="cp-footer-info">
           <p className="cp-label">Page Data</p>
           <div className="cp-badge-status">
@@ -295,6 +267,12 @@ const LayoutControlPanel = () => {
       </div>
 
       <style>{`
+        .cp-color-value { font-size: 9px; color: #b8bbaf; background: none; margin-left: auto; margin-right: 7px; }
+        .cp-color-row { gap: 5px; flex-wrap: wrap; }
+        .cp-color-label { max-width: 135px; }
+        .cp-theme-note { color: #b8bbaf; font-size: 11px; line-height: 1.6; margin: 10px 0; }
+        .cp-base-button { width: 100%; min-height: 38px; background: #c7a479; color: #171a16; border: 0; border-radius: 5px; font-size: 11px; cursor: pointer; margin-bottom: 12px; }
+        .cp-wrapper button:focus-visible, .cp-wrapper input:focus-visible { outline: 2px solid #c7a479; outline-offset: 3px; }
         .cp-wrapper {
           position: fixed;
           right: -260px;
@@ -319,9 +297,9 @@ const LayoutControlPanel = () => {
           top: 20px;
           width: 44px;
           height: 44px;
-          background: #8b5e3c;
+          background: #c7a479;
           border: none;
-          color: #fff;
+          color: #171a16;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -335,12 +313,6 @@ const LayoutControlPanel = () => {
           flex: 1;
           min-height: 0;
         }
-        .cp-content::-webkit-scrollbar { width: 3px; }
-        .cp-content::-webkit-scrollbar-thumb {
-          background: #333;
-          border-radius: 10px;
-        }
-        .cp-content::-webkit-scrollbar-thumb:hover { background: #8b5e3c; }
         /* Landscape mobile — menos altura disponible */
         @media (max-height: 500px) {
           .cp-wrapper { top: 4%; max-height: 92vh; }
@@ -357,14 +329,14 @@ const LayoutControlPanel = () => {
           font-weight: 700;
           font-size: 0.8rem;
           margin-bottom: 20px;
-          color: #d4af37;
+          color: #c7a479;
           text-transform: uppercase;
         }
         .cp-section { margin-bottom: 24px; }
         .cp-label {
           font-size: 0.55rem;
           text-transform: uppercase;
-          color: #666;
+          color: #aeb5ab;
           margin-bottom: 0px;
           font-weight: 800;
           letter-spacing: 1px;
@@ -407,11 +379,11 @@ const LayoutControlPanel = () => {
           left: 2px;
           transition: 0.3s;
         }
-        .cp-switch.active { background: #d4af37; }
+        .cp-switch.active { background: #c7a479; }
         .cp-switch.active::after { left: 17px; }
         .cp-badge-status {
           font-size: 0.65rem;
-          color: #d4af37;
+          color: #c7a479;
           background: rgba(212, 175, 55, 0.05);
           padding: 6px;
           border-radius: 6px;
@@ -428,7 +400,7 @@ const LayoutControlPanel = () => {
         .cp-reset-btn {
           background: none;
           border: 1px solid #333;
-          color: #666;
+          color: #aeb5ab;
           border-radius: 4px;
           padding: 2px 4px;
           cursor: pointer;
@@ -436,7 +408,7 @@ const LayoutControlPanel = () => {
           align-items: center;
           transition: 0.2s;
         }
-        .cp-reset-btn:hover { border-color: #d4af37; color: #d4af37; }
+        .cp-reset-btn:hover { border-color: #c7a479; color: #c7a479; }
         .cp-color-row {
           display: flex;
           justify-content: space-between;
@@ -458,7 +430,7 @@ const LayoutControlPanel = () => {
           cursor: pointer;
           padding: 1px;
         }
-        .cp-color-input:hover { border-color: #8b5e3c; }
+        .cp-color-input:hover { border-color: #c7a479; }
         .cp-btn-preview-row {
           display: flex;
           gap: 6px;
@@ -508,7 +480,7 @@ const LayoutControlPanel = () => {
         }
         .cp-pairing-card:hover { border-color: #444; }
         .cp-pairing-card.active {
-          border-color: #d4af37;
+          border-color: #c7a479;
           background: rgba(212, 175, 55, 0.06);
         }
         .cp-pairing-name {
@@ -516,15 +488,15 @@ const LayoutControlPanel = () => {
           color: #eee;
           display: block;
         }
-        .cp-pairing-card.active .cp-pairing-name { color: #d4af37; }
+        .cp-pairing-card.active .cp-pairing-name { color: #c7a479; }
         .cp-pairing-desc {
           font-size: 0.58rem;
-          color: #555;
+          color: #aeb5ab;
           text-transform: uppercase;
           letter-spacing: 0.05em;
           display: block;
         }
-        .text-muted { color: #555; }
+        .cp-wrapper .text-muted { color: #aeb5ab !important; }
         .spin-slow { animation: spin 8s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       `}</style>
