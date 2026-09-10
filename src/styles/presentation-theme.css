@@ -1,0 +1,75 @@
+/* Reference palette scope: the library, its portal, the configurator and their navigation. */
+.presentation-nav .navbar-dark .navbar-nav .nav-link {
+  color: var(--ls-text-secondary);
+}
+.presentation-nav .navbar-dark .navbar-nav .nav-link:hover,
+.presentation-nav .navbar-dark .navbar-nav .nav-link.active {
+  color: var(--ls-gold);
+}
+.presentation-nav .dropdown-menu { background: var(--ls-bg-surface); border-color: var(--ls-border); }
+.presentation-nav .dropdown-item { color: var(--ls-text-secondary); }
+.presentation-nav .dropdown-item:hover, .presentation-nav .dropdown-item:focus {
+  color: var(--ls-text-primary); background: var(--ls-gold-subtle);
+}
+.presentation-nav .navbar-toggler { color: var(--ls-text-primary); border-color: var(--ls-border); }
+
+:is(.ls-container, .ls-experience, .craft-container) { color: var(--ls-text-primary); }
+:is(.ls-container, .ls-experience, .craft-container) ::selection {
+  background: var(--ls-gold); color: var(--ls-text-on-gold);
+}
+:is(.ls-container, .ls-experience, .craft-container) :is(button, a, input):focus-visible {
+  outline: 2px solid var(--ls-focus); outline-offset: 4px;
+}
+
+/* Explicit interactive states prevent the legacy Bootstrap colors from returning on hover. */
+:is(.ls-container, .ls-experience, .craft-container) .btn-primary,
+:is(.ls-container, .ls-experience, .craft-container) .btn-primary:is(:hover, :focus, :active),
+.craft-container .btn-primary:not(:disabled):not(.disabled):active {
+  background: var(--ls-btn-primary); border-color: var(--ls-btn-primary); color: var(--ls-text-on-primary);
+}
+:is(.ls-container, .ls-experience, .craft-container) .btn-secondary,
+:is(.ls-container, .ls-experience, .craft-container) .btn-secondary:is(:hover, :focus, :active),
+.craft-container .btn-secondary:not(:disabled):not(.disabled):active {
+  background: var(--ls-bg-card); border-color: var(--ls-btn-secondary); color: var(--ls-btn-secondary);
+}
+:is(.ls-container, .ls-experience, .craft-container) .btn-secondary:hover {
+  background: color-mix(in srgb, var(--ls-btn-secondary) 10%, var(--ls-bg-card));
+}
+.craft-container .btn-ghost:hover { color: var(--ls-btn-ghost); }
+.craft-container .btn:focus { box-shadow: 0 0 0 3px var(--ls-gold-border); }
+
+/* Clear hierarchy: ivory headings, warm-gray reading text, quieter metadata. */
+.ls-eyebrow { color: var(--ls-text-dim); font-size: 11px; }
+.ls-origin { color: var(--ls-text-dim); font-size: 10px; }
+.ls-desc { font-size: .875rem; }
+.ls-collection-count, .ls-card-number, .ls-experience-identity > span { color: var(--ls-text-dim); }
+.ls-card { border-color: var(--ls-border); }
+.ls-discover:hover { color: var(--ls-btn-ghost); }
+.ls-discover svg, .ls-image-action { color: var(--ls-btn-secondary); }
+.ls-experience-header button:hover, .ls-experience-footer button:hover:not(:disabled) { color: var(--ls-btn-ghost); }
+.ts-explore { border-color: var(--ls-btn-secondary); background: color-mix(in srgb, var(--ls-btn-secondary) 6%, transparent); }
+.ts-explore > svg:first-child, .ts-explore > svg:last-child { color: var(--ls-btn-secondary); }
+.ts-explore:hover { border-color: var(--ls-btn-secondary); background: color-mix(in srgb, var(--ls-btn-secondary) 12%, transparent); }
+.ts-facts dt, .ts-specimen-label { color: var(--ls-text-dim); font-size: 10px; }
+.th-scene-caption, .th-image-name, .th-play-hint { color: var(--ls-text-dim); }
+.th-step-controls button { border-color: var(--ls-btn-secondary); color: var(--ls-btn-secondary); }
+.th-finish:hover { color: var(--ls-btn-ghost); }
+.th-chapters button { font-size: 11px; }
+
+.craft-container .ls-grid-item, .craft-container .ls-blend-carousel-card {
+  background: var(--ls-bg-card); border-color: var(--ls-border);
+}
+.craft-container .ls-grid-item.active, .craft-container .ls-blend-carousel-card.active {
+  border-color: var(--ls-gold);
+}
+.craft-container .ls-grid-item:hover, .craft-container .ls-blend-carousel-card:hover { border-color: var(--ls-gold-border); }
+.craft-container .ls-grid-item.active:hover, .craft-container .ls-blend-carousel-card.active:hover { border-color: var(--ls-gold); }
+.craft-container .lg-step-node.done .lg-step-label { color: var(--ls-text-secondary); }
+.craft-container .tobacco-gallery-tab-active { color: var(--ls-gold); }
+.craft-container .tobacco-info-header { color: var(--ls-gold); }
+.craft-container .craft-back-btn { background: var(--ls-glass); }
+
+@media (max-width: 600px) {
+  .ls-eyebrow { font-size: 10px; }
+  .ls-collection-count { font-size: 9px; }
+}

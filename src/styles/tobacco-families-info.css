@@ -1,20 +1,20 @@
 .tobacco-info-container {
   padding: 40px 30px;
-  background: #111;
-  color: #eee;
+  background: var(--ls-bg);
+  color: var(--ls-text-primary);
   text-align: center;
 }
 
 .tobacco-info-title {
   font-size: 32px;
   margin-bottom: 10px;
-  color: #c5a48f;
+  color: var(--ls-gold);
 }
 
 .tobacco-info-subtitle {
   font-style: italic;
   margin-bottom: 30px;
-  color: #ddd;
+  color: var(--ls-text-secondary);
 }
 
 .tobacco-info-grid {
@@ -26,7 +26,7 @@
 }
 
 .tobacco-info-column {
-  background: #1a1a1a;
+  background: var(--ls-bg-surface);
   padding: 15px;
   border-radius: 8px;
 }
@@ -36,15 +36,15 @@
 }
 
 .tobacco-info-header {
-  background: #550000;
-  color: #fff;
+  background: var(--ls-gold-subtle);
+  color: var(--ls-text-primary);
   padding: 6px;
   border-radius: 4px;
   margin-bottom: 10px;
 }
 
 .tobacco-info-labels {
-  background: #5a2d00;
+  background: var(--ls-bg-surface);
   font-weight: bold;
   text-align: left;
 }
@@ -52,7 +52,7 @@
 .tobacco-info-footer {
   margin-top: 30px;
   font-style: italic;
-  color: #ccc;
+  color: var(--ls-text-secondary);
 }
 
 /* Responsive */

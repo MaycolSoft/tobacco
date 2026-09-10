@@ -27,7 +27,7 @@
 .th-progress { height: 2px; background: var(--ls-gold-border); margin-bottom: 20px; overflow: hidden; }
 .th-progress > span { display: block; height: 100%; background: var(--ls-gold); transition: width .1s linear; }
 .th-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.th-play { display: flex; align-items: center; gap: 10px; background: var(--ls-btn-primary); border: 1px solid var(--ls-btn-primary); color: var(--ls-text-on-gold); min-height: 44px; padding: 10px 16px; border-radius: 30px; font-size: 11px; cursor: pointer; }
+.th-play { display: flex; align-items: center; gap: 10px; background: var(--ls-btn-primary); border: 1px solid var(--ls-btn-primary); color: var(--ls-text-on-primary); min-height: 44px; padding: 10px 16px; border-radius: 30px; font-size: 11px; cursor: pointer; }
 .th-step-controls { display: flex; gap: 8px; }
 .th-step-controls button { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--ls-gold-border); border-radius: 50%; background: none; color: var(--ls-text-primary); cursor: pointer; }
 .th-step-controls button:hover:not(:disabled) { background: var(--ls-gold-subtle); }

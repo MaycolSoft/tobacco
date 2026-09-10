@@ -116,7 +116,7 @@ export default function ScrollVideo({ videoInfo={} }) {
       setIsPlaying(true);
 
       const currentScroll = scroller.scrollTop;
-      const maxScroll = scroller.scrollHeight - window.innerHeight;
+      const maxScroll = scroller.scrollHeight - scroller.clientHeight;
 
       // 1. Validar si ya llegó al final para reiniciar
       if ((maxScroll - currentScroll) <= 1) {
@@ -164,7 +164,7 @@ export default function ScrollVideo({ videoInfo={} }) {
     const scroller = document.querySelector("#video-root");
     if (!scroller) return;
 
-    const scrollTarget = (scroller.scrollHeight - window.innerHeight) * progress;
+    const scrollTarget = (scroller.scrollHeight - scroller.clientHeight) * progress;
 
     gsap.to(scroller, {
       scrollTo: scrollTarget,
@@ -300,8 +300,9 @@ export default function ScrollVideo({ videoInfo={} }) {
     });
 
     return () => {
+      anim.scrollTrigger?.kill();
       anim.kill();
-      ScrollTrigger.getAll().forEach(t => t.kill());
+      autoPlayTweenRef.current?.kill();
     };
   }, [showCanvas]);
 
@@ -315,7 +316,7 @@ export default function ScrollVideo({ videoInfo={} }) {
     <div className="scroll-container"
       style={{
         height: `${scrollHeight}vh`,
-        background: "#D6C8B9"
+        background: "var(--ls-video-bg)"
       }}
     >
       
@@ -335,14 +336,14 @@ export default function ScrollVideo({ videoInfo={} }) {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1.2, ease: "easeOut" }}
                 style={{ 
-                  color: '#d4af37', 
+                  color: 'var(--ls-gold)', 
                   letterSpacing: '8px', // Bajamos de 12 a 8 para legibilidad
                   fontSize: '2.2rem', 
                   marginBottom: '15px',
                   fontWeight: '300', // Un peso más fino se ve más elegante
                   textTransform: 'uppercase',
-                  textShadow: '0 0 20px rgba(212, 175, 55, 0.3)', // Brillo suave constante
-                  background: 'linear-gradient(90deg, #d4af37 0%, #fff 50%, #d4af37 100%)',
+                  textShadow: '0 0 20px var(--ls-gold-border)', // Brillo suave constante
+                  background: 'linear-gradient(90deg, var(--ls-gold) 0%, var(--ls-text-primary) 50%, var(--ls-gold) 100%)',
                   backgroundSize: '200% auto',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
@@ -403,7 +404,7 @@ export default function ScrollVideo({ videoInfo={} }) {
             onStepClick={goToStep}
             currentFrame={activeStep}
           />
-          <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.12)', borderRadius: 1 }} />
+          <div style={{ width: 1, height: 20, background: 'var(--ls-border)', borderRadius: 1 }} />
           <button
             className="ls-controls-toggle"
             onClick={togglePlayPause}
@@ -462,7 +463,7 @@ export default function ScrollVideo({ videoInfo={} }) {
           width: 50px;
           height: 50px;
           border-radius: 50%;
-          background: rgba(5, 5, 5, 0.75);
+          background: var(--ls-glass);
           border: 1px solid var(--ls-btn-secondary);
           color: var(--ls-btn-secondary);
           cursor: pointer;
@@ -476,13 +477,13 @@ export default function ScrollVideo({ videoInfo={} }) {
         .ls-controls-toggle:hover {
           transform: scale(1.1);
           background: var(--ls-btn-primary);
-          color: var(--ls-text-on-gold);
+          color: var(--ls-text-on-primary);
           box-shadow: 0 0 25px var(--ls-btn-primary);
         }
         .ls-controls-toggle:active { transform: scale(0.95); }
         .ls-controls-icon { display: block; transition: transform 0.2s ease; }
         .sv-step-btn {
-          background: rgba(0, 0, 0, 0.6);
+          background: var(--ls-glass);
           border: 1px solid var(--ls-btn-secondary);
           color: var(--ls-btn-secondary);
           width: 50px;
@@ -500,7 +501,7 @@ export default function ScrollVideo({ videoInfo={} }) {
         }
         .sv-step-btn--active {
           background: var(--ls-btn-primary);
-          color: var(--ls-text-on-gold);
+          color: var(--ls-text-on-primary);
           border-color: transparent;
           box-shadow: 0 0 20px var(--ls-btn-primary);
         }
@@ -514,7 +515,7 @@ export default function ScrollVideo({ videoInfo={} }) {
           width: 36px;
           height: 36px;
           border-radius: 50%;
-          background: rgba(5,5,5,0.75);
+          background: var(--ls-glass);
           border: 1px solid var(--ls-btn-secondary);
           color: var(--ls-btn-secondary);
           cursor: pointer;
@@ -526,15 +527,15 @@ export default function ScrollVideo({ videoInfo={} }) {
         }
         .sv-gear-btn:hover {
           background: var(--ls-btn-primary);
-          color: var(--ls-text-on-gold);
+          color: var(--ls-text-on-primary);
           border-color: transparent;
         }
         .sv-speed-panel {
           position: absolute;
           bottom: 44px;
           left: 0;
-          background: rgba(8,8,8,0.88);
-          border: 1px solid rgba(255,255,255,0.1);
+          background: var(--ls-glass);
+          border: 1px solid var(--ls-border);
           border-radius: 10px;
           padding: 14px 16px;
           width: 200px;
@@ -545,7 +546,7 @@ export default function ScrollVideo({ videoInfo={} }) {
           justify-content: space-between;
           font-size: 9px;
           letter-spacing: 1.5px;
-          color: rgba(255,255,255,0.5);
+          color: var(--ls-text-secondary);
           text-transform: uppercase;
           margin-bottom: 10px;
         }
@@ -562,22 +563,11 @@ export default function ScrollVideo({ videoInfo={} }) {
           display: flex;
           justify-content: space-between;
           font-size: 8px;
-          color: rgba(255,255,255,0.3);
+          color: var(--ls-text-dim);
           margin-top: 6px;
           letter-spacing: 1px;
         }
 
-        ::-webkit-scrollbar {
-          display: none !important;
-          width: 0 !important;
-          height: 0 !important;
-        }
-
-        /* Para Firefox y IE/Edge antiguo */
-        * {
-          scrollbar-width: none !important;
-          -ms-overflow-style: none !important;
-        }
       `}</style>
     </div>
   );
@@ -586,24 +576,24 @@ export default function ScrollVideo({ videoInfo={} }) {
 // --- ESTILOS ---
 const overlayStyle = {
   position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-  background: '#000', zIndex: 5000, display: 'flex', justifyContent: 'center', alignItems: 'center'
+  background: 'var(--ls-bg)', zIndex: 5000, display: 'flex', justifyContent: 'center', alignItems: 'center'
 };
 
 const smokeStyle = {
   position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-  background: 'radial-gradient(circle, rgba(40,40,40,0.3) 0%, rgba(0,0,0,1) 80%)',
+  background: 'radial-gradient(circle, var(--ls-gold-subtle) 0%, var(--ls-bg) 80%)',
   opacity: 0.6, filter: 'blur(40px)', pointerEvents: 'none'
 };
 
-const titleStyle = { color: '#d4af37', letterSpacing: '8px', fontSize: '0.8rem', marginBottom: '20px' };
+const titleStyle = { color: 'var(--ls-gold)', letterSpacing: '8px', fontSize: '0.8rem', marginBottom: '20px' };
 
-const progressContainer = {  height: '1px', background: 'rgba(212, 175, 55, 0.2)', position: 'relative' };
+const progressContainer = {  height: '1px', background: 'var(--ls-gold-border)', position: 'relative' };
 
-const progressBar = { height: '100%', background: '#d4af37', boxShadow: '0 0 15px #d4af37' };
+const progressBar = { height: '100%', background: 'var(--ls-gold)', boxShadow: '0 0 15px var(--ls-gold)' };
 
-const statusContainer = { marginTop: '10px', display: 'flex', justifyContent: 'space-between',  color: '#444', fontSize: '9px', fontWeight: 'bold' };
+const statusContainer = { marginTop: '10px', display: 'flex', justifyContent: 'space-between',  color: 'var(--ls-text-secondary)', fontSize: '9px', fontWeight: 'bold' };
 
-const debugStyle = { position: 'fixed', bottom: '20px', left: '20px', zIndex: 6000, background: 'rgba(0,0,0,0.7)', color: '#d4af37', padding: '8px 12px', borderRadius: '5px', fontSize: '10px', fontFamily: 'monospace' };
+const debugStyle = { position: 'fixed', bottom: '20px', left: '20px', zIndex: 6000, background: 'var(--ls-glass)', color: 'var(--ls-gold)', padding: '8px 12px', borderRadius: '5px', fontSize: '10px', fontFamily: 'monospace' };
 
 const controlsColumnStyle = {
   position: 'fixed',
@@ -630,5 +620,3 @@ const stepsContainerStyle = {
   alignItems: 'center',
   gap: '15px',
 };
-
-

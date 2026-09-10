@@ -22,7 +22,7 @@
 
 .ls-grid-title {
   font-family: var(--ls-font-heading);
-  color: #ffffff;
+  color: var(--ls-text-primary);
   font-size: 2.5rem;
   letter-spacing: 2px;
   margin: 0 0 10px 0;
@@ -31,7 +31,7 @@
 
 .ls-grid-subtitle {
   font-family: var(--ls-font-body);
-  color: #8a8a8a;
+  color: var(--ls-text-secondary);
   font-size: 0.95rem;
   letter-spacing: 1px;
 }
@@ -44,7 +44,7 @@
   flex-wrap: wrap;
 }
 
-.ls-filter-btn {
+.lg-filter-btn {
   position: relative;
   background: transparent;
   border: 1px solid var(--ls-glass-border);
@@ -60,18 +60,18 @@
   font-family: var(--ls-font-body);
   font-size: 0.8rem;
   font-weight: 600;
-  color: #a3a3a3;
+  color: var(--ls-text-secondary);
   text-transform: uppercase;
   letter-spacing: 1.5px;
   transition: var(--ls-transition-smooth);
 }
 
-.ls-filter-btn:hover .ls-filter-text {
+.lg-filter-btn:hover .ls-filter-text {
   color: var(--ls-gold);
 }
 
-.ls-filter-btn.active .ls-filter-text {
-  color: #050505;
+.lg-filter-btn.active .ls-filter-text {
+  color: var(--ls-text-on-gold);
 }
 
 .ls-filter-pill {
@@ -117,13 +117,13 @@
   position: absolute;
   top: 20px;
   left: 20px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--ls-text-primary) 3%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ls-text-primary) 10%, transparent);
   padding: 4px 12px;
   font-family: var(--ls-font-body);
   font-size: 0.7rem;
   font-weight: 700;
-  color: #c4c4c4;
+  color: var(--ls-text-secondary);
   letter-spacing: 1px;
   z-index: 4;
 }
@@ -150,21 +150,21 @@
   transform: scale(1.05) rotate(2deg);
 }
 
-.ls-card-content {
+.lg-card-content {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
 .ls-card-meta {
-  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+  border-bottom: 1px solid color-mix(in srgb, var(--ls-gold) 10%, transparent);
   padding-bottom: 12px;
   margin-bottom: 12px;
 }
 
 .ls-card-title {
   font-family: var(--ls-font-heading);
-  color: #ffffff;
+  color: var(--ls-text-primary);
   font-size: 1.4rem;
   margin: 0 0 4px 0;
   font-weight: 400;
@@ -173,7 +173,7 @@
 .ls-card-origin {
   font-family: var(--ls-font-body);
   font-size: 0.75rem;
-  color: var(--ls-gold-muted);
+  color: var(--ls-text-secondary);
   text-transform: uppercase;
   letter-spacing: 1px;
   display: block;
@@ -182,7 +182,7 @@
 .ls-card-desc {
   font-family: var(--ls-font-body);
   font-size: 0.85rem;
-  color: #a0a0a0;
+  color: var(--ls-text-secondary);
   line-height: 1.5;
   margin: 0;
 }
@@ -205,7 +205,7 @@
 .ls-indicator-text {
   font-family: var(--ls-font-body);
   font-size: 0.7rem;
-  color: #707070;
+  color: var(--ls-text-dim);
   letter-spacing: 0.5px;
 }
 
@@ -215,7 +215,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(5, 5, 5, 0.4);
+  background: var(--ls-selection);
   border: 1px solid var(--ls-gold);
   opacity: 0;
   pointer-events: none;
@@ -252,7 +252,7 @@
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #ffffff;
+  color: var(--ls-text-primary);
 }
 
 /* STEP BAR */
@@ -281,20 +281,20 @@
   font-size: 0.8rem;
   font-weight: 700;
   font-family: var(--ls-font-body);
-  color: #444;
+  color: var(--ls-text-dim);
   transition: var(--ls-transition-smooth);
 }
 
 .lg-step-node.active .lg-step-bubble {
   border-color: var(--ls-btn-primary);
   color: var(--ls-btn-primary);
-  box-shadow: 0 0 16px rgba(139, 94, 60, 0.3);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--ls-gold) 30%, transparent);
 }
 
 .lg-step-node.done .lg-step-bubble {
   background: var(--ls-btn-primary);
   border-color: var(--ls-btn-primary);
-  color: var(--ls-text-on-gold);
+  color: var(--ls-text-on-primary);
 }
 
 .lg-step-label {
@@ -302,7 +302,7 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   font-family: var(--ls-font-body);
-  color: #444;
+  color: var(--ls-text-dim);
   transition: var(--ls-transition-smooth);
 }
 
@@ -311,7 +311,7 @@
 }
 
 .lg-step-node.done .lg-step-label {
-  color: #666;
+  color: var(--ls-text-dim);
 }
 
 .lg-step-node.clickable {
@@ -333,8 +333,8 @@
 }
 
 @keyframes lg-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(139, 94, 60, 0.4); }
-  50%       { box-shadow: 0 0 0 8px rgba(139, 94, 60, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ls-gold) 40%, transparent); }
+  50%       { box-shadow: 0 0 0 8px color-mix(in srgb, var(--ls-gold) 0%, transparent); }
 }
 
 .lg-step-line {
@@ -375,7 +375,7 @@
   text-transform: uppercase;
   cursor: pointer;
   padding: 4px 0;
-  color: #555;
+  color: var(--ls-text-dim);
   transition: color 0.2s ease;
 }
 

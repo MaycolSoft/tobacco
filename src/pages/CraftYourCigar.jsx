@@ -1,5 +1,7 @@
 import "@styles/CraftYourCigar.css";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
+import { BookOpen, Film, X } from 'lucide-react';
+import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 import { AnimatePresence, motion } from "framer-motion";
 import ScrollVideo from '@components/ScrollVideo.jsx';
 import LeafGrid from "@components/LeafGrid";
@@ -43,9 +45,9 @@ const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
   return (
     <>
       <div className="craft-you-cigar-video-selector-header">
-        <span className="craft-you-cigar-video-selector-title">Available Sequences</span>
+        <span className="craft-you-cigar-video-selector-title">Recorridos disponibles</span>
         <span className="craft-you-cigar-video-selector-count">
-          {listVideos.length} Folders
+          {listVideos.length} secuencias
         </span>
       </div>
 
@@ -74,7 +76,7 @@ const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
   );
 };
 
-const ButtonFlotanteItem = ({ openName = "Open", closeName = "Close", onClick, children }) => {
+const ButtonFlotanteItem = ({ openName = "Abrir", closeName = "Cerrar", onClick, Icon, children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -100,9 +102,12 @@ const ButtonFlotanteItem = ({ openName = "Open", closeName = "Close", onClick, c
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
         className={`btn btn-pill ${isOpen ? "btn-primary" : "btn-secondary"}`}
+        aria-haspopup={onClick ? 'dialog' : undefined}
+        aria-expanded={onClick ? undefined : isOpen}
         onClick={onClick ? onClick : () => setIsOpen((prev) => !prev)}
       >
-        {isOpen ? `✕ ${closeName}` : `${openName}`}
+        {isOpen ? <X size={17} aria-hidden="true" /> : Icon && <Icon size={17} aria-hidden="true" />}
+        {isOpen ? closeName : openName}
       </motion.button>
     </div>
   );
@@ -125,6 +130,8 @@ function CraftYourCigar() {
   const [showGuide, setShowGuide] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [videoInfo, setVideoInfo] = useState(null);
+  const closeGuide = useCallback(() => setShowGuide(false), []);
+  useBodyScrollLock(showVideo);
 
 
 
@@ -172,25 +179,18 @@ function CraftYourCigar() {
           
 
           <MultiButtonFlotanteContainer>
-            <ButtonFlotanteItem openName="Open Video Selector" closeName="Close Video Selector">
+            <ButtonFlotanteItem openName="Ver recorridos" closeName="Cerrar recorridos" Icon={Film}>
               <VideoSelectorPanel 
                 listVideos={listVideos}
                 onSelect={(videoSelected) => { setVideoInfo(videoSelected); setShowVideo(true); }} 
               />
             </ButtonFlotanteItem>
 
-            <ButtonFlotanteItem openName="Open Guide" closeName="Close Guide" onClick={() => setShowGuide(true)}>
+            <ButtonFlotanteItem openName="Guía de la mezcla" Icon={BookOpen} onClick={() => setShowGuide(true)}>
             </ButtonFlotanteItem>
           </MultiButtonFlotanteContainer>
 
-          <AnimatePresence>
-            {showGuide && (
-              <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="craft-guide-modal">
-                <button onClick={() => setShowGuide(false)} className="craft-back-btn btn btn-secondary btn-pill">Cerrar Guía</button>
-                <TobaccoGuidePage />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {showGuide && <TobaccoGuidePage onClose={closeGuide} />}
         </>
       )}
 

@@ -23,8 +23,8 @@ const Navbar = () => {
 
   return (
     <div 
-      className={`container-fluid p-0 nav-bar ${navbarSticky ? 'navbar-sticky' : ''}`}
-      style={navbarSticky ? { position: 'relative', background: '#050505' } : { position: 'absolute' }}
+      className={`container-fluid p-0 nav-bar ${navbarSticky ? 'navbar-sticky' : ''} ${['/leaf-library', '/craft-your-cigar'].includes(location.pathname) ? 'presentation-nav' : ''}`}
+      style={navbarSticky ? { position: 'relative', background: ['\/leaf-library', '\/craft-your-cigar'].includes(location.pathname) ? 'var(--ls-bg)' : '#050505' } : { position: 'absolute' }}
     >
       <nav className={`navbar navbar-expand-lg py-3 navbar-dark  `}>
         {/* Logo - Redirige al Home */}

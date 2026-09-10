@@ -173,7 +173,7 @@ export default function LeafGrid({ leaves = [], onComplete }) {
                     />
                   </div>
 
-                  <div className="ls-card-content">
+                  <div className="lg-card-content">
                     <div className="ls-card-meta">
                       <h3 className="ls-card-title">{leaf.name}</h3>
                       <span className="ls-card-origin">{leaf.origin}</span>

@@ -1,118 +1,25 @@
-import { motion } from "framer-motion";
-import "@styles/tobacco-families-info.css";
+import { Flame, Wind, Sun, ThermometerSun } from 'lucide-react';
 
-const columnVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: 0.15 * i, duration: 0.4 }
-  })
-};
+const families = [
+  { name: 'Kentucky', Icon: Flame, curing: 'Al fuego', color: 'Marrón oscuro', profile: 'Ahumado y robusto' },
+  { name: 'Burley', Icon: Wind, curing: 'Al aire', color: 'Marrón', profile: 'Notas de frutos secos y cacao' },
+  { name: 'Virginia', Icon: ThermometerSun, curing: 'Con aire caliente', color: 'Amarillo a dorado', profile: 'Dulzor natural' },
+  { name: 'Oriental', Icon: Sun, curing: 'Al sol', color: 'Amarillo verdoso', profile: 'Aromático' },
+];
 
 export default function TobaccoFamiliesInfo() {
   return (
-    <motion.div
-      className="tobacco-info-container"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
-      <h1 className="tobacco-info-title">Tobacco Families Guide</h1>
-      <p className="tobacco-info-subtitle">
-        The main tobacco families define how a blend will burn, smell and taste.
-        Here are their real characteristics.
-      </p>
-
-      <div className="tobacco-info-grid">
-        {/* Labels */}
-        <motion.div
-          className="tobacco-info-column tobacco-info-labels"
-          custom={0}
-          variants={columnVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <p>CURING</p>
-          <p>COLOR</p>
-          <p>AROMA</p>
-          <p>COMBUSTION</p>
-          <p>CHARACTERISTIC</p>
-          <p>FLAVOR</p>
-        </motion.div>
-
-        {/* Kentucky */}
-        <motion.div
-          className="tobacco-info-column"
-          custom={1}
-          variants={columnVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <h3 className="tobacco-info-header">KENTUCKY</h3>
-          <p>Fire</p>
-          <p>Dark brown</p>
-          <p>Smoky</p>
-          <p>Slow</p>
-          <p>Strong</p>
-          <p>Aromatic and robust</p>
-        </motion.div>
-
-        {/* Burley */}
-        <motion.div
-          className="tobacco-info-column"
-          custom={2}
-          variants={columnVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <h3 className="tobacco-info-header">BURLEY</h3>
-          <p>Air</p>
-          <p>Brown</p>
-          <p>Chocolate-like</p>
-          <p>Fast</p>
-          <p>Savory</p>
-          <p>Full and nutty</p>
-        </motion.div>
-
-        {/* Virginia */}
-        <motion.div
-          className="tobacco-info-column"
-          custom={3}
-          variants={columnVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <h3 className="tobacco-info-header">VIRGINIA</h3>
-          <p>Hot air / flue</p>
-          <p>Yellow to golden</p>
-          <p>Mild, sweet</p>
-          <p>Slow</p>
-          <p>Aromatic</p>
-          <p>Natural sweetness</p>
-        </motion.div>
-
-        {/* Oriental */}
-        <motion.div
-          className="tobacco-info-column"
-          custom={4}
-          variants={columnVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <h3 className="tobacco-info-header">ORIENTAL</h3>
-          <p>Sun</p>
-          <p>Yellow–greenish</p>
-          <p>Highly aromatic</p>
-          <p>Medium</p>
-          <p>Exotic</p>
-          <p>Very aromatic</p>
-        </motion.div>
+    <div className="tg-families">
+      <p className="tg-section-copy">La variedad y el curado ayudan a entender las diferencias entre tabacos. Esta comparación introduce cuatro perfiles generales; no indica que todos formen parte de nuestra colección.</p>
+      <div className="tg-family-grid">
+        {families.map(({ name, Icon, curing, color, profile }) => (
+          <article className="tg-family-card" key={name}>
+            <Icon size={23} strokeWidth={1.5} aria-hidden="true" /><h3>{name}</h3>
+            <dl><div><dt>Curado</dt><dd>{curing}</dd></div><div><dt>Color orientativo</dt><dd>{color}</dd></div><div><dt>Perfil orientativo</dt><dd>{profile}</dd></div></dl>
+          </article>
+        ))}
       </div>
-
-      <p className="tobacco-info-footer">
-        A master blender combines these families to create a balanced, pleasant
-        and aromatic cigar.
-      </p>
-    </motion.div>
+      <p className="tg-context-note">El origen, el cultivo y el procesamiento pueden cambiar la expresión de cada hoja. Una familia describe un perfil general; capa, capote y tripa describen su función en el cigarro.</p>
+    </div>
   );
 }

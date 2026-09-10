@@ -5,26 +5,45 @@
  */
 
 :root {
+  /* Base editorial. El UI Kit lee estos valores; no mantiene otra paleta en JS. */
+  --ls-base-bg:             #0F1110;
+  --ls-base-bg-card:        #181C19;
+  --ls-base-bg-surface:     #222823;
+  --ls-base-gold:           #C7A479;
+  --ls-base-text-primary:   #F3EFE6;
+  --ls-base-text-secondary: #B8BBAF;
+  --ls-base-text-dim:       #939C92;
+  --ls-base-video-bg:       #D6C8B9;
+  --ls-base-btn-primary:    var(--ls-base-gold);
+  --ls-base-btn-secondary:  var(--ls-base-gold);
+  --ls-base-btn-ghost:      var(--ls-base-gold);
+
   /* ── Fondos ── */
-  --ls-bg:          #050505;    /* fondo principal de página */
-  --ls-bg-card:     #111111;    /* fondo de tarjetas */
-  --ls-bg-surface:  #1a1a1a;    /* superficies elevadas (modales, drawers) */
-  --ls-glass:       rgba(15, 15, 15, 0.75);
+  --ls-bg:          var(--ls-base-bg);
+  --ls-bg-card:     var(--ls-base-bg-card);
+  --ls-bg-surface:  var(--ls-base-bg-surface);
+  --ls-glass:       color-mix(in srgb, var(--ls-bg-card) 92%, transparent);
+  --ls-overlay:     color-mix(in srgb, var(--ls-bg) 78%, transparent);
+  --ls-selection:   color-mix(in srgb, var(--ls-bg) 65%, transparent);
+  --ls-video-bg:    var(--ls-base-video-bg);
 
   /* ── Acento bronce ── */
-  --ls-gold:        #8B5E3C;
-  --ls-gold-muted:  #5C3D22;
-  --ls-gold-subtle: rgba(139, 94, 60, 0.08);
-  --ls-gold-border: rgba(139, 94, 60, 0.22);
+  --ls-gold:        var(--ls-base-gold);
+  --ls-gold-muted:  color-mix(in srgb, var(--ls-gold) 65%, var(--ls-bg));
+  --ls-gold-subtle: color-mix(in srgb, var(--ls-gold) 8%, transparent);
+  --ls-gold-border: color-mix(in srgb, var(--ls-gold) 26%, transparent);
+  --ls-border:      color-mix(in srgb, var(--ls-text-primary) 14%, transparent);
+  --ls-focus:       var(--ls-gold);
 
   /* Alias para compatibilidad con archivos existentes */
   --ls-glass-border: var(--ls-gold-border);
 
   /* ── Texto ── */
-  --ls-text-primary:   #ffffff;
-  --ls-text-secondary: #a0a0a0;
-  --ls-text-dim:       #666666;
-  --ls-text-on-gold:   #ffffff;   /* bronce oscuro → texto blanco sobre él */
+  --ls-text-primary:   var(--ls-base-text-primary);
+  --ls-text-secondary: var(--ls-base-text-secondary);
+  --ls-text-dim:       var(--ls-base-text-dim);
+  --ls-text-on-gold:   #171A16;
+  --ls-text-on-primary: #171A16;
 
   /* ── Tipografía — familias ── */
   --ls-font-heading: 'Playfair Display', serif;
@@ -60,9 +79,9 @@
   --letter-spacing-widest:   0.2em;
 
   /* ── Botones — tier colors ── */
-  --ls-btn-primary:   #8B5E3C;   /* tier primary (fill) */
-  --ls-btn-secondary: #8B5E3C;   /* tier secondary (border + text) */
-  --ls-btn-ghost:     #8B5E3C;   /* tier ghost (hover text) */
+  --ls-btn-primary:   var(--ls-gold);
+  --ls-btn-secondary: var(--ls-gold);
+  --ls-btn-ghost:     var(--ls-gold);
 
   /* ── Transiciones ── */
   --ls-transition-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
