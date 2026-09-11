@@ -86,7 +86,7 @@
 .ls-experience-header button { border: 0; background: none; color: var(--ls-text-secondary); cursor: pointer; min-height: 44px; }
 .ls-return { justify-self: start; display: flex; align-items: center; gap: 10px; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
 .ls-experience-identity { text-align: center; min-width: 0; }
-.ls-experience-identity > span { display: block; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--ls-text-secondary); margin-bottom: 4px; }
+.ls-experience-identity > span { display: block; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--ls-text-secondary); margin-bottom: 4px; }
 .ls-experience-identity h2 { font-family: var(--ls-font-heading); margin: 0; font-size: 1.15rem; letter-spacing: 0; color: var(--ls-text-primary); overflow-wrap: anywhere; }
 .ls-icon-button { justify-self: end; display: grid; place-items: center; width: 44px; }
 .ls-experience-header button:hover { color: var(--ls-text-primary); }
@@ -105,7 +105,7 @@
   .ls-intro { padding: 22px 0 32px; }
   .ls-intro h1 { font-size: 2.65rem; }
   .ls-intro > p { font-size: .85rem; }
-  .ls-collection-count { font-size: 8px; letter-spacing: .08em; }
+  .ls-collection-count { font-size: 10px; letter-spacing: .07em; }
   .ls-filters { gap: 4px; justify-content: space-between; }
   .ls-filter-btn { padding: 9px 9px; gap: 5px; font-size: 11px; }
   .ls-category-intro { padding: 0 0 24px; min-height: 125px; }

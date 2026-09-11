@@ -51,7 +51,8 @@
 .ts-explore > svg:first-child, .ts-explore > svg:last-child { color: var(--ls-btn-secondary); }
 .ts-explore:hover { border-color: var(--ls-btn-secondary); background: color-mix(in srgb, var(--ls-btn-secondary) 12%, transparent); }
 .ts-facts dt, .ts-specimen-label { color: var(--ls-text-dim); font-size: 10px; }
-.th-scene-caption, .th-image-name, .th-play-hint { color: var(--ls-text-dim); }
+.th-scene-caption, .th-image-name { color: var(--ls-text-dim); }
+.th-play-hint { color: var(--ls-text-secondary); font-size: 11px; }
 .th-step-controls button { border-color: var(--ls-btn-secondary); color: var(--ls-btn-secondary); }
 .th-finish:hover { color: var(--ls-btn-ghost); }
 .th-chapters button { font-size: 11px; }
@@ -71,5 +72,5 @@
 
 @media (max-width: 600px) {
   .ls-eyebrow { font-size: 10px; }
-  .ls-collection-count { font-size: 9px; }
+  .ls-collection-count { font-size: 10px; }
 }

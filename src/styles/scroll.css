@@ -1,5 +1,10 @@
 /* Native scrolling everywhere. Animations may move their own viewport explicitly. */
-html { scroll-behavior: auto; scrollbar-gutter: stable; }
+html {
+  scroll-behavior: auto;
+  scrollbar-gutter: stable;
+  /* Keeps the reserved scrollbar lane inside the presentation palette. */
+  background: var(--ls-bg);
+}
 html, body, body * {
   scrollbar-width: thin;
   scrollbar-color: var(--ls-gold-muted) var(--ls-bg);
