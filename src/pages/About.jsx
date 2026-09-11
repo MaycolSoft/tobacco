@@ -22,7 +22,7 @@ export default function About() {
           <Link className="site-text-link" to="/service">Conocer el proceso <ArrowRight size={17} /></Link>
         </div>
         <figure className="site-about-intro__image">
-          <img src="/img/carousel-2.jpg" alt="Manos trabajando en la elaboración de un cigarro" fetchPriority="high" />
+          <img src="/img/oficio-manos-editorial-v1.jpg" alt="Ilustración de manos examinando la textura de una hoja de tabaco sobre una mesa de madera" width="1122" height="1402" fetchPriority="high" />
           <figcaption>La materia se conoce. El oficio se practica.</figcaption>
         </figure>
       </section>

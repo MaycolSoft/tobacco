@@ -314,12 +314,43 @@ a { color: inherit; }
 .site-about-intro__copy > p { max-width: 560px; line-height: 1.8; }
 .site-about-intro__copy .site-text-link { margin-top: 12px; }
 .site-about-intro__image { min-width: 0; margin: 0; }
-.site-about-intro__image img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 64% center; }
+.site-about-intro__image img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: center; }
 .site-about-intro__image figcaption { padding-top: 15px; color: var(--ls-text-secondary); font-size: 12px; line-height: 1.6; }
 @media (max-width: 860px) {
   .site-about-intro { grid-template-columns: 1fr; gap: 32px; }
   .site-about-intro__image img { aspect-ratio: 4 / 3; }
   .site-page-header--compact .site-page-header__content { padding-block: 108px 30px; }
+}
+
+.site-profile-grid--specimens .site-profile-card figure { background: var(--ls-bg-surface); }
+.site-profile-grid--specimens .site-profile-card figure img { object-fit: contain; padding: 25px; filter: none; }
+.site-profile-grid--specimens .site-profile-card:hover figure img { filter: none; }
+.site-profile-grid--specimens .site-profile-card > div { display: flex; flex-direction: column; align-items: flex-start; }
+.site-profile-grid--specimens .site-profile-card p { min-height: 0; }
+.site-leaf-reference { width: 100%; margin: 12px 0 24px; padding-top: 20px; border-top: 1px solid var(--ls-border); }
+.site-leaf-reference h4 { margin-top: 12px; }
+.site-profile-grid--specimens .site-text-link { margin-top: auto; min-height: 44px; }
+.site-process-chapters { border-top: 1px solid var(--ls-border); }
+.site-process-chapter { display: grid; grid-template-columns: .85fr 1.15fr; align-items: center; gap: clamp(28px, 5vw, 70px); padding-block: 48px; border-bottom: 1px solid var(--ls-border); }
+.site-process-chapter__copy > svg { display: block; margin: 22px 0; color: var(--ls-gold); }
+.site-process-chapter h3 { font-size: clamp(2rem, 3vw, 3rem); letter-spacing: -.025em; }
+.site-process-chapter p { line-height: 1.8; }
+.site-process-specimen { margin: 0; padding: 24px; background: var(--ls-bg-card); text-align: center; }
+.site-process-specimen img { display: block; width: 100%; height: 360px; object-fit: contain; }
+.site-process-specimen figcaption { margin-top: 18px; font-size: 12px; color: var(--ls-text-secondary); }
+.site-process-parts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; background: var(--ls-bg-card); padding: 24px 16px; }
+.site-process-parts figure { min-width: 0; margin: 0; text-align: center; }
+.site-process-parts img { width: 100%; height: 260px; object-fit: contain; }
+.site-process-parts figcaption { display: grid; gap: 6px; margin-top: 15px; }
+.site-process-parts strong { font-family: var(--ls-font-heading); font-size: 18px; }
+.site-process-parts span { color: var(--ls-text-secondary); font-size: 12px; }
+.ls-card[id] { scroll-margin-top: 110px; }
+@media (max-width: 860px) {
+  .site-process-chapter { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .site-process-parts { gap: 8px; padding-inline: 12px; }
+  .site-process-parts img { height: 180px; }
 }
 
 /* Reading and action hierarchy: small type is reserved for decorative numbering. */
@@ -347,7 +378,6 @@ a { color: inherit; }
 .site-page-header::before, .site-page-header__glow { display: none; }
 .site-page-header__image { position: absolute; top: 0; right: 0; width: 62%; height: 100%; object-fit: cover; object-position: center; filter: saturate(.7); }
 .site-page-header::after { background: linear-gradient(90deg, var(--ls-bg) 25%, color-mix(in srgb, var(--ls-bg) 92%, transparent) 52%, color-mix(in srgb, var(--ls-bg) 25%, transparent)), linear-gradient(0deg, var(--ls-bg), transparent 50%); }
-[data-route='/menu'] .site-page-header__image,
 [data-route='/testimonial'] .site-page-header__image { object-fit: contain; width: 46%; padding: 36px; }
 .site-page-header.is-plain { background: var(--ls-bg); border-bottom: 1px solid var(--ls-border); }
 .site-page-header.is-plain::after { display: none; }
@@ -387,7 +417,6 @@ a { color: inherit; }
   .ls-experience-footer button { font-size: 12px; letter-spacing: 0; }
   .th-chapters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .site-page-header__image { width: 100%; opacity: .45; }
-  [data-route='/menu'] .site-page-header__image,
   [data-route='/testimonial'] .site-page-header__image { width: 65%; }
   .site-page-header::after { background: linear-gradient(90deg, var(--ls-bg), color-mix(in srgb, var(--ls-bg) 65%, transparent)), linear-gradient(0deg, var(--ls-bg), transparent); }
   .site-footer__base { overflow-wrap: anywhere; }
