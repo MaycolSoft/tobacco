@@ -17,7 +17,10 @@ export default function LeafLibrary() {
   const triggerRef = useRef(null);
   const detailTabRef = useRef(null);
   const immersiveTabRef = useRef(null);
-  const filtered = leaves.filter(leaf => filter === 'ALL' || leaf.category === filter);
+  const groups = ['CAPA', 'CAPOTE', 'TRIPA']
+    .filter(key => filter === 'ALL' || key === filter)
+    .map(key => ({ key, ...leafCategories[key], leaves: leaves.filter(leaf => leaf.category === key) }));
+  const filtered = groups.flatMap(group => group.leaves);
   const selected = leaves.find(leaf => leaf.id === selectedId);
   const selectedIndex = filtered.findIndex(leaf => leaf.id === selectedId);
   const isOpen = Boolean(selected);
@@ -83,8 +86,15 @@ export default function LeafLibrary() {
           <p>{leafCategories[filter].description}</p>
         </div>
       </div>
-      <div className="ls-grid">
-        {filtered.map((leaf, index) => (
+      {groups.map(group => (
+        <section className="ls-collection-group" key={group.key} aria-labelledby={`group-${group.key}`}>
+          {filter === 'ALL' && <header className="ls-group-heading">
+            <div><span className="ls-eyebrow">{group.position} · {group.leaves.length} variedades</span><h2 id={`group-${group.key}`}>{group.label} <span>{group.title}</span></h2></div>
+            <p>{group.description}</p>
+          </header>}
+          {filter !== 'ALL' && <h2 className="sr-only" id={`group-${group.key}`}>{group.label}</h2>}
+          <div className="ls-grid">
+        {group.leaves.map(leaf => (
           <article key={leaf.id} id={leaf.id} className="ls-card">
             <button className="ls-card-visual" onClick={event => openLeaf(leaf, event)} aria-label={`Descubrir ${leaf.name}, ${leafCategories[leaf.category].label}`}>
               <img src={leaf.thumbImg} alt={leaf.name} loading="lazy" />
@@ -96,12 +106,14 @@ export default function LeafLibrary() {
               <h3>{leaf.name}</h3>
               <p className="ls-desc">{leaf.description}</p>
               <button className="ls-discover" onClick={event => openLeaf(leaf, event)} aria-label={`Descubrir la hoja ${leaf.name}`}>
-                Descubrir hoja <ArrowRight size={16} /><span className="ls-card-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                Descubrir hoja <ArrowRight size={16} /><span className="ls-card-number" aria-hidden="true">{String(filtered.indexOf(leaf) + 1).padStart(2, '0')}</span>
               </button>
             </div>
           </article>
         ))}
-      </div>
+          </div>
+        </section>
+      ))}
       <p className="ls-catalog-end">Cada hoja, una expresión. Cada mezcla, una historia.</p>
       {selected && createPortal(
         <div ref={overlayRef} className="ls-experience" role="dialog" aria-modal="true" aria-labelledby="ls-experience-title">

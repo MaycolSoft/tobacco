@@ -1,71 +1,14 @@
+import { Eye, Hand, Leaf, Wind } from 'lucide-react';
 
-import React, { useEffect } from 'react';
+const senses = [
+  { icon: Eye, index: '01', title: 'Apariencia', text: 'Color, uniformidad y textura ofrecen las primeras pistas sobre el carácter de una hoja.' },
+  { icon: Hand, index: '02', title: 'Tacto', text: 'Flexibilidad, cuerpo y superficie ayudan a comprender su comportamiento en la composición.' },
+  { icon: Leaf, index: '03', title: 'Aroma', text: 'El aroma en frío permite reconocer familias de matices antes de iniciar la experiencia.' },
+  { icon: Wind, index: '04', title: 'Evolución', text: 'La mezcla se expresa por etapas; observar sus cambios es parte esencial de la lectura.' },
+];
 
-const Testimonial = () => {
-  useEffect(() => {
-    const $ = window.$;
-    let testimonialCarousel;
-
-    // Pequeño retraso para asegurar que el DOM de React esté listo
-    const timer = setTimeout(() => {
-      testimonialCarousel = $(".testimonial-carousel");
-      if (testimonialCarousel.length > 0 && $.fn.owlCarousel) {
-        testimonialCarousel.owlCarousel({
-          autoplay: true,
-          smartSpeed: 1500,
-          dots: true,
-          loop: true,
-          items: 1
-        });
-      }
-    }, 100);
-
-    // Limpieza al salir de la página para evitar errores de memoria
-    return () => {
-      clearTimeout(timer);
-      if (testimonialCarousel && testimonialCarousel.length > 0 && $.fn.owlCarousel) {
-        testimonialCarousel.trigger('destroy.owl.carousel');
-      }
-    };
-  }, []);
-
-  const testimonials = [
-    { id: 1, img: "/img/testimonial-1.jpg", name: "Client Name", profession: "Profession" },
-    { id: 2, img: "/img/testimonial-2.jpg", name: "Client Name", profession: "Profession" },
-    { id: 3, img: "/img/testimonial-3.jpg", name: "Client Name", profession: "Profession" },
-    { id: 4, img: "/img/testimonial-4.jpg", name: "Client Name", profession: "Profession" },
-  ];
-
+export default function Testimonial() {
   return (
-    <div className="container-fluid py-5">
-      <div className="container">
-        <div className="section-title">
-          <h4 className="text-primary text-uppercase" style={{ letterSpacing: '5px' }}>
-            Testimonial
-          </h4>
-          <h1 className="display-4">Our Clients Say</h1>
-        </div>
-        
-        <div className="owl-carousel testimonial-carousel">
-          {testimonials.map((t) => (
-            <div className="testimonial-item" key={t.id}>
-              <div className="d-flex align-items-center mb-3">
-                <img className="img-fluid" src={t.img} alt={t.name} />
-                <div className="ml-3">
-                  <h4>{t.name}</h4>
-                  <i>{t.profession}</i>
-                </div>
-              </div>
-              <p className="m-0">
-                Sed ea amet kasd elitr stet, stet rebum et ipsum est duo elitr eirmod clita lorem. 
-                Dolor tempor ipsum sanct clita
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    <div className="site-page"><section className="site-section site-shell"><div className="site-section-heading site-section-heading--wide"><div><span className="site-kicker">Mirar antes de interpretar</span><h2>Una experiencia que se descubre por capas.</h2></div><p className="site-lead">Conocer el tabaco también significa aprender a detenerse en los detalles.</p></div><div className="site-senses">{senses.map(({ icon: Icon, index, title, text }) => <article key={title}><span>{index}</span><Icon size={26} strokeWidth={1.25} /><h3>{title}</h3><p>{text}</p></article>)}</div></section><section className="site-sensory-quote"><div className="site-shell"><span className="site-kicker">Una lectura consciente</span><blockquote>La experiencia no empieza con una conclusión, sino con la atención.</blockquote><p>La interfaz acompaña ese ritmo: información precisa, imágenes amplias y espacios que permiten observar sin prisa.</p></div></section></div>
   );
-};
-
-export default Testimonial;
+}

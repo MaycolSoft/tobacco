@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { ArrowLeft, Compass } from 'lucide-react';
 import ProtectedRoute from '@components/ProtectedRoute';
 import Login from '@pages/Login';
 import Seo from '@components/Seo';
@@ -44,12 +45,14 @@ function App() {
           <Route path="/craft-your-cigar" element={<ProtectedRoute><CraftYourCigar /></ProtectedRoute>} />
 
 
-          {/* Ruta para manejar errores 404 - Opcional */}
           <Route path="*" element={
-            <div className="container py-5 text-center">
-              <h1 className="display-1">404</h1>
-              <h2>Page Not Found</h2>
-            </div>
+            <section className="site-empty-state">
+              <Compass size={34} strokeWidth={1.4} aria-hidden="true" />
+              <span className="site-kicker">Error 404</span>
+              <h1>Esta página no forma parte del recorrido.</h1>
+              <p>Regresa al inicio para continuar explorando el universo de la hoja y el cigarro.</p>
+              <Link className="site-button site-button--secondary" to="/"><ArrowLeft size={17} /> Volver al inicio</Link>
+            </section>
           } />
         </Routes>
       </MainLayout>

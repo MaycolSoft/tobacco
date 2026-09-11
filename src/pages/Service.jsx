@@ -1,78 +1,18 @@
+import { ArrowRight, Boxes, CircleDot, Hand, Layers3, ScanEye } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
+const stages = [
+  { icon: ScanEye, title: 'Selección', label: 'Leer la materia', text: 'Se observan integridad, textura y cualidades visuales para reconocer el potencial de cada hoja.' },
+  { icon: Layers3, title: 'Composición', label: 'Definir la estructura', text: 'Capa, capote y tripa se organizan según la función que cumplirán dentro del cigarro.' },
+  { icon: Boxes, title: 'Proporción', label: 'Buscar equilibrio', text: 'La relación entre las hojas determina el cuerpo, la evolución y la expresión de la mezcla.' },
+  { icon: Hand, title: 'Formación', label: 'Dar forma', text: 'La técnica convierte la selección en una pieza coherente, cuidando construcción y acabado.' },
+];
 
-
-import React from 'react';
-
-// Sub-componente para cada bloque de servicio
-const ServiceItem = ({ img, title, description }) => (
-  <div className="col-lg-6 mb-5">
-    <div className="row align-items-center">
-      <div className="col-sm-5">
-        <img className="img-fluid mb-3 mb-sm-0" src={img} alt={title} />
-      </div>
-      <div className="col-sm-7">
-        <h4>
-          <i className="">
-            <img src="/img/icono.png" width="47" height="33" alt="Icono" />
-          </i> 
-          {" "}{title}
-        </h4>
-        <p className="m-0">{description}</p>
-      </div>
-    </div>
-  </div>
-);
-
-const Service = () => {
-  const servicesData = [
-    {
-      id: 1,
-      img: "/img/service-1.jpg",
-      title: "Delivery",
-      description: "Sit lorem ipsum et diam elitr est dolor sed duo. Guberg sea et et lorem dolor sed est sit invidunt, dolore tempor diam ipsum takima erat tempor"
-    },
-    {
-      id: 2,
-      img: "/img/service-2.jpg",
-      title: "Fresh",
-      description: "Sit lorem ipsum et diam elitr est dolor sed duo. Guberg sea et et lorem dolor sed est sit invidunt, dolore tempor diam ipsum takima erat tempor"
-    },
-    {
-      id: 3,
-      img: "/img/service-3.jpg",
-      title: "Best Quality",
-      description: "Sit lorem ipsum et diam elitr est dolor sed duo. Guberg sea et et lorem dolor sed est sit invidunt, dolore tempor diam ipsum takima erat tempor"
-    },
-    {
-      id: 4,
-      img: "/img/service-4.jpg",
-      title: "Online",
-      description: "Sit lorem ipsum et diam elitr est dolor sed duo. Guberg sea et et lorem dolor sed est sit invidunt, dolore tempor diam ipsum takima erat tempor"
-    }
-  ];
-
+export default function Service() {
   return (
-    <div className="container-fluid pt-5">
-      <div className="container">
-        <div className="section-title">
-          <h4 className="text-primary text-uppercase" style={{ letterSpacing: '5px' }}>
-            Our Services
-          </h4>
-          <h1 className="display-4">Fresh</h1>
-        </div>
-        <div className="row">
-          {servicesData.map((service) => (
-            <ServiceItem 
-              key={service.id}
-              img={service.img}
-              title={service.title}
-              description={service.description}
-            />
-          ))}
-        </div>
-      </div>
+    <div className="site-page">
+      <section className="site-section site-shell"><div className="site-section-heading site-section-heading--wide"><div><span className="site-kicker">Una secuencia de decisiones</span><h2>La forma final comienza mucho antes de enrollar.</h2></div><p className="site-lead">Cada etapa conecta conocimiento técnico, sensibilidad y respeto por la materia prima.</p></div><div className="site-process-list">{stages.map(({ icon: Icon, title, label, text }, index) => <article key={title}><span className="site-process-list__number">0{index + 1}</span><div className="site-process-list__icon"><Icon size={25} strokeWidth={1.3} /></div><div><span className="site-kicker">{label}</span><h3>{title}</h3></div><p>{text}</p></article>)}</div></section>
+      <section className="site-process-feature"><div className="site-process-feature__image"><img src="/img/service-2.jpg" alt="Detalle del proceso artesanal del tabaco" /></div><div className="site-process-feature__copy"><CircleDot size={28} strokeWidth={1.3} /><span className="site-kicker">Aprender mirando</span><h2>El proceso también se puede recorrer.</h2><p>En la experiencia de creación, la selección de hojas se conecta con una secuencia visual para mostrar cómo esa composición se transforma en un cigarro.</p><Link className="site-button site-button--primary" to="/login">Crear una composición <ArrowRight size={17} /></Link></div></section>
     </div>
   );
-};
-
-export default Service;
+}
