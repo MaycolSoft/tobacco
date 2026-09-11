@@ -105,7 +105,7 @@
   .tg-family-card { padding: 18px; }
   .tg-section-heading { gap: 16px; }
   .tg-footer { gap: 10px; }
-  .tg-footer > span { font-size: 9px; max-width: 115px; line-height: 1.5; }
+  .tg-footer > span { font-size: 10px; max-width: 125px; line-height: 1.5; }
   .tg-footer > button { padding: 11px 15px; font-size: 10px; gap: 8px; }
 }
 @media (max-width: 350px) { .tg-family-grid { grid-template-columns: 1fr; } }
