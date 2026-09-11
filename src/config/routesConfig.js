@@ -18,8 +18,8 @@ import {
  */
 export const routesConfig = {
   "/": {
-    title: "The Master Blender",
-    subtitle: "Bienvenido",
+    title: "Tabacalera Tamboril",
+    subtitle: "Del cultivo al cigarro",
     icon: Home,
     showNavbar: true,
     showFooter: true,
@@ -27,8 +27,8 @@ export const routesConfig = {
     navbarSticky: false
   },
   "/leaf-library": {
-    title: "Biblioteca de Hojas",
-    subtitle: "Catálogo Premium",
+    title: "Biblioteca de hojas",
+    subtitle: "Materia prima",
     icon: Library,
     showNavbar: true,
     showFooter: false, // Según tu log: "showFooter":false
@@ -36,17 +36,17 @@ export const routesConfig = {
     navbarSticky: true  // Según tu log: "navbarSticky":true
   },
   "/about": {
-    title: "Nuestra Historia",
-    subtitle: "About Us",
+    title: "El oficio",
+    subtitle: "Una cultura construida alrededor de la hoja",
     icon: Info,
     showNavbar: true,
     showFooter: true,
-    showHeader: true,   // Según tu log: "showHeader":true
+    showHeader: false, // La página incluye su propia portada editorial.
     navbarSticky: false
   },
   "/service": {
-    title: "Nuestros Cigarros",
-    subtitle: "Servicios Premium",
+    title: "El proceso",
+    subtitle: "De la selección al acabado",
     icon: Cigarette,
     showNavbar: true,
     showFooter: true,
@@ -54,8 +54,8 @@ export const routesConfig = {
     navbarSticky: false
   },
   "/menu": {
-    title: "Nuestras Ligas",
-    subtitle: "Our Blends",
+    title: "Perfiles de mezcla",
+    subtitle: "Equilibrio, carácter y expresión",
     icon: LayoutGrid,
     showNavbar: true,
     showFooter: true,
@@ -63,26 +63,28 @@ export const routesConfig = {
     navbarSticky: false
   },
   "/reservation": {
-    title: "Reservaciones",
-    subtitle: "Reserva tu Experiencia",
+    headerVariant: 'compact',
+    title: "Presentación guiada",
+    subtitle: "Una experiencia alrededor del tabaco",
     icon: CalendarCheck,
     showNavbar: true,
     showFooter: true,
-    showHeader: false,
+    showHeader: true,
     navbarSticky: false
   },
   "/testimonial": {
-    title: "Testimonios",
-    subtitle: "Lo que dicen nuestros clientes",
+    title: "La experiencia sensorial",
+    subtitle: "Aprender a observar cada detalle",
     icon: MessageSquare,
     showNavbar: true,
     showFooter: true,
-    showHeader: false,
+    showHeader: true,
     navbarSticky: false
   },
   "/contact": {
+    headerVariant: 'compact',
     title: "Contacto",
-    subtitle: "Habla con nosotros",
+    subtitle: "Continuemos la conversación",
     icon: Mail,
     showNavbar: true,
     showFooter: true,

@@ -1,134 +1,14 @@
-import React, { useEffect } from "react";
+import { CalendarDays, Check, Clock3, Users } from 'lucide-react';
 
-const Reservation = () => {
-  useEffect(() => {
-    const $ = window.$;
-    if ($ && $.fn.datetimepicker) {
-      // Inicializar selector de fecha
-      $("#date").datetimepicker({
-        format: "L",
-      });
-      // Inicializar selector de hora
-      $("#time").datetimepicker({
-        format: "LT",
-      });
-    }
-  }, []);
+const highlights = ['Recorrido por la biblioteca de hojas', 'Explicación de capa, capote y tripa', 'Demostración visual de la elaboración'];
 
+export default function Reservation() {
   return (
-    <div className="container-fluid py-5">
-      <div className="container">
-        <div className="reservation position-relative overlay-top overlay-bottom">
-          <div className="row align-items-center">
-            {/* Columna de Texto Informativo */}
-            <div className="col-lg-6 my-5 my-lg-0">
-              <div className="p-5">
-                <div className="mb-4">
-                  <h1 className="display-3 text-primary">30% OFF</h1>
-                  <h1 className="text-white">For Online Reservation</h1>
-                </div>
-                <p className="text-white">
-                  Lorem justo clita erat lorem labore ea, justo dolor lorem
-                  ipsum ut sed eos, ipsum et dolor kasd sit ea justo. Erat justo
-                  sed sed diam.
-                </p>
-                <ul className="list-inline text-white m-0">
-                  <li className="py-2">
-                    <i className="fa fa-check text-primary mr-3"></i>Lorem ipsum
-                    dolor sit amet
-                  </li>
-                  <li className="py-2">
-                    <i className="fa fa-check text-primary mr-3"></i>Lorem ipsum
-                    dolor sit amet
-                  </li>
-                  <li className="py-2">
-                    <i className="fa fa-check text-primary mr-3"></i>Lorem ipsum
-                    dolor sit amet
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Columna del Formulario */}
-            <div className="col-lg-6">
-              <div
-                className="text-center p-5"
-                style={{ background: "rgba(51, 33, 29, .8)" }}
-              >
-                <h1 className="text-white mb-4 mt-5">Now Reservation</h1>
-                <form className="mb-5">
-                  <div className="form-group">
-                    <input
-                      type="text"
-                      className="form-control bg-transparent border-primary p-4"
-                      placeholder="Name"
-                      required="required"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input
-                      type="email"
-                      className="form-control bg-transparent border-primary p-4"
-                      placeholder="Email"
-                      required="required"
-                    />
-                  </div>
-
-                  {/* Selector de Fecha */}
-                  <div className="form-group">
-                    <div className="date" id="date" data-target-input="nearest">
-                      <input
-                        type="text"
-                        className="form-control bg-transparent border-primary p-4 datetimepicker-input"
-                        placeholder="Date"
-                        data-target="#date"
-                        data-toggle="datetimepicker"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Selector de Hora */}
-                  <div className="form-group">
-                    <div className="time" id="time" data-target-input="nearest">
-                      <input
-                        type="text"
-                        className="form-control bg-transparent border-primary p-4 datetimepicker-input"
-                        placeholder="Time"
-                        data-target="#time"
-                        data-toggle="datetimepicker"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <select
-                      className="custom-select bg-transparent border-primary px-4"
-                      style={{ height: "49px" }}
-                    >
-                      <option defaultValue>Person</option>
-                      <option value="1">Person 1</option>
-                      <option value="2">Person 2</option>
-                      <option value="3">Person 3</option>
-                      <option value="4">Person 4</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <button
-                      className="btn btn-primary btn-block font-weight-bold py-3"
-                      type="submit"
-                    >
-                      Book Now
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="site-page">
+      <section className="site-section site-shell site-request">
+        <div className="site-request__intro"><span className="site-kicker">Presentación guiada</span><h2>Una conversación alrededor de la hoja.</h2><p className="site-lead">Prepara una sesión para recorrer el origen, la composición y el proceso de elaboración con una narrativa clara y visual.</p><ul>{highlights.map(item => <li key={item}><Check size={16} />{item}</li>)}</ul><div className="site-request__meta"><span><Clock3 size={18} /> Ritmo guiado</span><span><Users size={18} /> Experiencia compartida</span></div></div>
+        <form className="site-form" onSubmit={event => event.preventDefault()}><div className="site-form__heading"><CalendarDays size={25} strokeWidth={1.3} /><div><span className="site-kicker">Coordinar experiencia</span><h3>Cuéntanos sobre tu presentación.</h3></div></div><label>Nombre<input type="text" name="name" placeholder="Tu nombre" /></label><label>Correo electrónico<input type="email" name="email" placeholder="nombre@correo.com" /></label><div className="site-form__row"><label>Fecha de interés<input type="date" name="date" /></label><label>Participantes<select name="attendees" defaultValue=""><option value="" disabled>Seleccionar</option><option>1–5 personas</option><option>6–12 personas</option><option>Más de 12</option></select></label></div><label>Enfoque de la presentación<select name="focus" defaultValue="complete"><option value="complete">Recorrido completo</option><option value="leaves">Biblioteca de hojas</option><option value="blend">Creación de una mezcla</option></select></label><button type="submit" className="site-button site-button--primary">Preparar solicitud</button><small>Este formulario forma parte de la presentación visual y no realiza pagos.</small></form>
+      </section>
     </div>
   );
-};
-
-export default Reservation;
+}

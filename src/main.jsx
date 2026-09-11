@@ -9,6 +9,7 @@ import CentralLogViewer from '@components/CentralLogViewer.jsx'
 import ErrorBoundary from "@components/ErrorBoundary";
 import '@styles/presentation-theme.css';
 import '@styles/scroll.css';
+import '@styles/site-editorial.css';
 
 
 createRoot(document.getElementById('root')).render(

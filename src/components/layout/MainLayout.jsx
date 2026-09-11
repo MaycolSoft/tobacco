@@ -16,24 +16,24 @@ const MainLayout = ({ children }) => {
     const defaultConfig = getRouteConfig(pathname);
     loadPageConfig(pathname, defaultConfig);
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [pathname, loadPageConfig]);
 
-  const { showNavbar, showFooter, showHeader, headerData, headerSticky } = currentConfig;
+  const { showNavbar, showFooter, showHeader, headerData, headerVariant } = currentConfig;
 
   return (
-    <div className="app-layout-wrapper">
-      {showNavbar && <Navbar isSticky={!showHeader} />}
+    <div className="app-layout-wrapper" data-route={pathname} data-header={showHeader ? 'visible' : 'hidden'}>
+      {showNavbar && <Navbar />}
       
       {showHeader && (
         <Header 
           title={headerData?.title || ""} 
           subtitle={headerData?.subtitle || ""} 
           Icon={headerData?.icon} 
-          isSticky={headerSticky}
+          variant={headerVariant}
         />
       )}
 
-      <main className={`main-content ${!showHeader && showNavbar ? 'no-header-padding' : ''}`}>
+      <main id="main-content" className={`main-content ${!showHeader && showNavbar ? 'no-header-padding' : ''}`}>
         {children}
       </main>
 

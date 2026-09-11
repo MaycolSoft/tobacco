@@ -1,61 +1,17 @@
-import React from 'react';
+import { ArrowRight, Feather, Gauge, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-// Sub-componente para no repetir HTML (DRY - Don't Repeat Yourself)
-const MenuItem = ({ img, price, title, description }) => (
-  <div className="row align-items-center mb-5">
-    <div className="col-4 col-sm-3">
-      <img className="w-100 rounded-circle mb-3 mb-sm-0" src={img} alt={title} />
-      <h5 className="menu-price">{price}</h5>
-    </div>
-    <div className="col-8 col-sm-9">
-      <h4>{title}</h4>
-      <p className="m-0">{description}</p>
-    </div>
-  </div>
-);
+const profiles = [
+  { icon: Feather, image: '/img/menu-1.jpg', index: '01', title: 'Sutil', note: 'Ligereza y definición', text: 'Una lectura delicada donde la armonía y los matices ocupan el primer plano.', tags: ['Aromático', 'Ligero', 'Limpio'] },
+  { icon: Sparkles, image: '/img/menu-2.jpg', index: '02', title: 'Equilibrado', note: 'Cuerpo y balance', text: 'Una composición donde ninguna parte domina y el carácter se desarrolla progresivamente.', tags: ['Redondo', 'Armónico', 'Expresivo'] },
+  { icon: Gauge, image: '/img/menu-3.jpg', index: '03', title: 'Intenso', note: 'Profundidad y presencia', text: 'Una expresión de mayor cuerpo construida desde la estructura interna de la mezcla.', tags: ['Profundo', 'Persistente', 'Con carácter'] },
+];
 
-const Menu = () => {
-  const sweetCigars = [
-    { id: 1, img: "/img/menu-1.jpg", price: "$60", title: "Black", description: "Sit lorem ipsum et diam elitr est dolor sed duo guberg sea et et lorem dolor" },
-    { id: 2, img: "/img/menu-2.jpg", price: "$60", title: "Cacao", description: "Sit lorem ipsum et diam elitr est dolor sed duo guberg sea et et lorem dolor" },
-    { id: 3, img: "/img/menu-3.jpg", price: "$60", title: "Coffee", description: "Sit lorem ipsum et diam elitr est dolor sed duo guberg sea et et lorem dolor" },
-  ];
-
-  const strongCigars = [
-    { id: 4, img: "/img/menu-1.jpg", price: "$50", title: "Strong", description: "Sit lorem ipsum et diam elitr est dolor sed duo guberg sea et et lorem dolor" },
-    { id: 5, img: "/img/menu-2.jpg", price: "$45", title: "Cacao", description: "Sit lorem ipsum et diam elitr est dolor sed duo guberg sea et et lorem dolor" },
-    { id: 6, img: "/img/menu-3.jpg", price: "$80", title: "Coffee", description: "Sit lorem ipsum et diam elitr est dolor sed duo guberg sea et et lorem dolor" },
-  ];
-
+export default function MenuPage() {
   return (
-    <div className="container-fluid pt-5">
-      <div className="container">
-        <div className="section-title">
-          <h4 className="text-primary text-uppercase" style={{ letterSpacing: '5px' }}>
-            Pricing
-          </h4>
-          <h1 className="display-4">Pricing</h1>
-        </div>
-        <div className="row">
-          {/* Columna Sweet */}
-          <div className="col-lg-6">
-            <h1 className="mb-5">Sweet</h1>
-            {sweetCigars.map(cigar => (
-              <MenuItem key={cigar.id} {...cigar} />
-            ))}
-          </div>
-
-          {/* Columna Strong */}
-          <div className="col-lg-6">
-            <h1 className="mb-5">Strong</h1>
-            {strongCigars.map(cigar => (
-              <MenuItem key={cigar.id} {...cigar} />
-            ))}
-          </div>
-        </div>
-      </div>
+    <div className="site-page">
+      <section className="site-section site-shell"><div className="site-section-heading"><div><span className="site-kicker">No son recetas cerradas</span><h2>Tres maneras de orientar una composición.</h2></div><p>Los perfiles funcionan como punto de partida para comprender cómo cambian el cuerpo, el balance y la presencia.</p></div><div className="site-profile-grid">{profiles.map(({ icon: Icon, image, index, title, note, text, tags }) => <article key={title} className="site-profile-card"><figure><img src={image} alt={`Perfil de mezcla ${title.toLowerCase()}`} /><span>{index}</span></figure><div><Icon size={22} strokeWidth={1.3} /><span className="site-kicker">{note}</span><h3>{title}</h3><p>{text}</p><ul>{tags.map(tag => <li key={tag}>{tag}</li>)}</ul></div></article>)}</div></section>
+      <section className="site-inline-cta site-shell"><div><span className="site-kicker">Ahora llévalo a la práctica</span><h2>Construye tu propio perfil.</h2></div><p>Selecciona capa, capote y tripa mientras descubres la función de cada hoja.</p><Link className="site-button site-button--secondary" to="/login">Comenzar <ArrowRight size={17} /></Link></section>
     </div>
   );
-};
-
-export default Menu;
+}

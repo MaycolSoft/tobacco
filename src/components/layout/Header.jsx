@@ -1,43 +1,30 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
 
-/**
- * Header Component
- * @param {string} title - Título principal de la página
- * @param {string} subtitle - Texto para el breadcrumb
- * @param {React.Component} Icon - Componente de icono de Lucide (opcional)
- */
-const Header = ({ title, subtitle, Icon }) => {
+const headerImages = {
+  '/about': '/img/carousel-2.jpg',
+  '/service': '/img/service-2.jpg',
+  '/menu': '/assets/full/CAPOTE CRIOLLO 98.png',
+  '/testimonial': '/assets/full/CAPA HABANA.png',
+};
+
+const Header = ({ title, subtitle, Icon, variant = 'editorial' }) => {
+  const { pathname } = useLocation();
+  const image = headerImages[pathname];
   return (
-    <div className="container-fluid page-header mb-5 position-relative overlay-bottom">
-      <div
-        className="d-flex flex-column align-items-center justify-content-center pt-0 pt-lg-5"
-        style={{ minHeight: "400px" }}
-      >
-        {/* Renderizado del Icono si existe */}
-        {Icon && (
-          <div className="mb-3 text-primary">
-            <Icon size={48} strokeWidth={1.5} color="#d4af37" />
-          </div>
-        )}
-
-        <h1 className="display-4 mb-3 mt-0 text-white text-uppercase text-center">
-          {title}
-        </h1>
-
-        <div className="d-inline-flex mb-lg-5">
-          <p className="m-0 text-white">
-            <Link className="text-white" to="/">
-              Home
-            </Link>
-          </p>
-          <p className="m-0 text-white px-2">/</p>
-          <p className="m-0 text-white" style={{ color: "#d4af37" }}>
-            {subtitle}
-          </p>
-        </div>
-      </div>
+  <header className={`site-page-header site-page-header--${variant} ${image ? 'has-editorial-image' : 'is-plain'}`}>
+    {image && <img className="site-page-header__image" src={image} alt="" />}
+    <div className="site-page-header__glow" aria-hidden="true" />
+    <div className="site-shell site-page-header__content">
+      <div className="site-page-header__icon">{Icon && <Icon size={27} strokeWidth={1.35} aria-hidden="true" />}</div>
+      <span className="site-kicker">{subtitle}</span>
+      <h1>{title}</h1>
+      <nav className="site-breadcrumb" aria-label="Migas de pan">
+        <Link to="/">Inicio</Link><ChevronRight size={13} aria-hidden="true" /><span>{title}</span>
+      </nav>
     </div>
+  </header>
   );
 };
 
