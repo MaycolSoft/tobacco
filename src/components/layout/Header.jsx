@@ -4,8 +4,8 @@ import { ChevronRight } from 'lucide-react';
 
 const headerImages = {
   '/about': '/img/carousel-2.jpg',
-  '/service': '/img/service-2.jpg',
-  '/menu': '/assets/full/CAPOTE CRIOLLO 98.png',
+  '/service': '/img/carousel-2.jpg',
+  '/menu': '/img/mezclas-mesa-editorial-v1.jpg',
   '/testimonial': '/assets/full/CAPA HABANA.png',
 };
 

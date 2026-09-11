@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useLocation } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, X, Sparkles, Leaf, Layers, Library, MapPin } from 'lucide-react';
 import InmersiveView from '@pages/InmersiveView';
 import TechnicalSheet from '@pages/TechnicalSheet';
@@ -9,6 +10,7 @@ import '@styles/LeafLibrary.css';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 
 export default function LeafLibrary() {
+  const { hash } = useLocation();
   const [filter, setFilter] = useState('ALL');
   const [selectedId, setSelectedId] = useState(null);
   const [view, setView] = useState('detail');
@@ -25,6 +27,14 @@ export default function LeafLibrary() {
   const selectedIndex = filtered.findIndex(leaf => leaf.id === selectedId);
   const isOpen = Boolean(selected);
   useBodyScrollLock(isOpen);
+
+  useEffect(() => {
+    const target = leaves.find(leaf => `#${leaf.id}` === hash);
+    if (!target) return;
+    setFilter('ALL');
+    const frame = requestAnimationFrame(() => document.getElementById(target.id)?.scrollIntoView({ block: 'start' }));
+    return () => cancelAnimationFrame(frame);
+  }, [hash]);
 
   useEffect(() => {
     if (!isOpen) return;
