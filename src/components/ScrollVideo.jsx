@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { motion, AnimatePresence } from "framer-motion";
-import { getOrDownloadFrame, blobToImage } from "@/data/frameCache";
+import { getOrDownloadFrame, blobToImage } from "@/lib/frameCache";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);

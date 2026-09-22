@@ -1,5 +1,5 @@
 import React from "react";
-import "@styles/error-boundory.css";
+import "@styles/error-boundary.css";
 
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -37,33 +37,33 @@ export default class ErrorBoundary extends React.Component {
       const message = error && (error.message || String(error));
 
       return (
-        <div className="error-boundory-container" role="alert">
-          <div className="error-boundory-card">
-            <div className="error-boundory-icon" aria-hidden>⚠️</div>
-            <h2 className="error-boundory-title">Algo salió mal</h2>
+        <div className="error-boundary-container" role="alert">
+          <div className="error-boundary-card">
+            <div className="error-boundary-icon" aria-hidden>⚠️</div>
+            <h2 className="error-boundary-title">Algo salió mal</h2>
 
             {message && (
-              <pre className="error-boundory-message">
+              <pre className="error-boundary-message">
                 {message}
               </pre>
             )}
 
             {errorInfo?.componentStack && (
-              <details className="error-boundory-details" open>
+              <details className="error-boundary-details" open>
                 <summary>Detalles técnicos</summary>
-                <pre className="error-boundory-stack">
+                <pre className="error-boundary-stack">
 {errorInfo.componentStack.trim()}
                 </pre>
               </details>
             )}
 
-            <div className="error-boundory-actions">
-              <button className="error-boundory-button" onClick={this.handleRetry}>
+            <div className="error-boundary-actions">
+              <button className="error-boundary-button" onClick={this.handleRetry}>
                 Reintentar
               </button>
               {this.props.onReset && (
                 <button
-                  className="error-boundory-button secondary"
+                  className="error-boundary-button secondary"
                   onClick={this.props.onReset}
                 >
                   Restablecer app

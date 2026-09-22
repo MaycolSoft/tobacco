@@ -1,4 +1,4 @@
-import "@styles/CraftYourCigar.css";
+import "@styles/craft-your-cigar.css";
 import React, { useCallback, useState } from "react";
 import { BookOpen, Film, X } from 'lucide-react';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Play, Pause, RotateCcw } from 'lucide-react';
 import { getLeafChapters } from '@/data/leafPresentation';
-import '@/styles/AnatomiaHoja.css';
+import '@/styles/anatomia-hoja.css';
 
-export default function InmersiveView({ leaf, onComplete }) {
+export default function ImmersiveView({ leaf, onComplete }) {
   const chapters = getLeafChapters(leaf);
   const [step, setStep] = useState(0);
   const [playing, setPlaying] = useState(false);

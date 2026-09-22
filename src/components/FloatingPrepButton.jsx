@@ -1,7 +1,7 @@
 
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import "@styles/floatingPrepButton.css";
+import "@styles/floating-prep-button.css";
 
 export default function FloatingPrepButton({ visible, onClick }) {
   return (

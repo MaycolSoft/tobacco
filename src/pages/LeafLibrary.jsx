@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, X, Sparkles, Leaf, Layers, Library, MapPin } from 'lucide-react';
-import InmersiveView from '@pages/InmersiveView';
-import TechnicalSheet from '@pages/TechnicalSheet';
+import ImmersiveView from '@components/leaf-library/ImmersiveView';
+import TechnicalSheet from '@components/leaf-library/TechnicalSheet';
 import { leaves } from '@/data/leaves';
 import { leafCategories, getLeafOrigin } from '@/data/leafPresentation';
-import '@styles/LeafLibrary.css';
+import '@styles/leaf-library.css';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 
 export default function LeafLibrary() {
@@ -137,7 +137,7 @@ export default function LeafLibrary() {
             <button ref={immersiveTabRef} aria-pressed={view === 'immersive'} onClick={() => changeView('immersive')}><Sparkles size={14} /> Recorrido inmersivo</button>
           </div>
           <div className="ls-experience-body" key={`${selected.id}-${view}`}>
-            {view === 'immersive' ? <InmersiveView leaf={selected} onComplete={() => changeView('detail')} /> : <TechnicalSheet leaf={selected} onExplore={() => changeView('immersive')} />}
+            {view === 'immersive' ? <ImmersiveView leaf={selected} onComplete={() => changeView('detail')} /> : <TechnicalSheet leaf={selected} onExplore={() => changeView('immersive')} />}
           </div>
           <footer className="ls-experience-footer">
             <button onClick={() => changeLeaf(-1)} disabled={selectedIndex <= 0}><ArrowLeft size={17} /><span>Hoja anterior</span></button>

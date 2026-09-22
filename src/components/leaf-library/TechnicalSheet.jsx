@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowUpRight, Sparkles, MapPin, Leaf, Layers } from 'lucide-react';
 import { leafCategories, getLeafOrigin } from '@/data/leafPresentation';
-import '@styles/TechnicalSheet.css';
+import '@styles/technical-sheet.css';
 
 export default function TechnicalSheet({ leaf, onExplore }) {
   const category = leafCategories[leaf.category];
