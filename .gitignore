@@ -1,3 +1,9 @@
+
+# Ignore generated video frames and videos
+/src/assets/videos
+/src/assets/frames
+
+
 # Dependencies
 node_modules/
 
