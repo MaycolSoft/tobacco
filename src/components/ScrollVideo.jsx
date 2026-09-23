@@ -1,21 +1,31 @@
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { motion, AnimatePresence } from "framer-motion";
-import { getOrDownloadFrame, blobToImage } from "@/lib/frameCache";
+import { FrameScheduler, getFrameDiagnostics } from "@/lib/frameScheduler";
+import { getFrameProfile } from "@/lib/frameProfile";
+import { SOURCE_FPS } from "@/config/animationPerformance";
+import { useAnimationPerfStore } from "@/store/useAnimationPerfStore";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollToPlugin);
 
+const STEP_COUNT = 5;
 
-const FloatingSteps = ({ frameCount, onStepClick, currentFrame }) => {
-  // Genera dinámicamente un arreglo con los 5 índices equidistantes basados exactamente en el total de imágenes
-  const steps = Array.from({ length: 5 }, (_, index) => {
-    return Math.round(((frameCount - 1) / 4) * index);
-  });
+// Genera los 5 índices equidistantes basados exactamente en el total de imágenes
+const getStepFrames = (frameCount) =>
+  Array.from({ length: STEP_COUNT }, (_, index) => Math.round(((frameCount - 1) / (STEP_COUNT - 1)) * index));
 
+const getStepIndex = (steps, frame) => {
+  for (let index = steps.length - 1; index >= 0; index--) {
+    if (frame >= steps[index]) return index;
+  }
+  return 0;
+};
+
+const FloatingSteps = ({ steps, onStepClick, activeStep }) => {
   return (
     <motion.div
       initial={{ x: 50, opacity: 0 }}
@@ -23,8 +33,7 @@ const FloatingSteps = ({ frameCount, onStepClick, currentFrame }) => {
       style={stepsContainerStyle}
     >      
       {steps.map((frame, index) => {
-        const nextStepFrame = steps[index + 1] || 999999;
-        const isThisStepActive = currentFrame >= frame && currentFrame < nextStepFrame;
+        const isThisStepActive = activeStep === index;
 
         return (
           <motion.button
@@ -44,19 +53,62 @@ const FloatingSteps = ({ frameCount, onStepClick, currentFrame }) => {
   );
 }
 
+// Dibuja un frame decodificado ({ source, width, height }) centrado en el canvas, en píxeles reales del backing store.
+function drawContain(ctx, frame, canvas) {
+  if (!frame?.width || !frame?.height) return;
+  const cW = canvas.width;
+  const cH = canvas.height;
+  const iW = frame.width;
+  const iH = frame.height;
+
+  const iRatio = iW / iH;
+  const cRatio = cW / cH;
+
+  let w, h;
+  if (iRatio < cRatio) {
+    h = cH;
+    w = (iW * cH) / iH;
+  } else {
+    w = cW;
+    h = (iH * cW) / iW;
+  }
+
+  const x = (cW - w) / 2;
+  const y = (cH - h) / 2;
+
+  ctx.clearRect(0, 0, cW, cH);
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(frame.source, x, y, w, h);
+}
+
 export default function ScrollVideo({ videoInfo={} }) {
   const canvasRef = useRef(null);
   const frameRef = useRef({ index: 0 });
-  const imagesRef = useRef([]);
+  const schedulerRef = useRef(null);
+  const lastDrawnRef = useRef(-1);
+  const drawRafRef = useRef(null);
+  const setSizeRef = useRef(null);
+  const activeStepRef = useRef(null);
+  const statsRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const autoPlayTweenRef = useRef(null);
+
+  // Configuración interna de rendimiento (defaults en config/animationPerformance.js)
+  const perfConfig = useAnimationPerfStore(state => state.config);
+  const perfConfigRef = useRef(perfConfig);
+
+  // Perfil de frames: carpeta del CDN, cantidad y FPS reales (el usuario nunca lo ve)
+  const profile = useMemo(
+    () => getFrameProfile(videoInfo, perfConfig.sourceMode),
+    [videoInfo, perfConfig.sourceMode]
+  );
+  const frameCount = profile.frameCount;
+  const steps = useMemo(() => getStepFrames(frameCount), [frameCount]);
 
   // Estados de carga y UI
   const [activeStep, setActiveStep] = useState(null);
   const [loadingProgress, setLoadingProgress] = useState(0);
-  const [isReady, setIsReady] = useState(false);
   const [showCanvas, setShowCanvas] = useState(false);
-  const [totalDownloaded, setTotalDownloaded] = useState(0);
 
   // Control de velocidad de scroll
   const [scrollHeight, setScrollHeight] = useState(() =>
@@ -69,42 +121,31 @@ export default function ScrollVideo({ videoInfo={} }) {
     localStorage.setItem('sv-scroll-height', String(val));
   };
 
-  const CDN = `https://cdn.mbsoft.freeddns.org/${videoInfo.name}`;
-  const frameCount = videoInfo.length;
-  const criticalBatch = 300;   
+  // Dibuja el frame pedido por GSAP o, si aún no está listo, el decodificado más cercano.
+  const drawCurrent = (force = false) => {
+    const canvas = canvasRef.current;
+    const scheduler = schedulerRef.current;
+    if (!canvas || !scheduler) return;
 
-  const imgPath = (i) => `${CDN}/frame_${String(i).padStart(4, "0")}.webp`;
+    const drawable = scheduler.getDrawable(Math.round(frameRef.current.index));
+    if (!drawable) return;
+    if (!force && drawable.index === lastDrawnRef.current) return;
 
-  function drawContain(ctx, img, canvas) {
-    if (!img || !img.complete) return;
-    const cW = canvas.width;
-    const cH = canvas.height;
-    const iW = img.width;
-    const iH = img.height;
+    drawContain(canvas.getContext("2d"), drawable.frame, canvas);
+    lastDrawnRef.current = drawable.index;
+  };
 
-    const iRatio = iW / iH;
-    const cRatio = cW / cH;
-
-    let w, h;
-    if (iRatio < cRatio) {
-      h = cH;
-      w = (iW * cH) / iH;
-    } else {
-      w = cW;
-      h = (iH * cW) / iW;
-    }
-
-    const x = (cW - w) / 2;
-    const y = (cH - h) / 2;
-
-    ctx.clearRect(0, 0, cW, cH);
-    ctx.drawImage(img, x, y, w, h);
-  }
+  const requestDraw = () => {
+    if (drawRafRef.current) return;
+    drawRafRef.current = requestAnimationFrame(() => {
+      drawRafRef.current = null;
+      drawCurrent();
+    });
+  };
 
   // ==========================================
   // 2. PLAY / PAUSE LOGIC FUNCTION
   // ==========================================
-  // Place this function inside your ScrollVideo component:
   const togglePlayPause = () => {
     const scroller = document.querySelector("#video-root");
     if (!scroller || !showCanvas) return;
@@ -123,17 +164,14 @@ export default function ScrollVideo({ videoInfo={} }) {
         scroller.scrollTop = 0;
       }
 
-      // 2. Definir la tasa de refresco (60 FPS)
-      const TARGET_FPS = 120;
-
-      // 3. Obtener la proporción actual del scroll (0 a 1)
+      // 2. Obtener la proporción actual del scroll (0 a 1)
       const currentProgress = maxScroll > 0 ? (scroller.scrollTop / maxScroll) : 0;
 
-      // 4. Calcular cuántos frames quedan por reproducir desde el punto actual
+      // 3. Calcular cuántos frames quedan por reproducir desde el punto actual
       const remainingFrames = frameCount * (1 - currentProgress);
 
-      // 5. El tiempo exacto en segundos para mantener velocidad lineal uniforme de 60fps
-      const dynamicDuration = remainingFrames / TARGET_FPS;
+      // 4. Duración real de la animación original según los FPS del perfil activo
+      const dynamicDuration = remainingFrames / profile.fps;
 
       autoPlayTweenRef.current = gsap.to(scroller, {
         scrollTo: maxScroll,
@@ -152,7 +190,8 @@ export default function ScrollVideo({ videoInfo={} }) {
     setIsPlaying(false);
 
     const currentFrame = frameRef.current.index;
-    const frameDistance = Math.abs(frameTarget - currentFrame);
+    // Distancia medida en frames del video original para que la duración no dependa del perfil
+    const frameDistance = Math.abs(frameTarget - currentFrame) * (SOURCE_FPS / profile.fps);
     
     // Lógica de duración dinámica:
     // Mínimo 0.8s para que no sea brusco
@@ -166,110 +205,85 @@ export default function ScrollVideo({ videoInfo={} }) {
 
     const scrollTarget = (scroller.scrollHeight - scroller.clientHeight) * progress;
 
+    // El destino y su vecindario pasan a ser la máxima prioridad (sin exigir los frames intermedios)
+    schedulerRef.current?.setFocus(frameTarget);
+    const clearFocus = () => schedulerRef.current?.clearFocus();
+
     gsap.to(scroller, {
       scrollTo: scrollTarget,
       duration: dynamicDuration,
       ease: "power2.inOut", // Aceleración y desaceleración suave
-      overwrite: "auto"     // Evita conflictos si el usuario hace click en varios botones rápido
+      overwrite: "auto",    // Evita conflictos si el usuario hace click en varios botones rápido
+      onComplete: clearFocus,
+      onInterrupt: clearFocus
     });
   };
 
 
-  // EFECTO 1: Manejo de Carga de Imágenes y Resize
+  // EFECTO 1: Scheduler de frames, canvas (DPR) y resize
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    let firstFrameShown = false;
 
-    let cancelled = false;
-    let loadedCount = 0;
+    frameRef.current.index = 0;
+    lastDrawnRef.current = -1;
+    activeStepRef.current = null;
+    setActiveStep(null);
+    setShowCanvas(false);
+    setLoadingProgress(0);
 
-    const criticalTarget = Math.min(criticalBatch, frameCount);
+    const scheduler = new FrameScheduler({
+      profile,
+      config: perfConfigRef.current,
+      onFrameReady: () => {
+        if (!firstFrameShown) {
+          firstFrameShown = true;
+          setLoadingProgress(100);
+          setShowCanvas(true);
+        }
+        requestDraw();
+      },
+    });
+    schedulerRef.current = scheduler;
 
     const setSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      const currentImage = imagesRef.current[frameRef.current.index];
-
-      if (currentImage) {
-        drawContain(ctx, currentImage, canvas);
-      }
+      const dpr = Math.min(window.devicePixelRatio || 1, perfConfigRef.current.maxDpr);
+      canvas.width = Math.round(window.innerWidth * dpr);
+      canvas.height = Math.round(window.innerHeight * dpr);
+      scheduler.setRenderSize(canvas.width, canvas.height);
+      // Cambiar el tamaño limpia el canvas: redibujar el mejor frame disponible.
+      drawCurrent(true);
     };
+    setSizeRef.current = setSize;
 
     window.addEventListener("resize", setSize);
+    // Inicia la carga: prioridad al frame 1 y su vecindario hacia adelante.
     setSize();
 
-    async function loadFrame(frameNumber) {
-      const url = imgPath(frameNumber);
-      const key = `${videoInfo.name}:frame:${String(frameNumber).padStart(4, "0")}`;
-
-      const { blob, fromCache } = await getOrDownloadFrame({
-        key,
-        url,
-        videoName: videoInfo.name,
-        frame: frameNumber,
-      });
-
-      const img = await blobToImage(blob);
-
-      if (cancelled) return;
-
-      imagesRef.current[frameNumber - 1] = img;
-
-      loadedCount++;
-
-      setTotalDownloaded(loadedCount);
-
-      if (loadedCount <= criticalTarget) {
-        const progress = Math.round((loadedCount / criticalTarget) * 100);
-        setLoadingProgress(progress);
-      }
-
-      if (loadedCount === criticalTarget) {
-        setIsReady(true);
-
-        setTimeout(() => {
-          if (!cancelled) {
-            setShowCanvas(true);
-          }
-        }, 800);
-      }
-
-      return fromCache;
-    }
-
-    async function preloadFrames() {
-      try {
-        // Primero carga los frames críticos.
-        for (let i = 1; i <= criticalTarget; i++) {
-          await loadFrame(i);
-        }
-
-        // Luego carga el resto en segundo plano.
-        for (let i = criticalTarget + 1; i <= frameCount; i++) {
-          if (cancelled) break;
-          loadFrame(i).catch(console.error);
-        }
-      } catch (error) {
-        console.error("Error cargando frames:", error);
-      }
-    }
-
-    preloadFrames();
-
     return () => {
-      cancelled = true;
       window.removeEventListener("resize", setSize);
+      if (drawRafRef.current) cancelAnimationFrame(drawRafRef.current);
+      drawRafRef.current = null;
+      setSizeRef.current = null;
+      scheduler.dispose();
+      if (schedulerRef.current === scheduler) schedulerRef.current = null;
     };
-  }, [frameCount, videoInfo.name]);
+  }, [profile]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Cambios de configuración interna en caliente (LayoutControlPanel)
+  useEffect(() => {
+    const previous = perfConfigRef.current;
+    perfConfigRef.current = perfConfig;
+    schedulerRef.current?.updateConfig(perfConfig);
+    if (previous.maxDpr !== perfConfig.maxDpr) setSizeRef.current?.();
+  }, [perfConfig]);
 
   // EFECTO 2: Inicialización de GSAP (Solo cuando el canvas es visible)
   useEffect(() => {
     if (!showCanvas) return;
 
-    // Pequeño delay para asegurar que el DOM de #video-root esté listo
-    const ctx = canvasRef.current.getContext("2d");
-    
+    let previousIndex = Math.round(frameRef.current.index);
+
     const anim = gsap.to(frameRef.current, {
       index: frameCount - 1,
       snap: "index",
@@ -283,19 +297,19 @@ export default function ScrollVideo({ videoInfo={} }) {
       },
       onUpdate: () => {
         const currentIndex = Math.round(frameRef.current.index);
+        const direction = Math.sign(currentIndex - previousIndex);
+        previousIndex = currentIndex;
 
-        // 1. Dibujar el frame (Siempre usando el entero más cercano)
-        const img = imagesRef.current[currentIndex];
-        if (img && img.complete) {
-          drawContain(ctx, img, canvasRef.current);
+        // 1. Priorizar el frame pedido y dibujar (o el más cercano ya decodificado)
+        schedulerRef.current?.setTarget(currentIndex, direction);
+        drawCurrent();
+
+        // 2. React solo se entera cuando cambia el paso lógico (5 pasos), no en cada frame
+        const stepIndex = getStepIndex(steps, currentIndex);
+        if (stepIndex !== activeStepRef.current) {
+          activeStepRef.current = stepIndex;
+          setActiveStep(stepIndex);
         }
-
-        // 2. Actualizar el estado de la UI (Solo si el número entero cambió)
-        // Usamos una función de actualización para comparar con el valor real previo
-        setActiveStep(prev => {
-          if (prev !== currentIndex) return currentIndex;
-          return prev;
-        });
       }
     });
 
@@ -304,13 +318,28 @@ export default function ScrollVideo({ videoInfo={} }) {
       anim.kill();
       autoPlayTweenRef.current?.kill();
     };
-  }, [showCanvas]);
+  }, [showCanvas, frameCount, steps]);
 
   // Recalcular ScrollTrigger DESPUÉS de que React aplique el nuevo height al DOM
   useEffect(() => {
     if (!showCanvas) return;
     requestAnimationFrame(() => ScrollTrigger.refresh());
   }, [scrollHeight, showCanvas]);
+
+  // Estadísticas de carga: se escriben directo en el DOM (sin renders de React)
+  useEffect(() => {
+    if (!perfConfig.showLoaderStats) return;
+    const update = () => {
+      if (!statsRef.current) return;
+      const stats = getFrameDiagnostics();
+      statsRef.current.textContent =
+        `Frame: ${stats.currentFrame ?? 0} / ${frameCount} | Decoded: ${stats.decodedFrames ?? 0} | ` +
+        `Queue: ${stats.queueLength ?? 0} | Active: ${stats.activeDownloads ?? 0}`;
+    };
+    update();
+    const interval = setInterval(update, 250);
+    return () => clearInterval(interval);
+  }, [perfConfig.showLoaderStats, frameCount]);
 
   return (
     <div className="scroll-container"
@@ -376,9 +405,7 @@ export default function ScrollVideo({ videoInfo={} }) {
         )}
       </AnimatePresence>
 
-      <div style={debugStyle}>
-        Assets: {totalDownloaded} / {frameCount} | Actual Frame: {activeStep}
-      </div>
+      {perfConfig.showLoaderStats && <div ref={statsRef} style={debugStyle} />}
 
       <canvas
         ref={canvasRef}
@@ -400,9 +427,9 @@ export default function ScrollVideo({ videoInfo={} }) {
       {showCanvas && (
         <div style={controlsColumnStyle}>
           <FloatingSteps
-            frameCount={frameCount}
+            steps={steps}
             onStepClick={goToStep}
-            currentFrame={activeStep}
+            activeStep={activeStep}
           />
           <div style={{ width: 1, height: 20, background: 'var(--ls-border)', borderRadius: 1 }} />
           <button

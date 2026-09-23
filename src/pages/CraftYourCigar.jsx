@@ -11,6 +11,8 @@ import FloatingPrepButton from "@components/FloatingPrepButton";
 
 import { leaves } from "@/data/leaves";
 import { blends } from "@/data/blends";
+import { getFrameProfile } from "@/lib/frameProfile";
+import { useAnimationPerfStore } from "@/store/useAnimationPerfStore";
 
 
 const listVideos = [
@@ -38,6 +40,7 @@ const listVideos = [
 
 
 const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
+  const sourceMode = useAnimationPerfStore(state => state.config.sourceMode);
   const formatName = (name) => {
     return name.replace("/", "").replaceAll("_", " ");
   };
@@ -67,7 +70,7 @@ const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
               {formatName(video.name)}
             </div>
             <div className="craft-you-cigar-video-selector-item-length">
-              {video.length} frames
+              {getFrameProfile(video, sourceMode).frameCount} frames
             </div>
           </motion.button>
         ))}

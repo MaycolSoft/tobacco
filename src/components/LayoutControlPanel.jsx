@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom'; // Importante para la persistencia por ruta
 import { useLayoutStore } from '@/store/useLayoutStore';
+import { useAnimationPerfStore } from '@/store/useAnimationPerfStore';
+import { ANIMATION_PERF_LIMITS } from '@/config/animationPerformance';
+import { clearFrameCache, enforceCacheBudget } from '@/lib/frameCache';
+import { getFrameDiagnostics } from '@/lib/frameScheduler';
 import { THEME_TOKEN_LABELS, BUTTON_TOKEN_LABELS, readBaseTokens, readSavedTokens, applyTokens, foregroundFor } from '@/config/designTheme';
 import {
   Settings, Eye, Layout, CreditCard,
-  ChevronRight, Anchor, Type, Palette, RotateCcw, Square
+  ChevronRight, Anchor, Type, Palette, RotateCcw, Square, Gauge
 } from 'lucide-react';
 
 const FONT_PAIRINGS = [
@@ -53,6 +57,34 @@ const THEME_TOKEN_KEYS = Object.keys(TOKEN_LABELS);
 const BTN_TOKEN_LABELS = BUTTON_TOKEN_LABELS;
 const BTN_TOKEN_KEYS = Object.keys(BTN_TOKEN_LABELS);
 
+const MB = 1024 * 1024;
+const formatMb = (bytes) => (bytes === null || bytes === undefined ? '—' : `${Math.round(bytes / MB)} MB`);
+
+// Controles numéricos de la sección Animation Performance (herramienta interna).
+const PERF_RANGES = [
+  { key: 'concurrency', label: 'Loader concurrency', step: 1 },
+  { key: 'prefetchAhead', label: 'Prefetch ahead', step: 5 },
+  { key: 'prefetchBehind', label: 'Prefetch behind', step: 5 },
+  { key: 'decodedFrameLimit', label: 'Decoded frame limit', step: 2 },
+  { key: 'cacheBudgetBytes', label: 'Cache budget', step: 256 * MB, format: formatMb },
+];
+
+const PERF_STATS = [
+  ['profile', 'Source profile'],
+  ['currentFrame', 'Current frame'],
+  ['frameCount', 'Frame count'],
+  ['decodedFrames', 'Decoded frames'],
+  ['prefetchedBlobs', 'Prefetched blobs'],
+  ['cacheHits', 'Persistent cache hits'],
+  ['networkDownloads', 'Network downloads'],
+  ['queueLength', 'Queue length'],
+  ['activeDownloads', 'Active downloads'],
+  ['failedFrames', 'Failed frames'],
+  ['retries', 'Retries'],
+  ['cacheWriteFailures', 'Cache write failures'],
+  ['approxCachedBytes', 'Approx. cached', formatMb],
+];
+
 const LayoutControlPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { pathname } = useLocation(); // Obtenemos la ruta actual
@@ -87,6 +119,31 @@ const LayoutControlPanel = () => {
   };
 
   const resetTokens = () => setTokens({ ...defaultTokens });
+
+  // Animation Performance: ajustes internos de ScrollVideo (persisten vía zustand, como el layout)
+  const { config: perfConfig, updateConfig: updatePerfConfig, resetConfig: resetPerfConfig } = useAnimationPerfStore();
+  const [perfStats, setPerfStats] = useState(null);
+  const [cacheStatus, setCacheStatus] = useState('');
+
+  // Las estadísticas solo se consultan mientras el panel está abierto
+  useEffect(() => {
+    if (!isOpen) return;
+    enforceCacheBudget(); // calcula el tamaño aproximado de la caché
+    const update = () => setPerfStats(getFrameDiagnostics());
+    update();
+    const interval = setInterval(update, 500);
+    return () => clearInterval(interval);
+  }, [isOpen]);
+
+  const handleClearFrameCache = async () => {
+    setCacheStatus('Limpiando…');
+    try {
+      await clearFrameCache();
+      setCacheStatus('Caché de animación eliminada.');
+    } catch (error) {
+      setCacheStatus(`No se pudo limpiar: ${error.message}`);
+    }
+  };
 
   const [activePairing, setActivePairing] = useState(
     () => localStorage.getItem('ls-font-pairing') || 'legacy'
@@ -256,6 +313,73 @@ const LayoutControlPanel = () => {
             <input type="color" className="cp-color-input" value={tokens['--ls-video-bg']} title={tokens['--ls-video-bg']} onChange={event => handleTokenChange('--ls-video-bg', event.target.value)} />
           </label>
           <p className="cp-theme-note">El tono original se conserva para integrar las imágenes del video.</p>
+        </div>
+
+        <div className="cp-section">
+          <div className="cp-label-row">
+            <Gauge size={12} />
+            <p className="cp-label">Animation Performance</p>
+            <button className="cp-reset-btn" onClick={resetPerfConfig} title="Restaurar valores por defecto" aria-label="Restaurar valores por defecto de rendimiento">
+              <RotateCcw size={11} />
+            </button>
+          </div>
+
+          <p className="cp-theme-note">Herramienta interna para pruebas. Los visitantes siempre usan la fuente optimizada.</p>
+
+          <p className="cp-label">Frame source</p>
+          <div className="cp-pairing-grid cp-perf-grid">
+            {[
+              { id: 'optimized', name: 'Optimized', desc: 'Por defecto' },
+              { id: 'original', name: 'Original', desc: 'Solo depuración' },
+            ].map((source) => (
+              <button
+                key={source.id}
+                className={`cp-pairing-card ${perfConfig.sourceMode === source.id ? 'active' : ''}`}
+                onClick={() => updatePerfConfig({ sourceMode: source.id })}
+              >
+                <span className="cp-pairing-name">{source.name}</span>
+                <span className="cp-pairing-desc">{source.desc}</span>
+              </button>
+            ))}
+          </div>
+
+          {PERF_RANGES.map(({ key, label, step, format }) => (
+            <label key={key} className="cp-color-row">
+              <span className="cp-color-label">{label}</span>
+              <code className="cp-color-value">{format ? format(perfConfig[key]) : perfConfig[key]}</code>
+              <input
+                type="range"
+                className="cp-perf-range"
+                min={ANIMATION_PERF_LIMITS[key][0]}
+                max={ANIMATION_PERF_LIMITS[key][1]}
+                step={step}
+                value={perfConfig[key]}
+                onChange={(event) => updatePerfConfig({ [key]: Number(event.target.value) })}
+              />
+            </label>
+          ))}
+
+          <div className="cp-toggle-item" onClick={() => updatePerfConfig({ showLoaderStats: !perfConfig.showLoaderStats })}>
+            <div className="d-flex align-items-center gap-2">
+              <Eye size={16} />
+              <span className={!perfConfig.showLoaderStats ? 'text-muted' : ''}>Show loader stats</span>
+            </div>
+            <div className={`cp-switch ${perfConfig.showLoaderStats ? 'active' : ''}`}></div>
+          </div>
+
+          <button className="cp-base-button cp-perf-clear" onClick={handleClearFrameCache}>Clear animation cache</button>
+          {cacheStatus && <p className="cp-theme-note">{cacheStatus}</p>}
+
+          {perfStats && (
+            <div className="cp-sub-card">
+              {PERF_STATS.map(([key, label, format]) => (
+                <div key={key} className="cp-color-row">
+                  <span className="cp-color-label">{label}</span>
+                  <code className="cp-color-value">{format ? format(perfStats[key]) : (perfStats[key] ?? '—')}</code>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="cp-footer-info">
@@ -496,6 +620,9 @@ const LayoutControlPanel = () => {
           letter-spacing: 0.05em;
           display: block;
         }
+        .cp-perf-grid { margin: 8px 0 10px; }
+        .cp-perf-range { width: 100%; accent-color: #c7a479; cursor: pointer; }
+        .cp-perf-clear { margin: 12px 0 0; }
         .cp-wrapper .text-muted { color: #aeb5ab !important; }
         .spin-slow { animation: spin 8s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
