@@ -12,8 +12,8 @@ export const useAnimationPerfStore = create(
     }),
     {
       name: 'tamborilero-animation-perf',
-      // v3: nuevos defaults (decodedFrameLimit 12, 750 MB, stats ocultas, precarga en segundo plano).
-      version: 3,
+      // v4: defaults actuales de animationPerformance.js (se descartan ajustes guardados de versiones previas).
+      version: 4,
       migrate: () => ({ config: { ...ANIMATION_PERF_DEFAULTS } }),
       partialize: (state) => ({ config: state.config }),
       // Los valores guardados se combinan con los defaults actuales (claves nuevas incluidas).

@@ -9,6 +9,9 @@
 //   critical   → el frame pedido (o el punto al que llegará el scroll) y sus vecinos inmediatos
 //   prefetch   → el resto de la ventana cercana, en la dirección del movimiento
 //   background → el resto de la secuencia, de forma progresiva, con los slots libres
+// Cerca del frame pedido la carga siempre es consecutiva; el salteo (stride) solo se usa más lejos.
+// Leer de IndexedDB usa su propio carril (cacheReadConcurrency): un frame ya guardado nunca espera
+// detrás de descargas lentas del CDN.
 //
 // Una descarga que ya empezó NO se cancela por el scroll: termina y queda en caché.
 // Solo se aborta al cerrar/desmontar o cambiar de video/fuente (dispose()).
@@ -31,6 +34,10 @@ const PASSED_PENALTY = 10000;
 const GAP_PENALTY = 1000;
 // Puntaje máximo de una descarga "critical" (el frame pedido y ±2 vecinos).
 const CRITICAL_SCORE = 5;
+// Frames delante del pedido que siempre se cargan de forma consecutiva (sin salteo).
+const MIN_DENSE_AHEAD = 8;
+// Buffer consecutivo alrededor del frame pedido que se completa antes de ceder slots a background.
+const NEAR_BUFFER = 30;
 const DEFAULT_FRAME_BYTES = 1.6 * 1024 * 1024;
 
 let activeScheduler = null;
@@ -270,8 +277,11 @@ export class FrameScheduler {
     }
 
     if (delta >= 0) {
-      // Cerca del punto donde estará el usuario al llegar la descarga.
-      let score = Math.abs(delta - this.lead);
+      // Zona densa: los frames inmediatamente siguientes, en orden consecutivo.
+      const dense = Math.max(MIN_DENSE_AHEAD, this.config.decodedFrameLimit);
+      if (delta <= dense) return delta;
+      // Más lejos: cerca del punto donde estará el usuario al llegar la descarga, salteando si hace falta.
+      let score = dense + Math.abs(delta - Math.max(this.lead, dense));
       if (this.stride > 1 && delta % this.stride !== 0) score += GAP_PENALTY;
       return score;
     }
@@ -361,10 +371,11 @@ export class FrameScheduler {
     this.pump();
   }
 
-  peekBest(queue) {
+  peekBest(queue, accept = () => true) {
     let best = -1;
     let bestScore = Infinity;
     for (const index of queue) {
+      if (!accept(index)) continue;
       const score = this.score(index);
       if (score < bestScore) {
         bestScore = score;
@@ -417,24 +428,46 @@ export class FrameScheduler {
       this.decode(best);
     }
 
-    const { concurrency } = this.config;
+    const count = (kind) => {
+      let total = 0;
+      for (const entry of this.downloads.values()) if (entry.kind === kind) total++;
+      return total;
+    };
+    const isCached = (index) => this.cached.has(index);
+
+    // Carril IndexedDB: frames ya guardados, no compiten con la red.
+    while (!this.disposed && count("cache") < this.config.cacheReadConcurrency) {
+      const [best] = this.peekBest(this.downloadQueue, isCached);
+      if (best < 0) break;
+      this.downloadQueue.delete(best);
+      this.download(best, "cache");
+    }
+
+    // Carril de red: critical > prefetch > background.
+    // Mientras no hay ningún frame en pantalla, el frame pedido va solo: no comparte ancho de banda.
+    const concurrency = this.lastRenderedFrame < 0 && this.decoded.size === 0 ? 1 : this.config.concurrency;
     const reserve = Math.min(this.config.backgroundSlots, concurrency - 1);
+    // Usuario quieto: la precarga en segundo plano tiene slots garantizados para construir buffer.
+    const idle = !this.moving && this.focus === null;
     let background = -2; // -2 = aún no calculado
-    const backgroundActive = () => [...this.downloads.values()].filter((d) => d.kind === "background").length;
 
-    while (!this.disposed && this.downloads.size < concurrency) {
-      const [best, bestScore] = this.peekBest(this.downloadQueue);
+    while (!this.disposed) {
+      const backgroundActive = count("background");
+      const networkActive = this.downloads.size - count("cache");
+      if (networkActive >= concurrency) break;
+
+      const [best, bestScore] = this.peekBest(this.downloadQueue, (index) => !isCached(index));
       if (background === -2) background = this.nextBackgroundFrame();
-      const foregroundActive = this.downloads.size - backgroundActive();
+      const critical = best >= 0 && bestScore <= CRITICAL_SCORE;
+      const foregroundActive = networkActive - backgroundActive;
+      // Los slots reservados para background solo se ceden cuando el buffer cercano está completo.
+      const nearDemand = best >= 0 && Math.abs(best - this.center) <= NEAR_BUFFER;
 
-      // Critical siempre entra. Prefetch deja libres los slots reservados para background (si hay background pendiente).
-      const foregroundAllowed = best >= 0 && (
-        bestScore <= CRITICAL_SCORE || background < 0 || foregroundActive < concurrency - reserve
-      );
-      if (foregroundAllowed) {
+      if (best >= 0 && (critical || nearDemand || !idle || background < 0 || foregroundActive < concurrency - reserve)) {
         this.downloadQueue.delete(best);
-        this.download(best, bestScore <= CRITICAL_SCORE ? "critical" : "prefetch");
-      } else if (background >= 0 && (backgroundActive() < reserve || best < 0)) {
+        this.download(best, critical ? "critical" : "prefetch");
+      } else if (background >= 0 && (best < 0 || (idle && backgroundActive < reserve))) {
+        // Sin demanda cercana (o quieto): seguir llenando la secuencia.
         this.download(background, "background");
         this.backgroundPosition = background;
         background = -2;
@@ -480,12 +513,9 @@ export class FrameScheduler {
       this.cached.add(index);
       this.failedAt.delete(index);
 
-      // La precarga lejana no ocupa memoria: queda solo en IndexedDB.
-      const [lo, hi] = this.networkBounds();
-      if (kind !== "background" || (index >= lo && index <= hi) || this.decodeSet.has(index)) {
-        this.rememberBlob(index, blob);
-        if (!this.decodeSet.has(index)) this.warmBlobs.add(index);
-      }
+      // Queda en memoria (acotada: se descarta primero lo más lejano) y siempre en IndexedDB.
+      this.rememberBlob(index, blob);
+      if (!this.decodeSet.has(index)) this.warmBlobs.add(index);
     } catch (error) {
       if (!isAbort(error) && !this.disposed) {
         this.failedAt.set(index, Date.now());
@@ -654,7 +684,7 @@ export class FrameScheduler {
     const bytes = this.completions.reduce((sum, [, size]) => sum + size, 0);
     const { ahead, behind } = this.nearestDecoded(this.requestedFrame);
     const oneBased = (index) => (index >= 0 ? index + 1 : null);
-    const kinds = { critical: 0, prefetch: 0, background: 0 };
+    const kinds = { critical: 0, prefetch: 0, background: 0, cache: 0 };
     for (const { kind } of this.downloads.values()) kinds[kind]++;
     return {
       profile: this.profile.mode,
@@ -678,8 +708,9 @@ export class FrameScheduler {
       persistentCachedFrames: this.cached.size,
       queueLength: this.downloadQueue.size,
       decodeQueueLength: this.decodeQueue.size,
-      activeDownloads: this.downloads.size,
+      activeDownloads: this.downloads.size - kinds.cache,
       activeDownloadKinds: `${kinds.critical}/${kinds.prefetch}/${kinds.background}`,
+      activeCacheReads: kinds.cache,
       activeDecodes: this.decodes.size,
       backgroundPosition: oneBased(this.backgroundPosition ?? -1),
       backgroundDownloads: this.counters.backgroundDownloads,

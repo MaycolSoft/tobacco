@@ -94,6 +94,7 @@ const PERF_STATS = [
   ['decodeQueueLength', 'Decode queue'],
   ['activeDownloads', 'Active downloads'],
   ['activeDownloadKinds', 'Critical / prefetch / bg'],
+  ['activeCacheReads', 'Active cache reads'],
   ['activeDecodes', 'Active decodes'],
   ['backgroundPosition', 'Background preload position'],
   ['backgroundDownloads', 'Background downloads'],

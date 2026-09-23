@@ -9,8 +9,9 @@ export const SOURCE_FPS = 60;
 
 export const ANIMATION_PERF_DEFAULTS = {
   sourceMode: "optimized",      // "optimized" (_30fps) | "original" (60fps, solo depuración)
-  concurrency: 6,               // descargas simultáneas máximas (red o IndexedDB)
+  concurrency: 6,               // descargas simultáneas máximas desde el CDN
   decodeConcurrency: 2,         // decodificaciones simultáneas máximas (separadas de las descargas)
+  cacheReadConcurrency: 4,      // lecturas simultáneas de IndexedDB (carril aparte de la red)
   backgroundSlots: 2,           // descargas reservadas para precargar el resto de la secuencia (0 = sin precarga)
   prefetchAhead: 40,            // frames a precargar en la dirección del movimiento
   prefetchBehind: 15,           // ventana de seguridad en la dirección contraria
@@ -30,6 +31,7 @@ export const ANIMATION_PERF_LIMITS = {
   concurrency: [1, 12],
   decodeConcurrency: [1, 6],
   backgroundSlots: [0, 6],
+  cacheReadConcurrency: [1, 8],
   prefetchAhead: [0, 120],
   prefetchBehind: [0, 60],
   decodedFrameLimit: [4, 60],
