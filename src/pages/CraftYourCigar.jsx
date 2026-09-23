@@ -14,26 +14,26 @@ import { blends } from "@/data/blends";
 
 
 const listVideos = [
-  { "name": "2t_colorado_claro", "length": 748, "displayName": "Double Leaf Colorado Claro" },
-  { "name": "2t_colorado_maduro", "length": 1502, "displayName": "Double Leaf Colorado Maduro" },
-  { "name": "2t_colorado", "length": 1502, "displayName": "Double Leaf Colorado Edition" },
-  { "name": "2t_maduro", "length": 1502, "displayName": "Double Leaf Aged Maduro" },
-  { "name": "2t_oscuro", "length": 1502, "displayName": "Double Leaf Dark Oscuro" },
-  { "name": "3t_colorado_claro", "length": 1502, "displayName": "Triple Leaf Heritage Claro" },
-  { "name": "3t_colorado_maduro", "length": 1502, "displayName": "Triple Leaf Heritage Maduro" },
-  { "name": "3t_colorado", "length": 1502, "displayName": "Triple Leaf Heritage Colorado" },
-  { "name": "3t_maduro", "length": 1502, "displayName": "Triple Leaf Private Maduro" },
-  { "name": "3t_oscuro", "length": 1502, "displayName": "Triple Leaf Private Oscuro" },
-  { "name": "4t_colorado_claro", "length": 1502, "displayName": "Quad Blend Reserve Claro" },
-  { "name": "4t_colorado_maduro", "length": 1502, "displayName": "Quad Blend Reserve Maduro" },
-  { "name": "4t_colorado", "length": 1502, "displayName": "Quad Blend Reserve Colorado" },
-  { "name": "4t_maduro", "length": 1502, "displayName": "Quad Blend Artisan Maduro" },
-  { "name": "4t_oscuro", "length": 1502, "displayName": "Quad Blend Artisan Oscuro" },
-  { "name": "5t_colorado_claro", "length": 1502, "displayName": "Master Selection 5T Claro" },
-  { "name": "5t_colorado_maduro", "length": 1502, "displayName": "Master Selection 5T Maduro" },
-  { "name": "5t_colorado", "length": 1502, "displayName": "Master Selection 5T Colorado" },
-  { "name": "5t_maduro", "length": 1502, "displayName": "Grand Cru Maduro 5T" },
-  { "name": "5t_oscuro", "length": 1502, "displayName": "Grand Cru Oscuro T5" }
+  { "name": "2t_colorado_claro", "length": 1486, "displayName": "Double Leaf Colorado Claro" },
+  { "name": "2t_colorado_maduro", "length": 1485, "displayName": "Double Leaf Colorado Maduro" },
+  { "name": "2t_colorado", "length": 1485, "displayName": "Double Leaf Colorado Edition" },
+  { "name": "2t_maduro", "length": 1485, "displayName": "Double Leaf Aged Maduro" },
+  { "name": "2t_oscuro", "length": 1485, "displayName": "Double Leaf Dark Oscuro" },
+  { "name": "3t_colorado_claro", "length": 1486, "displayName": "Triple Leaf Heritage Claro" },
+  { "name": "3t_colorado_maduro", "length": 1501, "displayName": "Triple Leaf Heritage Maduro" },
+  { "name": "3t_colorado", "length": 1485, "displayName": "Triple Leaf Heritage Colorado" },
+  { "name": "3t_maduro", "length": 1485, "displayName": "Triple Leaf Private Maduro" },
+  { "name": "3t_oscuro", "length": 1485, "displayName": "Triple Leaf Private Oscuro" },
+  { "name": "4t_colorado_claro", "length": 1486, "displayName": "Quad Blend Reserve Claro" },
+  { "name": "4t_colorado_maduro", "length": 1501, "displayName": "Quad Blend Reserve Maduro" },
+  { "name": "4t_colorado", "length": 1485, "displayName": "Quad Blend Reserve Colorado" },
+  { "name": "4t_maduro", "length": 1485, "displayName": "Quad Blend Artisan Maduro" },
+  { "name": "4t_oscuro", "length": 1485, "displayName": "Quad Blend Artisan Oscuro" },
+  { "name": "5t_colorado_claro", "length": 1486, "displayName": "Master Selection 5T Claro" },
+  { "name": "5t_colorado_maduro", "length": 1501, "displayName": "Master Selection 5T Maduro" },
+  { "name": "5t_colorado", "length": 1485, "displayName": "Master Selection 5T Colorado" },
+  { "name": "5t_maduro", "length": 1485, "displayName": "Grand Cru Maduro 5T" },
+  { "name": "5t_oscuro", "length": 1485, "displayName": "Grand Cru Oscuro T5" }
 ];
 
 
