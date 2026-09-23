@@ -24,6 +24,9 @@ export const ANIMATION_PERF_DEFAULTS = {
   failedFrameCooldownMs: 10000, // tiempo antes de volver a intentar un frame que falló
   stationaryDelayMs: 150,       // sin cambios de frame por este tiempo = quieto: refinar al frame exacto
   showLoaderStats: false,       // overlay de diagnóstico sobre la animación
+  loaderBufferFrames: 8,        // overlay "Preparando mezcla": frames consecutivos listos antes de ocultarlo
+  loaderMinDisplayMs: 500,      // tiempo mínimo visible (evita un parpadeo si todo viene de caché)
+  loaderMaxWaitMs: 8000,        // tope: el overlay nunca queda trabado si un frame falla
 };
 
 // Límites para valores editables desde el panel interno.

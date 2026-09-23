@@ -155,6 +155,16 @@ export class FrameScheduler {
     return "idle";
   }
 
+  // Cuántos frames consecutivos desde `from` ya están disponibles (decodificados, en memoria o en IndexedDB).
+  readyFrom(from, max) {
+    let count = 0;
+    for (let index = from; index < this.frameCount && count < max; index++) {
+      if (!this.decoded.has(index) && !this.blobs.has(index) && !this.cached.has(index)) break;
+      count++;
+    }
+    return count;
+  }
+
   // ---------- Objetivo ----------
 
   setTarget(index, direction = 0) {

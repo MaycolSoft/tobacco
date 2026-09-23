@@ -112,7 +112,10 @@ Piezas:
 
 1. Al montar, `setRenderSize` dispara `refresh()`: la carga empieza sola, sin esperar a ScrollTrigger.
 2. Mientras no hay ningún frame en pantalla, el frame 1 se descarga **solo** (concurrencia de red 1) para no compartir ancho de banda. En la simulación aparece a ~0.3 s en vez de ~1.2 s.
-3. Apenas se decodifica el frame 1, se dibuja y se muestra el canvas. No hay retardos artificiales.
+3. El overlay original ("PREPARANDO MEZCLA": nombre del video, humo, barra y "CALIDAD: PREMIUM") aparece de inmediato mientras el scheduler ya descarga detrás. El canvas dibuja el frame 1 apenas se decodifica.
+   - El overlay se oculta con su fade de 1.5 s cuando el frame 1 está dibujable y hay `loaderBufferFrames` (8) frames consecutivos disponibles.
+   - Tiene un mínimo visible de `loaderMinDisplayMs` (500 ms, para que no parpadee si todo viene de caché) y un tope de `loaderMaxWaitMs` (8 s): si un frame falla, el overlay nunca queda trabado.
+   - La barra refleja cuántos de esos 8 frames están listos. No se espera el buffer de 30 frames.
 4. Sigue el buffer consecutivo 2, 3, 4, … Los slots reservados para background no se ceden mientras quede demanda a ≤ 30 frames (`NEAR_BUFFER`).
 5. Con el buffer cercano completo, la precarga en segundo plano continúa con 41, 42, … y recorre toda la secuencia.
 
@@ -190,6 +193,9 @@ Fuente: `src/config/animationPerformance.js` (`ANIMATION_PERF_DEFAULTS`).
 | `failedFrameCooldownMs` | 10000 | espera antes de reintentar un frame fallido |
 | `stationaryDelayMs` | 150 | sin cambios por este tiempo = quieto |
 | `showLoaderStats` | `false` | overlay de diagnóstico sobre la animación |
+| `loaderBufferFrames` | 8 | frames consecutivos listos antes de ocultar el overlay de carga |
+| `loaderMinDisplayMs` | 500 | tiempo mínimo visible del overlay |
+| `loaderMaxWaitMs` | 8000 | tope de espera del overlay |
 
 Constantes internas de `frameScheduler.js`: `MAX_STRIDE = 8`, `CRITICAL_SCORE = 5` (pedido ±2), `MIN_DENSE_AHEAD = 8`, `NEAR_BUFFER = 30`, ventana de medición de 3 s.
 

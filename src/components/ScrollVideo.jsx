@@ -225,7 +225,7 @@ export default function ScrollVideo({ videoInfo={} }) {
   // EFECTO 1: Scheduler de frames, canvas (DPR) y resize
   useEffect(() => {
     const canvas = canvasRef.current;
-    let firstFrameShown = false;
+    let loaderDone = false;
 
     frameRef.current.index = 0;
     lastDrawnRef.current = -1;
@@ -237,16 +237,31 @@ export default function ScrollVideo({ videoInfo={} }) {
     const scheduler = new FrameScheduler({
       profile,
       config: perfConfigRef.current,
-      onFrameReady: () => {
-        if (!firstFrameShown) {
-          firstFrameShown = true;
-          setLoadingProgress(100);
-          setShowCanvas(true);
-        }
-        requestDraw();
-      },
+      onFrameReady: () => requestDraw(),
     });
     schedulerRef.current = scheduler;
+
+    // Overlay de carga: visible de inmediato mientras el scheduler ya descarga detrás.
+    // Se oculta cuando el frame 1 está dibujable y hay un buffer inicial corto y consecutivo,
+    // respetando un tiempo mínimo (sin parpadeo si todo viene de caché) y un tope (nunca queda trabado).
+    const { loaderBufferFrames, loaderMinDisplayMs, loaderMaxWaitMs } = perfConfigRef.current;
+    const bufferTarget = Math.min(loaderBufferFrames, Math.max(profile.frameCount, 1));
+    const openedAt = performance.now();
+    const loaderInterval = setInterval(() => {
+      if (loaderDone) return;
+      const ready = scheduler.readyFrom(0, bufferTarget);
+      const firstFrameReady = scheduler.getDrawable(0)?.index === 0;
+      setLoadingProgress(Math.round(((firstFrameReady ? ready : 0) / bufferTarget) * 100));
+
+      const elapsed = performance.now() - openedAt;
+      const bufferReady = firstFrameReady && ready >= bufferTarget;
+      if ((bufferReady && elapsed >= loaderMinDisplayMs) || elapsed >= loaderMaxWaitMs) {
+        loaderDone = true;
+        clearInterval(loaderInterval);
+        setLoadingProgress(100);
+        setShowCanvas(true);
+      }
+    }, 100);
 
     const setSize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, perfConfigRef.current.maxDpr);
@@ -263,6 +278,7 @@ export default function ScrollVideo({ videoInfo={} }) {
     setSize();
 
     return () => {
+      clearInterval(loaderInterval);
       window.removeEventListener("resize", setSize);
       if (drawRafRef.current) cancelAnimationFrame(drawRafRef.current);
       drawRafRef.current = null;
