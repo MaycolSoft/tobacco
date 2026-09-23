@@ -128,11 +128,13 @@ export default function ScrollVideo({ videoInfo={} }) {
     if (!canvas || !scheduler) return;
 
     const drawable = scheduler.getDrawable(Math.round(frameRef.current.index));
+    // Sin ningún frame decodificado: se conserva lo último dibujado.
     if (!drawable) return;
     if (!force && drawable.index === lastDrawnRef.current) return;
 
     drawContain(canvas.getContext("2d"), drawable.frame, canvas);
     lastDrawnRef.current = drawable.index;
+    scheduler.noteRendered(drawable.index, drawable.exact);
   };
 
   const requestDraw = () => {
@@ -333,8 +335,9 @@ export default function ScrollVideo({ videoInfo={} }) {
       if (!statsRef.current) return;
       const stats = getFrameDiagnostics();
       statsRef.current.textContent =
-        `Frame: ${stats.currentFrame ?? 0} / ${frameCount} | Decoded: ${stats.decodedFrames ?? 0} | ` +
-        `Queue: ${stats.queueLength ?? 0} | Active: ${stats.activeDownloads ?? 0}`;
+        `Req: ${stats.requestedFrame ?? 0} / ${frameCount} | Drawn: ${stats.renderedFrame ?? '—'} (lag ${stats.frameLag ?? '—'}) | ` +
+        `Decoded: ${stats.decodedFrames ?? 0} | Queue: ${stats.queueLength ?? 0} | Active: ${stats.activeDownloads ?? 0}/${stats.activeDecodes ?? 0} | ` +
+        `Stride: ${stats.stride ?? 1}`;
     };
     update();
     const interval = setInterval(update, 250);

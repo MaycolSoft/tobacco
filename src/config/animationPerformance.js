@@ -9,23 +9,27 @@ export const SOURCE_FPS = 60;
 
 export const ANIMATION_PERF_DEFAULTS = {
   sourceMode: "optimized",      // "optimized" (_30fps) | "original" (60fps, solo depuración)
-  concurrency: 6,               // descargas/decodificaciones simultáneas máximas
+  concurrency: 6,               // descargas simultáneas máximas (red o IndexedDB)
+  decodeConcurrency: 2,         // decodificaciones simultáneas máximas (separadas de las descargas)
+  backgroundSlots: 2,           // descargas reservadas para precargar el resto de la secuencia (0 = sin precarga)
   prefetchAhead: 40,            // frames a precargar en la dirección del movimiento
   prefetchBehind: 15,           // ventana de seguridad en la dirección contraria
-  decodedFrameLimit: 24,        // bitmaps decodificados en memoria como máximo
-  cacheBudgetBytes: 1536 * 1024 * 1024, // IndexedDB: ~1 secuencia optimizada completa (743 × ~1.6 MB)
+  decodedFrameLimit: 12,        // bitmaps decodificados en memoria como máximo
+  cacheBudgetBytes: 750 * 1024 * 1024, // IndexedDB: ~470 frames de ~1.6 MB
   cacheTtlMs: 14 * 24 * 60 * 60 * 1000, // 14 días desde el último acceso
   maxDpr: 2,                    // tope de devicePixelRatio para el canvas
   retryCount: 2,                // reintentos por frame ante fallos transitorios
   retryBaseDelayMs: 300,        // backoff: 300 ms, 600 ms, ...
   failedFrameCooldownMs: 10000, // tiempo antes de volver a intentar un frame que falló
-  fallbackRadius: 60,           // distancia máxima para dibujar el frame cargado más cercano
-  showLoaderStats: true,        // overlay de diagnóstico sobre la animación
+  stationaryDelayMs: 150,       // sin cambios de frame por este tiempo = quieto: refinar al frame exacto
+  showLoaderStats: false,       // overlay de diagnóstico sobre la animación
 };
 
 // Límites para valores editables desde el panel interno.
 export const ANIMATION_PERF_LIMITS = {
   concurrency: [1, 12],
+  decodeConcurrency: [1, 6],
+  backgroundSlots: [0, 6],
   prefetchAhead: [0, 120],
   prefetchBehind: [0, 60],
   decodedFrameLimit: [4, 60],

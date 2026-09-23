@@ -63,6 +63,8 @@ const formatMb = (bytes) => (bytes === null || bytes === undefined ? '—' : `${
 // Controles numéricos de la sección Animation Performance (herramienta interna).
 const PERF_RANGES = [
   { key: 'concurrency', label: 'Loader concurrency', step: 1 },
+  { key: 'decodeConcurrency', label: 'Decode concurrency', step: 1 },
+  { key: 'backgroundSlots', label: 'Background preload slots', step: 1 },
   { key: 'prefetchAhead', label: 'Prefetch ahead', step: 5 },
   { key: 'prefetchBehind', label: 'Prefetch behind', step: 5 },
   { key: 'decodedFrameLimit', label: 'Decoded frame limit', step: 2 },
@@ -71,14 +73,40 @@ const PERF_RANGES = [
 
 const PERF_STATS = [
   ['profile', 'Source profile'],
-  ['currentFrame', 'Current frame'],
   ['frameCount', 'Frame count'],
+  ['requestedFrame', 'Requested frame'],
+  ['renderedFrame', 'Rendered frame'],
+  ['renderedSource', 'Rendered frame source'],
+  ['frameLag', 'Frame lag'],
+  ['maxLag', 'Max lag'],
+  ['motion', 'Motion'],
+  ['direction', 'Direction'],
+  ['velocity', 'Scroll speed (f/s)'],
+  ['stride', 'Stride'],
+  ['lead', 'Lead (frames)'],
+  ['lastStableTarget', 'Last stable target'],
+  ['nearestAhead', 'Decoded nearest ahead'],
+  ['nearestBehind', 'Decoded nearest behind'],
   ['decodedFrames', 'Decoded frames'],
-  ['prefetchedBlobs', 'Prefetched blobs'],
-  ['cacheHits', 'Persistent cache hits'],
-  ['networkDownloads', 'Network downloads'],
-  ['queueLength', 'Queue length'],
+  ['prefetchedBlobs', 'Blob-memory frames'],
+  ['persistentCachedFrames', 'Persistent cached frames'],
+  ['queueLength', 'Queued frames'],
+  ['decodeQueueLength', 'Decode queue'],
   ['activeDownloads', 'Active downloads'],
+  ['activeDownloadKinds', 'Critical / prefetch / bg'],
+  ['activeDecodes', 'Active decodes'],
+  ['backgroundPosition', 'Background preload position'],
+  ['backgroundDownloads', 'Background downloads'],
+  ['framesPerSecond', 'Delivered frames/s'],
+  ['throughputMbps', 'Network Mbps'],
+  ['avgLatencyMs', 'Avg load ms'],
+  ['avgDecodeMs', 'Avg decode ms'],
+  ['exactRenders', 'Exact renders'],
+  ['fallbackRenders', 'Fallback renders'],
+  ['persistentHits', 'Persistent cache hits'],
+  ['memoryHits', 'Memory hits'],
+  ['schedulerNetworkDownloads', 'Network downloads'],
+  ['cancelledDownloads', 'Cancelled downloads'],
   ['failedFrames', 'Failed frames'],
   ['retries', 'Retries'],
   ['cacheWriteFailures', 'Cache write failures'],
@@ -315,7 +343,7 @@ const LayoutControlPanel = () => {
           <p className="cp-theme-note">El tono original se conserva para integrar las imágenes del video.</p>
         </div>
 
-        <div className="cp-section">
+        <div className="cp-section cp-perf-panel">
           <div className="cp-label-row">
             <Gauge size={12} />
             <p className="cp-label">Animation Performance</p>
@@ -620,6 +648,13 @@ const LayoutControlPanel = () => {
           letter-spacing: 0.05em;
           display: block;
         }
+        .cp-perf-panel {
+          background: #111;
+          border: 1px solid #2a2a2a;
+          border-radius: 10px;
+          padding: 12px;
+        }
+        .cp-perf-panel .cp-sub-card { background: #0c0c0c; margin-top: 12px; }
         .cp-perf-grid { margin: 8px 0 10px; }
         .cp-perf-range { width: 100%; accent-color: #c7a479; cursor: pointer; }
         .cp-perf-clear { margin: 12px 0 0; }

@@ -133,6 +133,21 @@ export async function getCachedFrame(key) {
   }
 }
 
+// Claves guardadas para una carpeta (solo metadatos, sin leer blobs). Permite saber qué frames
+// ya están en caché sin descargarlos ni leerlos.
+export async function getCachedFrameKeys(prefix) {
+  const db = await openDB();
+  if (!db) return [];
+  try {
+    const tx = db.transaction(META_STORE, "readonly");
+    const range = IDBKeyRange.bound(prefix, `${prefix}￿`);
+    return await requestResult(tx.objectStore(META_STORE).getAllKeys(range));
+  } catch (error) {
+    console.warn("frameCache: no se pudieron listar las claves", error);
+    return [];
+  }
+}
+
 export async function saveCachedFrame({ key, blob, videoName, frame }) {
   const db = await openDB();
   if (!db) return false;
