@@ -4,16 +4,11 @@ import { X, RefreshCw, ChevronDown, Trash2 } from 'lucide-react';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 import useFrameVariants from '@/hooks/useFrameVariants';
 import { useAnimationPerfStore } from '@/store/useAnimationPerfStore';
-import { canDeleteVariant, getVariantFps, getVariantProfile, groupFrameVariants } from '@/lib/frameVariants';
+import { canDeleteVariant, formatResolution, getVariantFps, getVariantProfile, groupFrameVariants } from '@/lib/frameVariants';
 import '@/styles/frame-variants.css';
 
 const INITIAL_FORM = { source: '', source_fps: 60, target_fps: 30, width: 1920, height: 1080, quality: 82, workers: 4 };
 const errorText = (error) => typeof error === 'string' ? error : JSON.stringify(error);
-const formatResolution = ({ width, height }) => {
-  const short = Math.min(width, height);
-  if (width >= 3840 || short >= 2160) return '4K';
-  return `${short}p`;
-};
 
 export default function FrameVariantsModal({ open, onClose }) {
   const dialogRef = useRef(null);

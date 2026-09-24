@@ -1,5 +1,5 @@
 import "@styles/craft-your-cigar.css";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { BookOpen, Film, X } from 'lucide-react';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 import { AnimatePresence, motion } from "framer-motion";
@@ -12,6 +12,8 @@ import FloatingPrepButton from "@components/FloatingPrepButton";
 import { leaves } from "@/data/leaves";
 import { blends } from "@/data/blends";
 import { getFrameProfile } from "@/lib/frameProfile";
+import { describeFrameProfile, getAnimationCatalog } from "@/lib/frameVariants";
+import { listFrameVariants } from "@/lib/frameVariantsApi";
 import { useAnimationPerfStore } from "@/store/useAnimationPerfStore";
 
 
@@ -39,41 +41,72 @@ const listVideos = [
 ];
 
 
+const PROFILE_TYPE_LABELS = {
+  default: 'Por defecto',
+  master: 'Master',
+  legacy: 'Legacy',
+  generated: 'Generada',
+  selected: 'Seleccionada',
+  unavailable: 'No disponible',
+};
+
+// Lista las animaciones reales del CDN (GET /variants) y el perfil de frames que cargará cada una.
 const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
   const frameVariants = useAnimationPerfStore(state => state.config.frameVariants);
+  const [variants, setVariants] = useState({ items: [], status: 'loading' });
   const formatName = (name) => {
     return name.replace("/", "").replaceAll("_", " ");
   };
+
+  useEffect(() => {
+    const controller = new AbortController();
+    listFrameVariants(controller.signal)
+      .then(items => setVariants({ items, status: 'ready' }))
+      .catch(error => { if (error.name !== 'AbortError') setVariants({ items: [], status: 'error' }); });
+    return () => controller.abort();
+  }, []);
+
+  const videos = variants.status === 'ready' ? getAnimationCatalog(variants.items, listVideos) : listVideos;
 
   return (
     <>
       <div className="craft-you-cigar-video-selector-header">
         <span className="craft-you-cigar-video-selector-title">Recorridos disponibles</span>
         <span className="craft-you-cigar-video-selector-count">
-          {listVideos.length} secuencias
+          {variants.status === 'loading' ? 'Cargando…' : `${videos.length} secuencias`}
         </span>
       </div>
 
-      <div className="craft-you-cigar-video-selector-scroll-container">
-        {listVideos.map((video, index) => (
-          <motion.button
-            key={index}
-            whileHover={{ x: 5 }}
-            whileTap={{ scale: 0.98 }}
-            className="craft-you-cigar-video-selector-item-button"
-            onClick={() => {
-              onSelect(video);
-              if (setIsOpen) setIsOpen(false);
-            }}
-          >
-            <div className="craft-you-cigar-video-selector-item-name">
-              {formatName(video.name)}
-            </div>
-            <div className="craft-you-cigar-video-selector-item-length">
-              {getFrameProfile(video, frameVariants[video.name]).frameCount} frames
-            </div>
-          </motion.button>
-        ))}
+      {variants.status === 'error' && (
+        <p className="craft-you-cigar-video-selector-notice" role="status">No se pudo consultar el CDN. Se muestra la lista local.</p>
+      )}
+
+      <div className="craft-you-cigar-video-selector-scroll-container" aria-busy={variants.status === 'loading'}>
+        {variants.status !== 'loading' && videos.map((video) => {
+          const selection = frameVariants[video.name];
+          const profile = describeFrameProfile(getFrameProfile(video, selection), variants.items, Boolean(selection));
+          return (
+            <motion.button
+              key={video.name}
+              whileHover={{ x: 5 }}
+              whileTap={{ scale: 0.98 }}
+              className="craft-you-cigar-video-selector-item-button"
+              onClick={() => {
+                onSelect(video);
+                if (setIsOpen) setIsOpen(false);
+              }}
+            >
+              <span className="craft-you-cigar-video-selector-item-name">
+                {selection && <span className="craft-you-cigar-video-selector-item-dot" aria-label="Variante seleccionada" />}
+                {video.displayName || formatName(video.name)}
+              </span>
+              <span className="craft-you-cigar-video-selector-item-meta">
+                <span>{[`${profile.fps} fps`, profile.resolution, `${profile.frames} frames`].filter(Boolean).join(' · ')}</span>
+                <span className={`craft-you-cigar-video-selector-item-tag is-${profile.type}`}>{PROFILE_TYPE_LABELS[profile.type]}</span>
+              </span>
+            </motion.button>
+          );
+        })}
       </div>
     </>
   );

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { normalizePerfConfig, FRAME_CDN_BASE } from '../config/animationPerformance.js';
 import { getFrameProfile } from './frameProfile.js';
-import { groupFrameVariants, getVariantProfile, canDeleteVariant } from './frameVariants.js';
+import { groupFrameVariants, getVariantProfile, canDeleteVariant, getAnimationCatalog, describeFrameProfile } from './frameVariants.js';
 import { listFrameVariants, createFrameVariant, deleteFrameVariant } from './frameVariantsApi.js';
 
 const master = { name: '2t_colorado_maduro', kind: 'master', managed: false, frame_count: 1485, metadata: null };
@@ -72,4 +72,24 @@ test('API surfaces server errors and malformed responses', async (t) => {
   globalThis.fetch.mock.mockImplementation(async () => Response.json({ unexpected: true }));
   await assert.rejects(listFrameVariants(), /variants list/);
   await assert.rejects(createFrameVariant({}), /valid job/);
+});
+
+test('animation catalog follows API masters and keeps local display names', () => {
+  const other = { ...master, name: 'new_master', frame_count: 900 };
+  const fallback = [{ name: master.name, length: 1, displayName: 'Colorado Maduro' }];
+  assert.deepEqual(getAnimationCatalog([legacy, other, generated, master], fallback), [
+    { name: 'new_master', length: 900, displayName: undefined },
+    { name: master.name, length: 1485, displayName: 'Colorado Maduro' },
+  ]);
+  assert.equal(getAnimationCatalog([], fallback), fallback);
+});
+
+test('profile description reports default, selected kind, resolution and missing folders', () => {
+  const video = { name: master.name, length: 1485 };
+  const items = [master, legacy, generated];
+  assert.deepEqual(describeFrameProfile(getFrameProfile(video), items, false), { fps: 30, frames: 743, resolution: null, type: 'default' });
+  const selected = getVariantProfile(generated);
+  assert.deepEqual(describeFrameProfile(getFrameProfile(video, selected), items, true), { fps: 30, frames: 743, resolution: '1080p', type: 'generated' });
+  assert.equal(describeFrameProfile(getFrameProfile(video, selected), [master], true).type, 'unavailable');
+  assert.equal(describeFrameProfile(getFrameProfile(video, selected), [], true).type, 'selected');
 });

@@ -68,8 +68,9 @@
 
 /* Header del panel */
 .craft-you-cigar-video-selector-header {
-  padding: 14px 18px;
+  padding: 14px 14px 14px 18px;
   border-bottom: 1px solid var(--ls-gold-border);
+  gap: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -77,15 +78,17 @@
 }
 
 .craft-you-cigar-video-selector-title {
+  white-space: nowrap;
   color: var(--ls-gold);
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   font-family: var(--ls-font-body);
 }
 
 .craft-you-cigar-video-selector-count {
+  white-space: nowrap;
   color: var(--ls-text-dim);
   font-size: 0.65rem;
   background: color-mix(in srgb, var(--ls-text-primary) 4%, transparent);
@@ -113,11 +116,11 @@
   border-radius: 8px;
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   transition: var(--ls-transition-fast);
   width: 100%;
-  gap: 8px;
+  gap: 4px;
 }
 
 .craft-you-cigar-video-selector-item-button:hover {
@@ -126,6 +129,9 @@
 }
 
 .craft-you-cigar-video-selector-item-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   color: var(--ls-text-secondary);
   font-size: 0.82rem;
   white-space: nowrap;
@@ -139,11 +145,53 @@
   color: var(--ls-text-primary);
 }
 
-.craft-you-cigar-video-selector-item-length {
-  color: var(--ls-text-dim);
-  font-size: 0.65rem;
-  font-family: 'Courier New', monospace;
+.craft-you-cigar-video-selector-item-dot {
+  width: 6px;
+  height: 6px;
   flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--ls-gold);
+}
+
+.craft-you-cigar-video-selector-item-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  color: var(--ls-text-dim);
+  font-size: 0.66rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.craft-you-cigar-video-selector-item-tag {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  border: 1px solid var(--ls-border);
+  border-radius: 3px;
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.craft-you-cigar-video-selector-item-tag:is(.is-master, .is-legacy, .is-generated, .is-selected) {
+  color: var(--ls-gold);
+  border-color: var(--ls-gold-border);
+  background: var(--ls-gold-subtle);
+}
+
+.craft-you-cigar-video-selector-item-tag.is-unavailable {
+  color: #d49a8f;
+  border-color: rgba(196, 110, 96, 0.35);
+}
+
+.craft-you-cigar-video-selector-notice {
+  margin: 0;
+  padding: 8px 18px;
+  color: var(--ls-text-dim);
+  font-size: 0.66rem;
+  border-bottom: 1px solid var(--ls-border);
 }
 
 /* Botones del dock — estilos visuales delegados al tier system (.btn) */

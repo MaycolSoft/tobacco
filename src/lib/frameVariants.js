@@ -51,3 +51,28 @@ export function groupFrameVariants(items) {
     variants: variants.sort((a, b) => (order[a.kind] ?? 3) - (order[b.kind] ?? 3) || a.name.localeCompare(b.name)),
   }));
 }
+
+export function formatResolution({ width, height }) {
+  const short = Math.min(width, height);
+  if (width >= 3840 || short >= 2160) return '4K';
+  return `${short}p`;
+}
+
+// Animations available on the CDN, in API order. Local entries only provide display names,
+// and are used as-is when the API is unavailable or returns no masters.
+export function getAnimationCatalog(items, fallback = []) {
+  const known = new Map(fallback.map(video => [video.name, video]));
+  const masters = items.filter(item => item.kind === 'master' && Number.isSafeInteger(item.frame_count) && item.frame_count > 0);
+  if (!masters.length) return fallback;
+  return masters.map(master => ({ name: master.name, length: master.frame_count, displayName: known.get(master.name)?.displayName }));
+}
+
+// Describes the frame profile an animation will load. `type` is 'default' without a selection,
+// the variant kind when it is listed, 'unavailable' when the saved folder is no longer listed,
+// or 'selected' when the list could not be loaded.
+export function describeFrameProfile(profile, items, hasSelection) {
+  const item = items.find(variant => variant.name === profile.folder);
+  const { width, height } = item?.metadata ?? {};
+  const type = !hasSelection ? 'default' : item ? item.kind : items.length ? 'unavailable' : 'selected';
+  return { fps: profile.fps, frames: profile.frameCount, resolution: width && height ? formatResolution({ width, height }) : null, type };
+}
