@@ -45,7 +45,7 @@ export function foregroundFor(hex) {
     return channels[0] * .2126 + channels[1] * .7152 + channels[2] * .0722;
   };
   const background = luminance(isHex(hex) ? hex : '#C7A479');
-  const dark = '#171A16';
+  const dark = '#16140F';
   const light = '#FFFDF8';
   const contrast = color => {
     const value = luminance(color);

@@ -6,13 +6,13 @@
 
 :root {
   /* Base editorial. El UI Kit lee estos valores; no mantiene otra paleta en JS. */
-  --ls-base-bg:             #0F1110;
-  --ls-base-bg-card:        #181C19;
-  --ls-base-bg-surface:     #222823;
+  --ls-base-bg:             #0F0E0C;
+  --ls-base-bg-card:        #171512;
+  --ls-base-bg-surface:     #211E19;
   --ls-base-gold:           #C7A479;
-  --ls-base-text-primary:   #F3EFE6;
-  --ls-base-text-secondary: #B8BBAF;
-  --ls-base-text-dim:       #A1A89F;
+  --ls-base-text-primary:   #F1ECE3;
+  --ls-base-text-secondary: #B5ADA1;
+  --ls-base-text-dim:       #8F887E;
   --ls-base-video-bg:       #D6C8B9;
   --ls-base-btn-primary:    var(--ls-base-gold);
   --ls-base-btn-secondary:  var(--ls-base-gold);
@@ -42,8 +42,8 @@
   --ls-text-primary:   var(--ls-base-text-primary);
   --ls-text-secondary: var(--ls-base-text-secondary);
   --ls-text-dim:       var(--ls-base-text-dim);
-  --ls-text-on-gold:   #171A16;
-  --ls-text-on-primary: #171A16;
+  --ls-text-on-gold:   #16140F;
+  --ls-text-on-primary: #16140F;
 
   /* ── Tipografía — familias ── */
   --ls-font-heading: 'Playfair Display', serif;
