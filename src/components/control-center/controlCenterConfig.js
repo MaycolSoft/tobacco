@@ -29,11 +29,6 @@ export const FONT_PAIRINGS = [
   },
 ];
 
-export const FRAME_SOURCES = [
-  { id: 'optimized', name: 'Optimized', desc: 'Por defecto' },
-  { id: 'original', name: 'Original', desc: 'Solo depuración' },
-];
-
 const MB = 1024 * 1024;
 const formatMb = (bytes) => (bytes === null || bytes === undefined ? '—' : `${Math.round(bytes / MB)} MB`);
 

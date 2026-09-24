@@ -9,8 +9,7 @@ export const FRAME_VARIANTS_API_BASE = `${FRAME_CDN_BASE}/api-variants`;
 export const SOURCE_FPS = 60;
 
 export const ANIMATION_PERF_DEFAULTS = {
-  sourceMode: "optimized",      // "optimized" (_30fps) | "original" (60fps, solo depuración)
-  frameVariants: {},            // master -> { folder, frameCount, fps }; overrides sourceMode for that animation
+  frameVariants: {},            // master -> { folder, frameCount, fps }; sin selección se usa `{master}_30fps`
   concurrency: 6,               // descargas simultáneas máximas desde el CDN
   decodeConcurrency: 2,         // decodificaciones simultáneas máximas (separadas de las descargas)
   cacheReadConcurrency: 4,      // lecturas simultáneas de IndexedDB (carril aparte de la red)
@@ -46,12 +45,13 @@ export const ANIMATION_PERF_LIMITS = {
 };
 
 export function normalizePerfConfig(config = {}) {
-  const merged = { ...ANIMATION_PERF_DEFAULTS, ...config };
+  // `sourceMode` (Optimized/Original) fue reemplazado por las variantes; se descarta si viene guardado.
+  const { sourceMode: _legacySourceMode, ...saved } = config ?? {};
+  const merged = { ...ANIMATION_PERF_DEFAULTS, ...saved };
   for (const [key, [min, max]] of Object.entries(ANIMATION_PERF_LIMITS)) {
     const value = Number(merged[key]);
     merged[key] = Number.isFinite(value) ? Math.min(Math.max(value, min), max) : ANIMATION_PERF_DEFAULTS[key];
   }
-  if (merged.sourceMode !== "original") merged.sourceMode = "optimized";
   merged.frameVariants = normalizeFrameVariants(merged.frameVariants);
   merged.showLoaderStats = Boolean(merged.showLoaderStats);
   return merged;

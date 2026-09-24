@@ -103,10 +103,10 @@ export default function ScrollVideo({ videoInfo={} }) {
   const selectedFrameCount = selectedVariant?.frameCount;
   const selectedFps = selectedVariant?.fps;
   const profile = useMemo(
-    () => getFrameProfile(videoInfo, perfConfig.sourceMode, {
+    () => getFrameProfile(videoInfo, {
       folder: selectedFolder, frameCount: selectedFrameCount, fps: selectedFps,
     }),
-    [videoInfo, perfConfig.sourceMode, selectedFolder, selectedFrameCount, selectedFps]
+    [videoInfo, selectedFolder, selectedFrameCount, selectedFps]
   );
   const frameCount = profile.frameCount;
   const steps = useMemo(() => getStepFrames(frameCount), [frameCount]);

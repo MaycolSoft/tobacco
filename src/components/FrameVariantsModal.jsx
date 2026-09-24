@@ -131,7 +131,7 @@ export default function FrameVariantsModal({ open, onClose }) {
           <section className="fv-library" aria-label="Available frame variants" aria-busy={manager.loading}>
             <div className="fv-library-heading"><h3>Available variants <small>({manager.items.length})</small></h3>
               <button type="button" className="fv-ghost" onClick={() => manager.refresh()} disabled={manager.loading || manager.busy}
-                title="Profiles apply only to their source animation. Use default restores the Optimized / Original setting."><RefreshCw size={13} /> Refresh</button></div>
+                title="Profiles apply only to their source animation. Use default restores the 30 fps default profile."><RefreshCw size={13} /> Refresh</button></div>
             {notice && <p className="fv-notice" role="status">{notice}</p>}
             {manager.listError && <p className="fv-error" role="alert">{manager.listError} Use Refresh to try again.</p>}
             {manager.loading && <p role="status">Loading variants…</p>}
@@ -152,7 +152,7 @@ export default function FrameVariantsModal({ open, onClose }) {
                       <h4>{group.source}</h4>
                       <span className="fv-count">{group.variants.length}</span>
                     </button>
-                    <span className="fv-group-active" title={activeName ? `Active profile: ${activeName}` : 'Using the Optimized / Original setting'}>
+                    <span className="fv-group-active" title={activeName ? `Active profile: ${activeName}` : 'Using the 30 fps default profile'}>
                       {activeName ? activeName : 'Default'}
                     </span>
                     {activeName && <button type="button" className="fv-link" onClick={() => { clearVariant(group.source); setNotice(`Default profile restored for ${group.source}.`); }}>Use default</button>}

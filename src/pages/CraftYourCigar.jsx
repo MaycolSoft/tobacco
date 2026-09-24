@@ -40,7 +40,6 @@ const listVideos = [
 
 
 const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
-  const sourceMode = useAnimationPerfStore(state => state.config.sourceMode);
   const frameVariants = useAnimationPerfStore(state => state.config.frameVariants);
   const formatName = (name) => {
     return name.replace("/", "").replaceAll("_", " ");
@@ -71,7 +70,7 @@ const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
               {formatName(video.name)}
             </div>
             <div className="craft-you-cigar-video-selector-item-length">
-              {getFrameProfile(video, sourceMode, frameVariants[video.name]).frameCount} frames
+              {getFrameProfile(video, frameVariants[video.name]).frameCount} frames
             </div>
           </motion.button>
         ))}
