@@ -194,7 +194,7 @@ a { color: inherit; }
 .site-form-error { color: #e7a39b; font-size: .78rem; }
 
 /* Footer and empty state */
-.site-footer { border-top: 1px solid var(--ls-border); background: #0b0d0c; }
+.site-footer { border-top: 1px solid var(--ls-border); background: color-mix(in srgb, var(--ls-bg) 85%, black); }
 .site-footer__grid { display: grid; grid-template-columns: 1.5fr .6fr .6fr; gap: 70px; padding-block: 78px 65px; }
 .site-footer__statement h2 { margin: 13px 0 20px; font-size: clamp(2rem, 3.6vw, 3.5rem); letter-spacing: -.03em; }
 .site-footer__statement p { max-width: 540px; font-size: .88rem; line-height: 1.75; }

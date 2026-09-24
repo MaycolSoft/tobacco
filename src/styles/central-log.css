@@ -10,8 +10,8 @@
 .central-log-panel {
   width: 240px;
   height: 200px;
-  background: #111;
-  border: 1px solid #444;
+  background: var(--ls-bg-card);
+  border: 1px solid var(--ls-border);
   border-radius: 8px;
   overflow: hidden;
   animation: fade 0.15s ease-out;
@@ -21,10 +21,10 @@
   display: flex;
   justify-content: space-between;
   padding: 6px 10px;
-  background: #222;
-  color: #fff;
+  background: var(--ls-bg-surface);
+  color: var(--ls-text-primary);
   font-size: 13px;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid var(--ls-border);
 }
 
 .central-log-clear-btn {
