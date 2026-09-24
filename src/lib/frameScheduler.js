@@ -698,6 +698,7 @@ export class FrameScheduler {
     for (const { kind } of this.downloads.values()) kinds[kind]++;
     return {
       profile: this.profile.mode,
+      folder: this.profile.folder,
       frameCount: this.frameCount,
       currentFrame: this.requestedFrame + 1,
       requestedFrame: this.requestedFrame + 1,

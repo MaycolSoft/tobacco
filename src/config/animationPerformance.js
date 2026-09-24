@@ -3,12 +3,14 @@
 // LayoutControlPanel puede sobrescribir estos valores (herramienta interna); si nunca se abre, se usan estos.
 
 export const FRAME_CDN_BASE = "https://cdn.mbsoft.freeddns.org";
+export const FRAME_VARIANTS_API_BASE = `${FRAME_CDN_BASE}/api-variants`;
 
 // FPS de los videos originales de los que salen las secuencias.
 export const SOURCE_FPS = 60;
 
 export const ANIMATION_PERF_DEFAULTS = {
   sourceMode: "optimized",      // "optimized" (_30fps) | "original" (60fps, solo depuración)
+  frameVariants: {},            // master -> { folder, frameCount, fps }; overrides sourceMode for that animation
   concurrency: 6,               // descargas simultáneas máximas desde el CDN
   decodeConcurrency: 2,         // decodificaciones simultáneas máximas (separadas de las descargas)
   cacheReadConcurrency: 4,      // lecturas simultáneas de IndexedDB (carril aparte de la red)
@@ -50,6 +52,18 @@ export function normalizePerfConfig(config = {}) {
     merged[key] = Number.isFinite(value) ? Math.min(Math.max(value, min), max) : ANIMATION_PERF_DEFAULTS[key];
   }
   if (merged.sourceMode !== "original") merged.sourceMode = "optimized";
+  merged.frameVariants = normalizeFrameVariants(merged.frameVariants);
   merged.showLoaderStats = Boolean(merged.showLoaderStats);
   return merged;
+}
+
+export function normalizeFrameVariants(variants) {
+  if (!variants || typeof variants !== 'object' || Array.isArray(variants)) return {};
+  const folderPattern = /^[a-zA-Z0-9][a-zA-Z0-9_.-]*$/;
+  return Object.fromEntries(Object.entries(variants).flatMap(([source, value]) => {
+    if (!folderPattern.test(source) || !value || typeof value.folder !== 'string' ||
+        !folderPattern.test(value.folder) || !Number.isSafeInteger(value.frameCount) ||
+        value.frameCount <= 0 || !Number.isFinite(value.fps) || value.fps <= 0) return [];
+    return [[source, { folder: value.folder, frameCount: value.frameCount, fps: value.fps }]];
+  }));
 }

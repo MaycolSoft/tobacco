@@ -98,9 +98,15 @@ export default function ScrollVideo({ videoInfo={} }) {
   const perfConfigRef = useRef(perfConfig);
 
   // Perfil de frames: carpeta del CDN, cantidad y FPS reales (el usuario nunca lo ve)
+  const selectedVariant = perfConfig.frameVariants[videoInfo?.name];
+  const selectedFolder = selectedVariant?.folder;
+  const selectedFrameCount = selectedVariant?.frameCount;
+  const selectedFps = selectedVariant?.fps;
   const profile = useMemo(
-    () => getFrameProfile(videoInfo, perfConfig.sourceMode),
-    [videoInfo, perfConfig.sourceMode]
+    () => getFrameProfile(videoInfo, perfConfig.sourceMode, {
+      folder: selectedFolder, frameCount: selectedFrameCount, fps: selectedFps,
+    }),
+    [videoInfo, perfConfig.sourceMode, selectedFolder, selectedFrameCount, selectedFps]
   );
   const frameCount = profile.frameCount;
   const steps = useMemo(() => getStepFrames(frameCount), [frameCount]);
@@ -228,6 +234,9 @@ export default function ScrollVideo({ videoInfo={} }) {
     let loaderDone = false;
 
     frameRef.current.index = 0;
+    setIsPlaying(false);
+    const scroller = document.querySelector('#video-root');
+    if (scroller) scroller.scrollTop = 0;
     lastDrawnRef.current = -1;
     activeStepRef.current = null;
     setActiveStep(null);
