@@ -3,10 +3,8 @@ import { Settings } from 'lucide-react';
 import FrameVariantsModal from '@/components/FrameVariantsModal';
 import UIControlCenterModal from '@/components/control-center/UIControlCenterModal';
 import { FONT_PAIRINGS } from '@/components/control-center/controlCenterConfig';
-import { BUTTON_TOKEN_LABELS, readBaseTokens, readSavedTokens, applyTokens } from '@/config/designTheme';
+import { readBaseTokens, readAppearance, resolveAppearance, saveAppearance, defaultAppearance, applyTokens } from '@/config/designTheme';
 import '@/styles/ui-control-center.css';
-
-const BTN_TOKEN_KEYS = Object.keys(BUTTON_TOKEN_LABELS);
 
 const loadGoogleFont = (googleParam) => {
   const id = `gf-${googleParam.replace(/[^a-z0-9]/gi, '-')}`;
@@ -25,42 +23,31 @@ const LayoutControlPanel = () => {
   const [variantsOpen, setVariantsOpen] = useState(false);
 
   const [defaultTokens] = useState(readBaseTokens);
-  const [tokens, setTokens] = useState(() => readSavedTokens(defaultTokens));
+  const [appearance, setAppearance] = useState(readAppearance);
+  const { tokens, fontPairingId: activePairing } = resolveAppearance(defaultTokens, appearance);
 
   useEffect(() => { applyTokens(tokens); }, [tokens]);
-
-  const handleTokenChange = (prop, value) => {
-    setTokens(prev => {
-      const updated = { ...prev, [prop]: value };
-      if (prop === '--ls-gold') {
-        BTN_TOKEN_KEYS.forEach(key => {
-          if (prev[key].toLowerCase() === prev['--ls-gold'].toLowerCase()) updated[key] = value;
-        });
-      }
-      return updated;
-    });
-  };
-
-  const resetTokens = () => setTokens({ ...defaultTokens });
-
-  const [activePairing, setActivePairing] = useState(
-    () => localStorage.getItem('ls-font-pairing') || 'legacy'
-  );
-
-  const applyPairing = (pairing) => {
+  useEffect(() => { saveAppearance(appearance); }, [appearance]);
+  useEffect(() => {
+    const pairing = FONT_PAIRINGS.find(pair => pair.id === activePairing);
     loadGoogleFont(pairing.heading.google);
     loadGoogleFont(pairing.body.google);
     document.documentElement.style.setProperty('--ls-font-heading', pairing.heading.family);
     document.documentElement.style.setProperty('--ls-font-body', pairing.body.family);
-    setActivePairing(pairing.id);
-    localStorage.setItem('ls-font-pairing', pairing.id);
-  };
+  }, [activePairing]);
 
-  // Restaurar pairing guardado al montar
-  useEffect(() => {
-    const saved = FONT_PAIRINGS.find(p => p.id === activePairing);
-    if (saved) applyPairing(saved);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const handleTokenChange = (prop, value) => setAppearance(prev => ({
+    ...prev, tokenOverrides: { ...prev.tokenOverrides, [prop]: value },
+  }));
+  const resetToken = prop => setAppearance(prev => {
+    const tokenOverrides = { ...prev.tokenOverrides };
+    delete tokenOverrides[prop];
+    return { ...prev, tokenOverrides };
+  });
+  const selectProfile = profileId => setAppearance({ ...defaultAppearance(), profileId });
+  const resetProfile = () => setAppearance(prev => ({ ...defaultAppearance(), profileId: prev.profileId }));
+  const applyPairing = pairing => setAppearance(prev => ({ ...prev, fontPairingOverride: pairing.id }));
+  const resetPairing = () => setAppearance(prev => ({ ...prev, fontPairingOverride: null }));
 
   return (
     <>
@@ -73,7 +60,8 @@ const LayoutControlPanel = () => {
         open={isOpen}
         onClose={() => setIsOpen(false)}
         onOpenVariants={() => setVariantsOpen(true)}
-        theme={{ tokens, onTokenChange: handleTokenChange, onResetTokens: resetTokens, activePairing, onApplyPairing: applyPairing }}
+        theme={{ tokens, defaultTokens, appearance, onTokenChange: handleTokenChange, onResetToken: resetToken,
+          onSelectProfile: selectProfile, onResetProfile: resetProfile, activePairing, onApplyPairing: applyPairing, onResetPairing: resetPairing }}
       />
 
       <FrameVariantsModal open={variantsOpen} onClose={() => setVariantsOpen(false)} />

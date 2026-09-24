@@ -1,12 +1,13 @@
 import { Clapperboard, Layers } from 'lucide-react';
 import { ColorRow, Section } from './controls';
 
-export default function VideoTab({ tokens, onTokenChange, onOpenVariants }) {
+export default function VideoTab({ tokens, appearance, onTokenChange, onResetToken, onOpenVariants }) {
   return (
     <div className="cc-grid cc-grid-2">
       <Section title="Video Scene" icon={Clapperboard}>
-        <ColorRow label="Fondo de los fotogramas" value={tokens['--ls-video-bg']} onChange={value => onTokenChange('--ls-video-bg', value)} />
-        <p className="cc-note">El tono original se conserva para integrar las imágenes del video.</p>
+        <ColorRow label="Fondo de los fotogramas" value={tokens['--ls-video-bg']} onChange={value => onTokenChange('--ls-video-bg', value)}
+          onReset={Object.hasOwn(appearance.tokenOverrides, '--ls-video-bg') ? () => onResetToken('--ls-video-bg') : undefined} />
+        <p className="cc-note">El perfil visual define este fondo. Puedes ajustarlo para integrarlo con los fotogramas.</p>
       </Section>
 
       <Section title="Frame variants" icon={Layers}>

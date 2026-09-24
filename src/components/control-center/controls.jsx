@@ -23,13 +23,14 @@ export function ToggleRow({ icon: Icon, label, checked, disabled, onToggle }) {
   );
 }
 
-export function ColorRow({ label, value, onChange }) {
+export function ColorRow({ label, value, onChange, onReset }) {
   return (
-    <label className="cc-color-row">
+    <div className="cc-color-row">
       <span className="cc-color-label">{label}</span>
       <code>{value}</code>
       <input type="color" aria-label={label} title={value} value={value} onChange={event => onChange(event.target.value)} />
-    </label>
+      {onReset && <ResetButton onClick={onReset} label={`Reset ${label} to profile`} />}
+    </div>
   );
 }
 

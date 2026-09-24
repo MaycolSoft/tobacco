@@ -63,7 +63,7 @@ export default function UIControlCenterModal({ open, onClose, theme, onOpenVaria
         <div className="cc-body" role="tabpanel" id={`${baseId}-panel`} aria-labelledby={`${baseId}-tab-${activeTab}`} tabIndex={0}>
           {activeTab === 'layout' && <LayoutTab />}
           {activeTab === 'theme' && <ThemeTypographyTab {...theme} />}
-          {activeTab === 'video' && <VideoTab tokens={theme.tokens} onTokenChange={theme.onTokenChange} onOpenVariants={onOpenVariants} />}
+          {activeTab === 'video' && <VideoTab {...theme} onOpenVariants={onOpenVariants} />}
           {activeTab === 'performance' && <PerformanceTab />}
         </div>
       </div>}

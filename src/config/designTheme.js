@@ -1,3 +1,6 @@
+import { visualProfiles } from './visualProfiles.js';
+import { FONT_PAIRINGS } from '../components/control-center/controlCenterConfig.js';
+
 export const THEME_TOKEN_LABELS = {
   '--ls-gold': 'Acento de marca',
   '--ls-bg': 'Fondo de página',
@@ -25,14 +28,47 @@ export function readBaseTokens() {
   return Object.fromEntries(keys.map(key => [key, style.getPropertyValue(key.replace('--ls-', '--ls-base-')).trim()]));
 }
 
-export function readSavedTokens(defaults) {
+const validPairing = id => FONT_PAIRINGS.some(pair => pair.id === id);
+const filterTokens = values => Object.fromEntries(keys.filter(key => isHex(values?.[key])).map(key => [key, values[key]]));
+export const defaultAppearance = () => ({ version: 3, profileId: 'base', tokenOverrides: {}, fontPairingOverride: null });
+
+export function readAppearance() {
+  let record;
+  try { record = JSON.parse(localStorage.getItem(storageKey)); } catch { /* Use defaults or the legacy font selection. */ }
+  if (record?.version === 3) {
+    return {
+      ...defaultAppearance(),
+      profileId: Object.hasOwn(visualProfiles, record.profileId) ? record.profileId : 'base',
+      tokenOverrides: filterTokens(record.tokenOverrides),
+      fontPairingOverride: validPairing(record.fontPairingOverride) ? record.fontPairingOverride : null,
+    };
+  }
+  const saved = record?.version === 2 ? record.tokens : record;
+  const tokenOverrides = filterTokens(saved);
+  // Preserve the existing unversioned migration behavior. V2 values are all retained.
+  if (record?.version !== 2) {
+    keys.forEach(key => {
+      if (tokenOverrides[key]?.toLowerCase() === legacyDefaults[key]) delete tokenOverrides[key];
+    });
+  }
+  let fontPairingOverride = null;
   try {
-    const record = JSON.parse(localStorage.getItem(storageKey));
-    const saved = record?.version === 2 ? record.tokens : record;
-    const overrides = Object.fromEntries(keys.filter(key => isHex(saved?.[key]) &&
-      (record?.version === 2 || saved[key].toLowerCase() !== legacyDefaults[key])).map(key => [key, saved[key]]));
-    return { ...defaults, ...overrides };
-  } catch { return { ...defaults }; }
+    const savedFont = localStorage.getItem('ls-font-pairing');
+    if (validPairing(savedFont)) fontPairingOverride = savedFont;
+  } catch { /* Appearance remains usable when storage is unavailable. */ }
+  return { ...defaultAppearance(), tokenOverrides, fontPairingOverride };
+}
+
+export function resolveAppearance(defaults, appearance) {
+  const profile = visualProfiles[appearance.profileId] || visualProfiles.base;
+  return {
+    tokens: { ...defaults, ...profile.tokens, ...appearance.tokenOverrides },
+    fontPairingId: appearance.fontPairingOverride || profile.fontPairingId,
+  };
+}
+
+export function saveAppearance(appearance) {
+  try { localStorage.setItem(storageKey, JSON.stringify(appearance)); } catch { /* Preview still works. */ }
 }
 
 // Choose the more readable of two ink colors for a customizable filled button.
@@ -61,5 +97,4 @@ export function applyTokens(tokens) {
   ['--ls-gold-muted', '--ls-gold-border', '--ls-glass-border', '--ls-gold-subtle'].forEach(key => root.style.removeProperty(key));
   root.style.setProperty('--ls-text-on-gold', foregroundFor(tokens['--ls-gold']));
   root.style.setProperty('--ls-text-on-primary', foregroundFor(tokens['--ls-btn-primary']));
-  try { localStorage.setItem(storageKey, JSON.stringify({ version: 2, tokens })); } catch { /* The preview still works without persistence. */ }
 }
