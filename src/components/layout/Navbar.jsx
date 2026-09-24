@@ -8,6 +8,7 @@ const primaryLinks = [
   ['/', 'Inicio'],
   ['/about', 'El oficio'],
   ['/leaf-library', 'Las hojas'],
+  ['/blend-guide', 'La guía'],
   ['/service', 'El proceso'],
   ['/menu', 'Las mezclas'],
 ];

@@ -20,6 +20,7 @@ import Testimonial from '@/pages/Testimonial';
 import Contact from '@/pages/Contact';
 import CraftYourCigar from '@/pages/CraftYourCigar';
 import LeafLibrary from '@/pages/LeafLibrary';
+import BlendGuide from '@/pages/BlendGuide';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           
           {/* Rutas de información */}
           <Route path="/leaf-library" element={<LeafLibrary />} />
+          <Route path="/blend-guide" element={<BlendGuide />} />
           <Route path="/about" element={<About />} />
           <Route path="/service" element={<Service />} />
           <Route path="/menu" element={<Menu />} />

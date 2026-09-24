@@ -112,7 +112,7 @@ export default function TobaccoGuidePage({ onClose }) {
           <section id="guide-collection" className="tg-section" aria-labelledby="tg-collection-title">
             <div className="tg-section-heading"><span className="tg-section-number">03</span><div><span className="tg-eyebrow">Nuestra materia prima</span><h2 id="tg-collection-title">Ahora, conoce las hojas.</h2></div></div>
             <TobaccoFamilyGallery />
-            <Link className="tg-library-link" to="/leaf-library" onClick={onClose}>Explorar la biblioteca completa <ArrowRight size={17} /></Link>
+            <Link className="tg-library-link" to="/leaf-library">Explorar la biblioteca completa <ArrowRight size={17} /></Link>
           </section>
           <p className="tg-end-note">Cada hoja aporta una parte. La mezcla cuenta la historia.</p>
         </div>

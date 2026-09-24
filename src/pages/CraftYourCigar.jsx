@@ -1,11 +1,10 @@
 import "@styles/craft-your-cigar.css";
-import React, { useCallback, useEffect, useState } from "react";
-import { BookOpen, Film, X } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { Film, X } from 'lucide-react';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 import { AnimatePresence, motion } from "framer-motion";
 import ScrollVideo from '@components/ScrollVideo.jsx';
 import LeafGrid from "@components/LeafGrid";
-import TobaccoGuidePage from "@components/TobaccoGuidePage";
 import BlendProfiles from "@components/BlendProfiles";
 import FloatingPrepButton from "@components/FloatingPrepButton";
 
@@ -163,10 +162,8 @@ const MultiButtonFlotanteContainer = ({ children }) => {
 
 function CraftYourCigar() {
   const [selectedLeaves, setSelectedLeaves] = useState([]);
-  const [showGuide, setShowGuide] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [videoInfo, setVideoInfo] = useState(null);
-  const closeGuide = useCallback(() => setShowGuide(false), []);
   useBodyScrollLock(showVideo);
 
 
@@ -221,12 +218,7 @@ function CraftYourCigar() {
                 onSelect={(videoSelected) => { setVideoInfo(videoSelected); setShowVideo(true); }} 
               />
             </ButtonFlotanteItem>
-
-            <ButtonFlotanteItem openName="Guía de la mezcla" Icon={BookOpen} onClick={() => setShowGuide(true)}>
-            </ButtonFlotanteItem>
           </MultiButtonFlotanteContainer>
-
-          {showGuide && <TobaccoGuidePage onClose={closeGuide} />}
         </>
       )}
 
