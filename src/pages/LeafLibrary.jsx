@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, X, Sparkles, Leaf, Layers, Library, MapPin } from 'lucide-react';
 import ImmersiveView from '@components/leaf-library/ImmersiveView';
 import TechnicalSheet from '@components/leaf-library/TechnicalSheet';
@@ -8,10 +8,21 @@ import { leaves } from '@/data/leaves';
 import { leafCategories, getLeafOrigin } from '@/data/leafPresentation';
 import '@styles/leaf-library.css';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';
+import { useAuthStore } from '@store/authStore';
+import { useBlendStore } from '@/store/useBlendStore';
+
+const origins = [...new Set(leaves.map(getLeafOrigin))].sort((a, b) => a.localeCompare(b, 'es'));
 
 export default function LeafLibrary() {
   const { hash } = useLocation();
-  const [filter, setFilter] = useState('ALL');
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const requestedCategory = searchParams.get('categoria');
+  const [filter, setFilter] = useState(leafCategories[requestedCategory] ? requestedCategory : 'ALL');
+  const [origin, setOrigin] = useState('ALL');
+  const user = useAuthStore(state => state.user);
+  const addLeaf = useBlendStore(state => state.addLeaf);
+  const [addError, setAddError] = useState('');
   const [selectedId, setSelectedId] = useState(null);
   const [view, setView] = useState('detail');
   const overlayRef = useRef(null);
@@ -21,7 +32,8 @@ export default function LeafLibrary() {
   const immersiveTabRef = useRef(null);
   const groups = ['CAPA', 'CAPOTE', 'TRIPA']
     .filter(key => filter === 'ALL' || key === filter)
-    .map(key => ({ key, ...leafCategories[key], leaves: leaves.filter(leaf => leaf.category === key) }));
+    .map(key => ({ key, ...leafCategories[key], leaves: leaves.filter(leaf => leaf.category === key && (origin === 'ALL' || getLeafOrigin(leaf) === origin)) }))
+    .filter(group => group.leaves.length);
   const filtered = groups.flatMap(group => group.leaves);
   const selected = leaves.find(leaf => leaf.id === selectedId);
   const selectedIndex = filtered.findIndex(leaf => leaf.id === selectedId);
@@ -29,9 +41,14 @@ export default function LeafLibrary() {
   useBodyScrollLock(isOpen);
 
   useEffect(() => {
+    if (leafCategories[requestedCategory]) setFilter(requestedCategory);
+  }, [requestedCategory]);
+
+  useEffect(() => {
     const target = leaves.find(leaf => `#${leaf.id}` === hash);
     if (!target) return;
     setFilter('ALL');
+    setOrigin('ALL');
     const frame = requestAnimationFrame(() => document.getElementById(target.id)?.scrollIntoView({ block: 'start' }));
     return () => cancelAnimationFrame(frame);
   }, [hash]);
@@ -63,11 +80,18 @@ export default function LeafLibrary() {
   const openLeaf = (leaf, event) => {
     triggerRef.current = event.currentTarget;
     setView('detail');
+    setAddError('');
     setSelectedId(leaf.id);
   };
   const changeLeaf = (direction) => {
     const next = filtered[selectedIndex + direction];
-    if (next) setSelectedId(next.id);
+    if (next) { setAddError(''); setSelectedId(next.id); }
+  };
+  // Desde la biblioteca se puede sumar una hoja a la mezcla en curso y volver a la mesa.
+  const addToBlend = leaf => {
+    if (!addLeaf(leaf)) { setAddError('Tu tripa ya tiene 5 hojas. Quita una en la mesa de composición para añadir otra.'); return; }
+    setSelectedId(null);
+    navigate('/craft-your-cigar');
   };
   const changeView = (nextView) => {
     setView(nextView);
@@ -91,6 +115,15 @@ export default function LeafLibrary() {
             </button>
           ))}
         </nav>
+        <label className="ls-origin-filter">
+          <span>Origen</span>
+          <select value={origin} onChange={event => setOrigin(event.target.value)}>
+            <option value="ALL">Todos los orígenes</option>
+            {origins.map(item => <option key={item} value={item}>{item}</option>)}
+          </select>
+        </label>
+      </div>
+      <div className="ls-catalog-intro">
         <div className="ls-category-intro" aria-live="polite">
           <h2>{leafCategories[filter].title}</h2>
           <p>{leafCategories[filter].description}</p>
@@ -124,6 +157,12 @@ export default function LeafLibrary() {
           </div>
         </section>
       ))}
+      {!groups.length && (
+        <div className="ls-empty" role="status">
+          <p>No hay hojas de {leafCategories[filter].label.toLowerCase()} con origen en {origin}.</p>
+          <button type="button" className="ls-discover" onClick={() => setOrigin('ALL')}>Ver todos los orígenes <ArrowRight size={16} /></button>
+        </div>
+      )}
       <p className="ls-catalog-end">Cada hoja, una expresión. Cada mezcla, una historia.</p>
       {selected && createPortal(
         <div ref={overlayRef} className="ls-experience" role="dialog" aria-modal="true" aria-labelledby="ls-experience-title">
@@ -137,7 +176,7 @@ export default function LeafLibrary() {
             <button ref={immersiveTabRef} aria-pressed={view === 'immersive'} onClick={() => changeView('immersive')}><Sparkles size={14} /> Recorrido inmersivo</button>
           </div>
           <div className="ls-experience-body" key={`${selected.id}-${view}`}>
-            {view === 'immersive' ? <ImmersiveView leaf={selected} onComplete={() => changeView('detail')} /> : <TechnicalSheet leaf={selected} onExplore={() => changeView('immersive')} />}
+            {view === 'immersive' ? <ImmersiveView leaf={selected} onComplete={() => changeView('detail')} /> : <TechnicalSheet leaf={selected} onExplore={() => changeView('immersive')} onAddToBlend={user ? () => addToBlend(selected) : undefined} addError={addError} />}
           </div>
           <footer className="ls-experience-footer">
             <button onClick={() => changeLeaf(-1)} disabled={selectedIndex <= 0}><ArrowLeft size={17} /><span>Hoja anterior</span></button>

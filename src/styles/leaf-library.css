@@ -26,8 +26,13 @@
 .ls-intro > p { max-width: 510px; margin: 0 auto 25px; font-size: .95rem; line-height: 1.8; color: var(--ls-text-secondary); }
 .ls-collection-count { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ls-text-secondary); }
 .ls-collection-count > span { color: var(--ls-gold); padding: 0 14px; }
-.ls-catalog-header { max-width: 1300px; margin: auto; border-top: 1px solid var(--ls-gold-border); }
-.ls-filters { display: flex; justify-content: center; gap: 8px; padding: 22px 0; }
+.ls-catalog-header { position: sticky; top: 90px; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 20px; max-width: 1300px; margin: auto; padding: 0 4px; border-top: 1px solid var(--ls-gold-border); border-bottom: 1px solid var(--ls-border); background: color-mix(in srgb, var(--ls-bg) 96%, transparent); backdrop-filter: blur(14px); }
+.ls-filters { display: flex; justify-content: flex-start; gap: 8px; padding: 14px 0; }
+.ls-origin-filter { display: inline-flex; align-items: center; gap: 10px; color: var(--ls-text-secondary); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+.ls-origin-filter select { min-height: 40px; padding: 8px 12px; border: 1px solid var(--ls-border); border-radius: 0; background: var(--ls-bg); color: var(--ls-text-primary); font: 400 13px/1.2 var(--ls-font-body); text-transform: none; }
+.ls-origin-filter select:focus-visible { outline: 2px solid var(--ls-focus); outline-offset: 3px; }
+.ls-catalog-intro { max-width: 1300px; margin: auto; padding-top: 30px; }
+.ls-empty { max-width: 1300px; margin: 20px auto; padding: 50px 20px; border: 1px solid var(--ls-border); text-align: center; color: var(--ls-text-secondary); }
 .ls-filter-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 12px;
   min-height: 44px; border: 1px solid transparent; border-radius: 50px;
@@ -100,6 +105,10 @@
 .ls-page-count { font-size: 12px; letter-spacing: .15em; white-space: nowrap; }
 .ls-page-count > span { color: var(--ls-text-secondary); }
 @keyframes ls-experience-enter { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 860px) {
+  .ls-catalog-header { top: 76px; flex-direction: column; align-items: stretch; gap: 0; padding-bottom: 12px; }
+  .ls-origin-filter { justify-content: space-between; }
+}
 @media (max-width: 600px) {
   .ls-container { padding: 10px 5% 0; }
   .ls-intro { padding: 22px 0 32px; }

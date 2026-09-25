@@ -36,6 +36,20 @@
 .ts-explore > svg:last-child { margin-left: auto; flex-shrink: 0; }
 .ts-explore > span { font-size: .8rem; }
 .ts-explore small { display: block; font-size: 10px; color: var(--ls-text-secondary); margin-top: 5px; }
+.ts-facts { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
+.ts-pending, .ts-pairs { margin: -14px 0 26px; color: var(--ls-text-secondary); font-size: 12px; line-height: 1.6; }
+.ts-pairs { color: var(--ls-text-primary); font-size: .85rem; }
+.ts-pairs .ls-eyebrow { display: block; margin-bottom: 6px; }
+.ts-dots { display: inline-flex; gap: 5px; }
+.ts-dots i { width: 8px; height: 8px; border: 1px solid var(--ls-gold-muted); border-radius: 50%; }
+.ts-dots i.is-on { background: var(--ls-gold); border-color: var(--ls-gold); }
+.ts-link { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; margin: -8px 0 24px; color: var(--ls-gold); font-size: 13px; text-decoration: none; }
+.ts-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.ts-add { margin-bottom: 14px; }
+.ts-add-button { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 14px 22px; border: 1px solid var(--ls-btn-primary); border-radius: 999px; background: var(--ls-btn-primary); color: var(--ls-text-on-primary); font: 600 13px/1 var(--ls-font-body); letter-spacing: .04em; cursor: pointer; }
+.ts-add-button:hover { filter: brightness(1.08); }
+.ts-add-error { margin: 10px 0 0; color: #e7a39b; font-size: 12px; }
+.ts-link:focus-visible, .ts-add-button:focus-visible { outline: 2px solid var(--ls-focus); outline-offset: 4px; }
 @media (max-width: 800px) {
   .ts-wrapper { grid-template-columns: 1fr; gap: 18px; padding: 16px 6% 30px; }
   .ts-image-side { min-height: 0; padding: 14px 12px; }
