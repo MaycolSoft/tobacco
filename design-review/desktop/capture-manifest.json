@@ -1,0 +1,101 @@
+{
+  "date": "2026-09-25",
+  "profile": "black",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "routes": [
+    {
+      "name": "inicio",
+      "route": "/"
+    },
+    {
+      "name": "biblioteca-hojas",
+      "route": "/leaf-library"
+    },
+    {
+      "name": "oficio",
+      "route": "/about"
+    },
+    {
+      "name": "perfiles-mezcla",
+      "route": "/menu"
+    },
+    {
+      "name": "experiencia-sensorial",
+      "route": "/testimonial"
+    },
+    {
+      "name": "presentacion-guiada",
+      "route": "/reservation"
+    },
+    {
+      "name": "contacto",
+      "route": "/contact"
+    },
+    {
+      "name": "acceso",
+      "route": "/login"
+    },
+    {
+      "name": "error-404",
+      "route": "/pagina-no-encontrada"
+    },
+    {
+      "name": "proceso",
+      "route": "/service → /about#proceso",
+      "note": "Redirección a El oficio · Proceso"
+    },
+    {
+      "name": "menu-experiencias",
+      "route": "/menu",
+      "note": "Submenú Experiencias abierto"
+    },
+    {
+      "name": "crea-tu-cigarro",
+      "route": "/craft-your-cigar",
+      "note": "01 Tripa sin selección"
+    },
+    {
+      "name": "crea-tu-cigarro-mezcla",
+      "route": "/craft-your-cigar",
+      "note": "01 Tripa con 2 hojas · resumen Tu mezcla"
+    },
+    {
+      "name": "tu-cigarro",
+      "route": "/craft-your-cigar",
+      "note": "04 Tu cigarro"
+    },
+    {
+      "name": "hoja-detalle",
+      "route": "/leaf-library",
+      "note": "Ficha de hoja con sesión iniciada"
+    },
+    {
+      "name": "guia-mezcla",
+      "route": "/blend-guide → /craft-your-cigar",
+      "note": "Guía de la mezcla · vista 1"
+    },
+    {
+      "name": "guia-mezcla-2",
+      "route": "/blend-guide → /craft-your-cigar",
+      "note": "Guía de la mezcla · vista 2"
+    },
+    {
+      "name": "guia-mezcla-3",
+      "route": "/blend-guide → /craft-your-cigar",
+      "note": "Guía de la mezcla · vista 3"
+    },
+    {
+      "name": "guia-mezcla-4",
+      "route": "/blend-guide → /craft-your-cigar",
+      "note": "Guía de la mezcla · vista 4"
+    },
+    {
+      "name": "guia-mezcla-5",
+      "route": "/blend-guide → /craft-your-cigar",
+      "note": "Guía de la mezcla · vista 5"
+    }
+  ]
+}
