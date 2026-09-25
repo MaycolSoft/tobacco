@@ -1,24 +1,27 @@
 import { ArrowRight, Feather, Gauge, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '@store/authStore';
 import { leaves } from '@/data/leaves';
 import { leafCategories } from '@/data/leafPresentation';
 
+// Cada perfil enlaza con hojas de la colección cuyo texto ya describe ese aporte.
 const profiles = [
-  { icon: Feather, leafId: 'tripa-olor-seco', title: 'Aroma', note: 'Los matices de la hoja', text: 'Comienza por reconocer las notas descritas en cada variedad. Compara sus diferencias antes de combinarlas.' },
-  { icon: Sparkles, leafId: 'capote-criollo-98', title: 'Estructura', note: 'La función de cada parte', text: 'Observa cómo el capote sostiene el conjunto. La composición también se entiende desde la función de cada hoja.' },
-  { icon: Gauge, leafId: 'tripa-corojo-ligero', title: 'Fortaleza', note: 'La presencia en la mezcla', text: 'Compara las hojas de carácter intenso con las más moderadas para orientar tu selección.' },
+  { icon: Feather, leafId: 'tripa-olor-seco', title: 'Aroma', note: 'Los matices de la hoja', text: 'Comienza por reconocer las notas descritas en cada variedad. Compara sus diferencias antes de combinarlas.', link: { to: '/leaf-library#tripa-olor-seco', label: 'Ver una hoja aromática' } },
+  { icon: Sparkles, leafId: 'capote-criollo-98', title: 'Estructura', note: 'La función de cada parte', text: 'Observa cómo el capote sostiene el conjunto. La composición también se entiende desde la función de cada hoja.', link: { to: '/leaf-library?categoria=CAPOTE', label: 'Ver hojas de capote' } },
+  { icon: Gauge, leafId: 'tripa-corojo-ligero', title: 'Fortaleza', note: 'La presencia en la mezcla', text: 'Compara las hojas de carácter intenso con las más moderadas para orientar tu selección.', link: { to: '/leaf-library#tripa-corojo-ligero', label: 'Ver una hoja de fortaleza intensa' } },
 ];
 
 export default function MenuPage() {
+  const user = useAuthStore(state => state.user);
   return (
     <div className="site-page">
       <section className="site-section site-shell">
         <div className="site-section-heading">
-          <div><span className="site-kicker">Aprender a combinar</span><h2>Una mezcla empieza por conocer sus hojas.</h2></div>
-          <p>Aroma, estructura y fortaleza: tres aspectos para explorar la colección. Las hojas de referencia muestran aportes individuales; el resultado depende del conjunto.</p>
+          <div><span className="site-kicker">Comprender el carácter</span><h2>Una mezcla empieza por conocer sus hojas.</h2></div>
+          <p>Un perfil no es una receta: describe cómo se percibe una composición. Aroma, estructura y fortaleza ayudan a leerla. Las hojas de referencia muestran aportes individuales; el resultado depende del conjunto.</p>
         </div>
         <div className="site-profile-grid site-profile-grid--specimens">
-          {profiles.map(({ icon: Icon, leafId, title, note, text }, index) => {
+          {profiles.map(({ icon: Icon, leafId, title, note, text, link }, index) => {
             const leaf = leaves.find(item => item.id === leafId);
             return (
               <article key={title} className="site-profile-card">
@@ -30,7 +33,7 @@ export default function MenuPage() {
                     <span className="site-kicker">Hoja de referencia · {leafCategories[leaf.category].label}</span>
                     <h4>{leaf.name}</h4><p>{leaf.description}</p>
                   </div>
-                  <Link className="site-text-link" to={`/leaf-library#${leaf.id}`}>Conocer esta hoja <ArrowRight size={16} /></Link>
+                  <Link className="site-text-link" to={link.to}>{link.label} <ArrowRight size={16} /></Link>
                 </div>
               </article>
             );
@@ -39,8 +42,8 @@ export default function MenuPage() {
       </section>
       <section className="site-inline-cta site-shell">
         <div><span className="site-kicker">De la hoja a la composición</span><h2>Encuentra tu equilibrio.</h2></div>
-        <p>Explora las variedades, selecciona capa, capote y tripa y continúa al recorrido visual de elaboración.</p>
-        <Link className="site-button site-button--primary" to="/craft-your-cigar">Crear mi cigarro <ArrowRight size={17} /></Link>
+        <p>En la mesa de composición eliges tripa, capote y capa, y revisas el carácter del conjunto antes de verlo cobrar forma.</p>
+        <Link className="site-button site-button--primary" to={user ? '/craft-your-cigar' : '/login'}>Crear mi cigarro <ArrowRight size={17} /></Link>
       </section>
     </div>
   );
