@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { ArrowLeft, Compass } from 'lucide-react';
 import ProtectedRoute from '@components/ProtectedRoute';
 import Login from '@pages/Login';
@@ -13,14 +13,12 @@ import LayoutControlPanel from '@components/LayoutControlPanel';
 // Páginas
 import Home from '@/pages/Home';
 import About from '@/pages/About';
-import Service from '@/pages/Service';
 import Menu from '@/pages/Menu';
 import Reservation from '@/pages/Reservation';
 import Testimonial from '@/pages/Testimonial';
 import Contact from '@/pages/Contact';
 import CraftYourCigar from '@/pages/CraftYourCigar';
 import LeafLibrary from '@/pages/LeafLibrary';
-import BlendGuide from '@/pages/BlendGuide';
 
 function App() {
   return (
@@ -34,9 +32,7 @@ function App() {
           
           {/* Rutas de información */}
           <Route path="/leaf-library" element={<LeafLibrary />} />
-          <Route path="/blend-guide" element={<BlendGuide />} />
           <Route path="/about" element={<About />} />
-          <Route path="/service" element={<Service />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/login" element={<Login />} />
           
@@ -45,6 +41,10 @@ function App() {
           <Route path="/testimonial" element={<Testimonial />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/craft-your-cigar" element={<ProtectedRoute><CraftYourCigar /></ProtectedRoute>} />
+
+          {/* Compatibilidad: El proceso se fusionó con El oficio y la guía vive dentro del configurador. */}
+          <Route path="/service" element={<Navigate to="/about#proceso" replace />} />
+          <Route path="/blend-guide" element={<Navigate to="/craft-your-cigar?guia=abierta" replace />} />
 
 
           <Route path="*" element={

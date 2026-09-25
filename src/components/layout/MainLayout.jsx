@@ -19,6 +19,7 @@ const MainLayout = ({ children }) => {
   }, [pathname, loadPageConfig]);
 
   const { showNavbar, showFooter, showHeader, headerData, headerVariant } = currentConfig;
+  const { parent } = getRouteConfig(pathname);
 
   return (
     <div className="app-layout-wrapper" data-route={pathname} data-header={showHeader ? 'visible' : 'hidden'}>
@@ -29,6 +30,7 @@ const MainLayout = ({ children }) => {
           title={headerData?.title || ""} 
           subtitle={headerData?.subtitle || ""} 
           Icon={headerData?.icon} 
+          parent={parent}
           variant={headerVariant}
         />
       )}

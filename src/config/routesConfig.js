@@ -3,7 +3,6 @@ import {
   Home, 
   Library, 
   Info, 
-  Cigarette, 
   LayoutGrid, 
   CalendarCheck, 
   MessageSquare, 
@@ -44,15 +43,6 @@ export const routesConfig = {
     showHeader: false, // La página incluye su propia portada editorial.
     navbarSticky: false
   },
-  "/service": {
-    title: "El proceso",
-    subtitle: "De la selección al acabado",
-    icon: Cigarette,
-    showNavbar: true,
-    showFooter: true,
-    showHeader: true,   // Según tu log: "showHeader":true
-    navbarSticky: false
-  },
   "/menu": {
     title: "Perfiles de mezcla",
     subtitle: "Equilibrio, carácter y expresión",
@@ -64,6 +54,7 @@ export const routesConfig = {
   },
   "/reservation": {
     headerVariant: 'compact',
+    parent: "Experiencias",
     title: "Presentación guiada",
     subtitle: "Una experiencia alrededor del tabaco",
     icon: CalendarCheck,
@@ -73,6 +64,7 @@ export const routesConfig = {
     navbarSticky: false
   },
   "/testimonial": {
+    parent: "Experiencias",
     title: "La experiencia sensorial",
     subtitle: "Aprender a observar cada detalle",
     icon: MessageSquare,
@@ -92,8 +84,8 @@ export const routesConfig = {
     navbarSticky: false
   },
   "/craft-your-cigar": {
-    title: "Crea tu Cigarro",
-    subtitle: "Configurador Maestro",
+    title: "Crear mi cigarro",
+    subtitle: "Mesa de composición",
     icon: Wrench,
     showNavbar: true, 
     showFooter: false, 
@@ -102,7 +94,7 @@ export const routesConfig = {
   },
   "/login": {
     title: "Acceso",
-    subtitle: "Inicia Sesión",
+    subtitle: "Acceso privado a Crear mi cigarro",
     icon: LogIn,
     showNavbar: true,
     showFooter: false,

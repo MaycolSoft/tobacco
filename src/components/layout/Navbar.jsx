@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowUpRight, LogOut, Menu, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, LogOut, Menu, X } from 'lucide-react';
 import { useAuthStore } from '@store/authStore';
 import { useLayoutStore } from '@/store/useLayoutStore';
 
+// Cada entrada responde una pregunta distinta del recorrido; `match` agrupa rutas fusionadas.
 const primaryLinks = [
-  ['/', 'Inicio'],
-  ['/about', 'El oficio'],
-  ['/leaf-library', 'Las hojas'],
-  ['/blend-guide', 'La guía'],
-  ['/service', 'El proceso'],
-  ['/menu', 'Las mezclas'],
+  { to: '/', label: 'Inicio', match: ['/'] },
+  { to: '/leaf-library', label: 'Las hojas', match: ['/leaf-library'] },
+  { to: '/about', label: 'El oficio', match: ['/about'] },
+  { to: '/menu', label: 'Perfiles de mezcla', match: ['/menu'] },
+];
+const experienceLinks = [
+  { to: '/testimonial', label: 'Experiencia sensorial', text: 'Aprender a observar la hoja' },
+  { to: '/reservation', label: 'Presentación guiada', text: 'Coordinar una sesión' },
 ];
 
 const Navbar = () => {
@@ -19,8 +22,24 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
   const [open, setOpen] = useState(false);
+  const [experiencesOpen, setExperiencesOpen] = useState(false);
+  const experiencesRef = useRef(null);
+  const inExperiences = experienceLinks.some(link => link.to === pathname);
 
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => { setOpen(false); setExperiencesOpen(false); }, [pathname]);
+
+  useEffect(() => {
+    if (!experiencesOpen) return;
+    const onPointer = event => { if (!experiencesRef.current?.contains(event.target)) setExperiencesOpen(false); };
+    const onKey = event => {
+      if (event.key !== 'Escape') return;
+      setExperiencesOpen(false);
+      experiencesRef.current?.querySelector('button')?.focus();
+    };
+    document.addEventListener('pointerdown', onPointer);
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('pointerdown', onPointer); document.removeEventListener('keydown', onKey); };
+  }, [experiencesOpen]);
 
   const handleLogout = () => {
     logout();
@@ -41,10 +60,23 @@ const Navbar = () => {
 
         <div className={`site-nav-panel ${open ? 'is-open' : ''}`}>
           <div className="site-nav-links">
-            {primaryLinks.map(([to, label]) => (
-              <Link key={to} to={to} className={pathname === to ? 'active' : ''}>{label}</Link>
-            ))}
-            <Link to="/contact" className={pathname === '/contact' ? 'active' : ''}>Contacto</Link>
+            {primaryLinks.map(({ to, label, match }) => {
+              const active = match.includes(pathname);
+              return <Link key={to} to={to} className={active ? 'active' : ''} aria-current={active ? 'page' : undefined}>{label}</Link>;
+            })}
+            <div className={`site-nav-group ${experiencesOpen ? 'is-open' : ''}`} ref={experiencesRef}>
+              <button type="button" className={inExperiences ? 'active' : ''} aria-expanded={experiencesOpen} aria-controls="site-nav-experiences" onClick={() => setExperiencesOpen(value => !value)}>
+                Experiencias <ChevronDown size={14} aria-hidden="true" />
+              </button>
+              <div className="site-nav-submenu" id="site-nav-experiences">
+                {experienceLinks.map(({ to, label, text }) => (
+                  <Link key={to} to={to} className={pathname === to ? 'active' : ''} aria-current={pathname === to ? 'page' : undefined}>
+                    <strong>{label}</strong><small>{text}</small>
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <Link to="/contact" className={pathname === '/contact' ? 'active' : ''} aria-current={pathname === '/contact' ? 'page' : undefined}>Contacto</Link>
           </div>
           <div className="site-nav-actions">
             {user && <button type="button" className="site-nav-session" onClick={handleLogout}><LogOut size={15} /> Salir</button>}

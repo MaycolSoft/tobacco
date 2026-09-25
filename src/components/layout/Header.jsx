@@ -4,12 +4,11 @@ import { ChevronRight } from 'lucide-react';
 
 const headerImages = {
   '/about': '/img/carousel-2.jpg',
-  '/service': '/img/carousel-2.jpg',
   '/menu': '/img/mezclas-mesa-editorial-v1.jpg',
   '/testimonial': '/assets/full/CAPA HABANA.png',
 };
 
-const Header = ({ title, subtitle, Icon, variant = 'editorial' }) => {
+const Header = ({ title, subtitle, Icon, parent, variant = 'editorial' }) => {
   const { pathname } = useLocation();
   const image = headerImages[pathname];
   return (
@@ -21,7 +20,7 @@ const Header = ({ title, subtitle, Icon, variant = 'editorial' }) => {
       <span className="site-kicker">{subtitle}</span>
       <h1>{title}</h1>
       <nav className="site-breadcrumb" aria-label="Migas de pan">
-        <Link to="/">Inicio</Link><ChevronRight size={13} aria-hidden="true" /><span>{title}</span>
+        <Link to="/">Inicio</Link><ChevronRight size={13} aria-hidden="true" />{parent && <><span>{parent}</span><ChevronRight size={13} aria-hidden="true" /></>}<span aria-current="page">{title}</span>
       </nav>
     </div>
   </header>
