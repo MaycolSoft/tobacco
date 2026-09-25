@@ -16,7 +16,7 @@ html, body, body * {
 }
 *::-webkit-scrollbar-thumb:hover { background: var(--ls-gold); }
 *::-webkit-scrollbar-corner { background: var(--ls-bg); }
-.ls-experience-body, .tg-scroll, #video-root,
+.ls-experience-body, #video-root,
 .craft-you-cigar-video-selector-scroll-container, .cp-content, .central-log-list {
   overscroll-behavior: contain;
   scrollbar-gutter: stable;

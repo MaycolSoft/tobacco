@@ -399,10 +399,10 @@ a { color: inherit; }
 .ls-filters { flex-wrap: wrap; }
 .tg-eyebrow, .tg-leaf-origin, .tg-family-card dt, .tg-gallery-count,
 .tg-anatomy > p, .tg-footer > span { font-size: 12px; letter-spacing: .06em; }
-.tg-nav a, .tg-part-tabs button, .tg-gallery-tabs button, .tg-footer > button { font-size: 13px; }
+.tg-nav a, .tg-part-tabs button, .tg-gallery-tabs button, .tg-footer > a { font-size: 13px; }
 .tg-footer { flex-wrap: wrap; }
 .tg-footer > span { max-width: none; flex: 1 1 160px; }
-.tg-footer > button { flex-shrink: 0; }
+.tg-footer > a { flex-shrink: 0; }
 
 @media (min-width: 861px) and (max-width: 1250px) {
   .site-brand > span { display: none; }

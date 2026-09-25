@@ -1,29 +1,21 @@
-/* A full-screen editorial guide with one content viewport. */
-.tg-experience { position: fixed; inset: 0; height: 100vh; height: 100dvh; z-index: 2147483000; display: flex; flex-direction: column; overflow: hidden; background: var(--ls-bg); color: var(--ls-text-primary); font-family: var(--ls-font-body); isolation: isolate; animation: tg-enter .3s ease both; }
+/* Editorial guide rendered as a regular site page. */
+.tg-experience { background: var(--ls-bg); color: var(--ls-text-primary); font-family: var(--ls-font-body); }
 .tg-experience *, .tg-experience *::before, .tg-experience *::after { box-sizing: border-box; }
 .tg-experience ::selection { background: var(--ls-gold); color: var(--ls-text-on-gold); }
 .tg-experience button, .tg-experience a { font-family: var(--ls-font-body); -webkit-tap-highlight-color: transparent; }
 .tg-experience :is(button, a, [tabindex]):focus-visible { outline: 2px solid var(--ls-focus); outline-offset: 4px; }
 .tg-experience button { cursor: pointer; }
-.tg-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: max(12px, env(safe-area-inset-top)) 4% 12px; min-height: 76px; border-bottom: 1px solid var(--ls-border); flex-shrink: 0; }
-.tg-header button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; border: 0; background: none; color: var(--ls-text-secondary); font-size: 11px; }
-.tg-header button:hover { color: var(--ls-btn-ghost); }
-.tg-icon-button { width: 44px; flex-shrink: 0; }
-.tg-brand { font-family: var(--ls-font-heading); font-size: 1rem; }
-.tg-brand > span { color: var(--ls-text-dim); font-family: var(--ls-font-body); font-size: 10px; margin-left: 10px; }
-.tg-nav { display: flex; justify-content: center; padding: 0 4%; gap: 32px; flex-shrink: 0; }
+.tg-nav { display: flex; justify-content: center; padding: 0 4%; gap: 32px; border-bottom: 1px solid var(--ls-border); }
 .tg-nav a { display: inline-flex; gap: 9px; align-items: center; min-height: 54px; border-bottom: 1px solid transparent; color: var(--ls-text-secondary); font-size: 11px; text-decoration: none; }
 .tg-nav a small { font-size: 9px; color: var(--ls-text-dim); }
 .tg-nav a[aria-current] { color: var(--ls-gold); border-color: var(--ls-gold); }
-.tg-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; }
-.tg-scroll:focus-visible { outline-offset: -3px !important; }
 .tg-content { max-width: 1260px; margin: auto; padding: 0 5%; }
 .tg-intro { max-width: 620px; padding: 58px 0 45px; }
 .tg-eyebrow { display: block; color: var(--ls-text-dim); text-transform: uppercase; font-size: 10px; letter-spacing: .17em; line-height: 1.7; }
 .tg-intro h1 { color: var(--ls-text-primary); font-family: var(--ls-font-heading); font-size: clamp(2.6rem, 5vw, 4.7rem); line-height: 1.08; letter-spacing: -.035em; margin: 16px 0 22px; }
 .tg-intro h1 em { color: var(--ls-gold); font-family: inherit; }
 .tg-intro > p, .tg-section-copy { color: var(--ls-text-secondary); font-size: .95rem; line-height: 1.85; max-width: 740px; }
-.tg-section { border-top: 1px solid var(--ls-border); padding: 34px 0 48px; scroll-margin-top: 24px; }
+.tg-section { border-top: 1px solid var(--ls-border); padding: 34px 0 48px; scroll-margin-top: 120px; }
 .tg-section-heading { display: flex; align-items: center; gap: 22px; margin-bottom: 28px; }
 .tg-section-number { color: var(--ls-gold); font-family: var(--ls-font-heading); font-size: 2.6rem; line-height: 1; }
 .tg-section-heading h2 { font-family: var(--ls-font-heading); color: var(--ls-text-primary); font-size: clamp(1.6rem, 3vw, 2.3rem); letter-spacing: -.02em; margin: 6px 0 0; }
@@ -76,8 +68,7 @@
 .tg-end-note { color: var(--ls-text-dim); font-family: var(--ls-font-heading); font-style: italic; text-align: center; padding: 8px 0 32px; font-size: .9rem; }
 .tg-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 12px 4% max(12px, env(safe-area-inset-bottom)); border-top: 1px solid var(--ls-border); background: var(--ls-bg); flex-shrink: 0; }
 .tg-footer > span { color: var(--ls-text-dim); font-size: 11px; }
-.tg-footer > button { display: inline-flex; align-items: center; gap: 12px; padding: 12px 22px; min-height: 44px; border: 1px solid var(--ls-btn-primary); border-radius: 30px; background: var(--ls-btn-primary); color: var(--ls-text-on-primary); font-size: 11px; }
-@keyframes tg-enter { from { opacity: 0; } to { opacity: 1; } }
+.tg-footer > a { display: inline-flex; align-items: center; gap: 12px; padding: 12px 22px; min-height: 44px; border: 1px solid var(--ls-btn-primary); border-radius: 30px; background: var(--ls-btn-primary); color: var(--ls-text-on-primary); font-size: 11px; text-decoration: none; }
 @media (max-width: 900px) {
   .tg-family-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .tg-composition { gap: 25px; }
@@ -85,11 +76,6 @@
   .tg-part-tabs button { padding: 10px 12px; }
 }
 @media (max-width: 650px) {
-  .tg-header { gap: 8px; min-height: 65px; }
-  .tg-brand { font-size: .9rem; text-align: center; }
-  .tg-brand > span { display: none; }
-  .tg-return > span { display: none; }
-  .tg-return { width: 44px; }
   .tg-nav { gap: 16px; padding: 0 4%; justify-content: space-between; }
   .tg-nav a { font-size: 10px; gap: 6px; }
   .tg-nav a small { display: none; }
@@ -106,7 +92,7 @@
   .tg-section-heading { gap: 16px; }
   .tg-footer { gap: 10px; }
   .tg-footer > span { font-size: 10px; max-width: 125px; line-height: 1.5; }
-  .tg-footer > button { padding: 11px 15px; font-size: 10px; gap: 8px; }
+  .tg-footer > a { padding: 11px 15px; font-size: 10px; gap: 8px; }
 }
 @media (max-width: 350px) { .tg-family-grid { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .tg-experience, .tg-experience * { animation: none !important; transition: none !important; } }
