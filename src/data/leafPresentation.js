@@ -18,3 +18,18 @@ export const getLeafChapters = (leaf) => {
     { label: 'En el cigarro', title: category.role, text: category.detail, detail: `${category.label} · ${category.position}`, x: 47, y: 79 },
   ];
 };
+
+// Datos pendientes del inventario. Cuando existan en leaves.js se muestran sin cambiar la interfaz:
+// profile: { fortaleza, aroma, cuerpo } en escala 1–5, family, contributes: [], pairsWith: [ids].
+export const PROFILE_AXES = [
+  { key: 'fortaleza', label: 'Fortaleza' },
+  { key: 'aroma', label: 'Aroma' },
+  { key: 'cuerpo', label: 'Cuerpo' },
+];
+export const getLeafProfile = leaf => leaf?.profile || null;
+
+// Promedio de la composición; null mientras alguna hoja no tenga perfil.
+export const getBlendProfile = blendLeaves => {
+  if (!blendLeaves.length || blendLeaves.some(leaf => !getLeafProfile(leaf))) return null;
+  return Object.fromEntries(PROFILE_AXES.map(({ key }) => [key, Math.round(blendLeaves.reduce((sum, leaf) => sum + leaf.profile[key], 0) / blendLeaves.length)]));
+};

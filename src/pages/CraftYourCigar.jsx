@@ -1,15 +1,18 @@
 import "@styles/craft-your-cigar.css";
-import React, { useEffect, useState } from "react";
-import { Film, X } from 'lucide-react';
+import React, { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { BookOpen, Film, X } from 'lucide-react';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 import { AnimatePresence, motion } from "framer-motion";
 import ScrollVideo from '@components/ScrollVideo.jsx';
 import LeafGrid from "@components/LeafGrid";
-import BlendProfiles from "@components/BlendProfiles";
-import FloatingPrepButton from "@components/FloatingPrepButton";
+import BlendSummary from "@components/BlendSummary";
+import MasterBlends from "@components/MasterBlends";
+import TobaccoGuidePage from "@components/TobaccoGuidePage";
 
 import { leaves } from "@/data/leaves";
-import { blends } from "@/data/blends";
+import { masterBlends } from "@/data/masterBlends";
+import { BLEND_STEPS, useBlendStore } from "@/store/useBlendStore";
 import { getFrameProfile } from "@/lib/frameProfile";
 import { describeFrameProfile, getAnimationCatalog } from "@/lib/frameVariants";
 import { listFrameVariants } from "@/lib/frameVariantsApi";
@@ -160,14 +163,25 @@ const MultiButtonFlotanteContainer = ({ children }) => {
 
 
 
+// Recorrido: mesa de composición → Tripa → Capote → Capa → Tu cigarro → elaboración frame a frame.
 function CraftYourCigar() {
-  const [selectedLeaves, setSelectedLeaves] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [showGuide, setShowGuide] = useState(() => searchParams.get('guia') === 'abierta');
   const [showVideo, setShowVideo] = useState(false);
   const [videoInfo, setVideoInfo] = useState(null);
+  const stepIndex = useBlendStore(state => state.stepIndex);
+  const loadBlend = useBlendStore(state => state.loadBlend);
+  const isResult = stepIndex === BLEND_STEPS.length;
   useBodyScrollLock(showVideo);
 
+  // /blend-guide redirige aquí con ?guia=abierta; el parámetro se limpia tras abrir la guía.
+  useEffect(() => {
+    if (searchParams.has('guia')) setSearchParams({}, { replace: true });
+  }, [searchParams, setSearchParams]);
 
-
+  const openGuide = () => setShowGuide(true);
+  const closeGuide = useCallback(() => setShowGuide(false), []);
+  const startCrafting = () => { setVideoInfo(listVideos[1]); setShowVideo(true); };
 
   return (
     <div className="craft-container">
@@ -187,9 +201,9 @@ function CraftYourCigar() {
               }}
               className="craft-back-btn btn btn-secondary btn-pill"
             >
-              ✕ Volver a Mezclar
+              ✕ Volver a mi cigarro
             </button>
-            <ScrollVideo videoInfo={videoInfo} selectedLeaves={selectedLeaves} />
+            <ScrollVideo videoInfo={videoInfo} />
           </motion.div>
         </AnimatePresence>
       )}
@@ -197,19 +211,23 @@ function CraftYourCigar() {
       {/* Contenido principal oculto si el video está activo para evitar doble scroll */}
       {!showVideo && (
         <>
+          <header className="craft-intro">
+            <div>
+              <span className="site-kicker">Mesa de composición</span>
+              <h1>{isResult ? 'Tu cigarro.' : 'Compón tu mezcla.'}</h1>
+              <p>{isResult ? 'Todas las partes están elegidas. Revisa la composición y continúa a su elaboración.' : 'Elige la tripa, el capote y la capa. Cuando tu cigarro esté completo, podrás ver cómo cobra forma.'}</p>
+            </div>
+            <button type="button" className="craft-guide-button" onClick={openGuide} aria-haspopup="dialog">
+              <BookOpen size={17} aria-hidden="true" /> Guía de la mezcla
+            </button>
+          </header>
 
-          <BlendProfiles blends={blends} onSelectCombo={setSelectedLeaves} />
-          <LeafGrid
-            leaves={leaves}
-            onComplete={(sel) => setSelectedLeaves([...sel.TRIPA, ...sel.CAPOTE, ...sel.CAPA])}
-          />
+          {!isResult && <MasterBlends blends={masterBlends} onUse={loadBlend} />}
 
-          <FloatingPrepButton
-            visible={selectedLeaves.length > 0}
-            onClick={() => {setVideoInfo(listVideos[1]); setShowVideo(true);} }
-          />
-
-          
+          <div className={`craft-workspace ${isResult ? 'is-result' : ''}`}>
+            <LeafGrid leaves={leaves} onStartCrafting={startCrafting} />
+            {!isResult && <BlendSummary leaves={leaves} onOpenGuide={openGuide} />}
+          </div>
 
           <MultiButtonFlotanteContainer>
             <ButtonFlotanteItem openName="Ver recorridos" closeName="Cerrar recorridos" Icon={Film}>
@@ -222,6 +240,7 @@ function CraftYourCigar() {
         </>
       )}
 
+      {showGuide && <TobaccoGuidePage onClose={closeGuide} />}
     </div>
   );
 }
