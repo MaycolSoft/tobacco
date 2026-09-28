@@ -17,7 +17,7 @@ Actualizadas el **25 de septiembre de 2026** desde la aplicación local, despué
 | Las hojas | `/leaf-library` | [biblioteca-hojas.png](desktop/biblioteca-hojas.png) |
 | Ficha de hoja (vista) | `/leaf-library` | [hoja-detalle.png](desktop/hoja-detalle.png) |
 | El oficio | `/about` | [oficio.png](desktop/oficio.png) |
-| El proceso → El oficio (vista) | `/service` → `/about#proceso` | [proceso.png](desktop/proceso.png) |
+| El proceso, dentro de El oficio (vista) | `/about#proceso` | [proceso.png](desktop/proceso.png) |
 | Perfiles de mezcla | `/menu` | [perfiles-mezcla.png](desktop/perfiles-mezcla.png) |
 | Submenú Experiencias (vista) | `/menu` | [menu-experiencias.png](desktop/menu-experiencias.png) |
 | Experiencia sensorial | `/testimonial` | [experiencia-sensorial.png](desktop/experiencia-sensorial.png) |
@@ -33,8 +33,10 @@ Actualizadas el **25 de septiembre de 2026** desde la aplicación local, despué
 | 01 Tripa, sin selección | `/craft-your-cigar` | [crea-tu-cigarro.png](desktop/crea-tu-cigarro.png) |
 | 01 Tripa con 2 hojas y resumen «Tu mezcla» | `/craft-your-cigar` | [crea-tu-cigarro-mezcla.png](desktop/crea-tu-cigarro-mezcla.png) |
 | 04 Tu cigarro | `/craft-your-cigar` | [tu-cigarro.png](desktop/tu-cigarro.png) |
-| Guía de la mezcla (vistas) | `/blend-guide` → `/craft-your-cigar` | [Vista 1](desktop/guia-mezcla.png), [2](desktop/guia-mezcla-2.png), [3](desktop/guia-mezcla-3.png), [4](desktop/guia-mezcla-4.png), [5](desktop/guia-mezcla-5.png) |
+| Guía de la mezcla (vistas) | `/craft-your-cigar?guia=abierta` | [Vista 1](desktop/guia-mezcla.png), [2](desktop/guia-mezcla-2.png), [3](desktop/guia-mezcla-3.png), [4](desktop/guia-mezcla-4.png), [5](desktop/guia-mezcla-5.png) |
 
 La elaboración frame a frame («Ver cómo cobra forma») no se captura: depende de la secuencia de imágenes del CDN.
 
 Datos de captura: [capture-manifest.json](desktop/capture-manifest.json).
+
+Las tablas indican las rutas actuales. El manifiesto conserva las rutas utilizadas al tomar las capturas; sus alias antiguos ya no están disponibles.

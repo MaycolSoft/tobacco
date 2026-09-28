@@ -6,7 +6,7 @@ import { useAuthStore } from '@store/authStore';
 import { leaves } from '@/data/leaves';
 import { leafCategories } from '@/data/leafPresentation';
 
-// El oficio reúne el conocimiento del tabaquero y el proceso que antes vivía en /service.
+// El oficio reúne el conocimiento del tabaquero y el proceso de elaboración.
 const principles = [
   { icon: Eye, title: 'Observar', text: 'Leer el color, la textura y la estructura antes de tomar una decisión.' },
   { icon: Hand, title: 'Comprender', text: 'Reconocer lo que cada hoja puede aportar dentro de una composición.' },
@@ -26,7 +26,7 @@ export default function About() {
   const { hash } = useLocation();
   const Title = showHeader ? 'h2' : 'h1';
 
-  // Permite llegar directamente al proceso desde /service o desde otras páginas.
+  // Permite llegar directamente a una sección mediante su ancla.
   useEffect(() => {
     if (!hash) return;
     const frame = requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start' }));

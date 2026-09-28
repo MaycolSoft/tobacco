@@ -174,7 +174,7 @@ function CraftYourCigar() {
   const isResult = stepIndex === BLEND_STEPS.length;
   useBodyScrollLock(showVideo);
 
-  // /blend-guide redirige aquí con ?guia=abierta; el parámetro se limpia tras abrir la guía.
+  // ?guia=abierta permite entrar con la guía abierta; el parámetro se limpia después.
   useEffect(() => {
     if (searchParams.has('guia')) setSearchParams({}, { replace: true });
   }, [searchParams, setSearchParams]);

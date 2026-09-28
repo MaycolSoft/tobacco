@@ -22,6 +22,14 @@ Inicio y biblioteca están habilitados para indexación y aparecen en el sitemap
 
 ## Publicación
 
-No se ejecutaron compilaciones, servidores, validadores ni pruebas por indicación del usuario. La salida HTML por ruta, las vistas previas sociales y las rutas en Vercel quedan pendientes de revisión en una futura publicación. La indexación depende del buscador; estos metadatos no garantizan posiciones ni resultados enriquecidos.
+El proyecto todavía no se ha publicado. La compilación y la generación de HTML por ruta se comprobaron localmente el 28 de septiembre de 2026. Las vistas previas sociales y las respuestas HTTP en Vercel quedan pendientes de comprobación tras el primer despliegue. La indexación depende del buscador; estos metadatos no garantizan posiciones ni resultados enriquecidos.
+
+### Rutas vigentes
+
+- El proceso forma parte de `/about` y puede abrirse directamente con `/about#proceso`.
+- La guía vive dentro de `/craft-your-cigar` y puede abrirse con `/craft-your-cigar?guia=abierta`. Sin sesión, el login conserva ese destino para abrirla después del acceso.
+- Se eliminaron `/service` y `/blend-guide`, sin redirecciones en React ni Vercel: el proyecto es nuevo y no necesita compatibilidad con enlaces publicados. Se tratan como rutas desconocidas y muestran la página 404.
+
+Después del primer despliegue, comprobar la entrada directa y la recarga de las rutas vigentes, el ancla del proceso, la apertura de la guía después del login y la respuesta HTTP 404 para rutas desconocidas. `vite dev` y `vite preview` no validan las reglas de `vercel.json`.
 
 Referencias utilizadas: [SEO para JavaScript — Google](https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics), [Plugin API — Vite](https://vite.dev/guide/api-plugin), [Configuración — Vercel](https://vercel.com/docs/project-configuration/vercel-json), [404 estático — Vercel](https://vercel.com/kb/guide/custom-404-page).

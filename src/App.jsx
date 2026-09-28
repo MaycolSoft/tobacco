@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ArrowLeft, Compass } from 'lucide-react';
 import ProtectedRoute from '@components/ProtectedRoute';
 import Login from '@pages/Login';
@@ -41,11 +41,6 @@ function App() {
           <Route path="/testimonial" element={<Testimonial />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/craft-your-cigar" element={<ProtectedRoute><CraftYourCigar /></ProtectedRoute>} />
-
-          {/* Compatibilidad: El proceso se fusionó con El oficio y la guía vive dentro del configurador. */}
-          <Route path="/service" element={<Navigate to="/about#proceso" replace />} />
-          <Route path="/blend-guide" element={<Navigate to="/craft-your-cigar?guia=abierta" replace />} />
-
 
           <Route path="*" element={
             <section className="site-empty-state">
