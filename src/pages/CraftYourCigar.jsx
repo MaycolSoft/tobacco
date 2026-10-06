@@ -215,7 +215,7 @@ function CraftYourCigar() {
             <div>
               <span className="site-kicker">Mesa de composición</span>
               <h1>{isResult ? 'Tu cigarro.' : 'Compón tu mezcla.'}</h1>
-              <p>{isResult ? 'Todas las partes están elegidas. Revisa la composición y continúa a su elaboración.' : 'Elige la tripa, el capote y la capa. Cuando tu cigarro esté completo, podrás ver cómo cobra forma.'}</p>
+              <p>{isResult ? 'Todas las partes están elegidas. Revisa la composición y continúa a su elaboración.' : 'Elige tripa, capote y capa para crear tu cigarro.'}</p>
             </div>
             <button type="button" className="craft-guide-button" onClick={openGuide} aria-haspopup="dialog">
               <BookOpen size={17} aria-hidden="true" /> Guía de la mezcla

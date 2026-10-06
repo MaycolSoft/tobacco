@@ -64,9 +64,12 @@ export default function LeafGrid({ leaves = [], onStartCrafting }) {
       ) : (
         <>
           {/* Encabezado del paso con mensaje contextual */}
+          <div className="craft-step-toolbar">
           <div className="ls-grid-header">
+            <div className="craft-step-heading">
             <span className="site-kicker">{currentStep.number} · {leafCategories[currentStep.key].position}</span>
             <h2 className="ls-grid-title" id="craft-step-title">{currentStep.label}</h2>
+            </div>
             <p className="ls-grid-role">{leafCategories[currentStep.key].description}</p>
             <p className={`ls-grid-subtitle ${stepComplete ? 'is-ready' : ''}`} role="status" aria-live="polite">{getStepMessage(currentStep, currentSel.length)}</p>
           </div>
@@ -80,6 +83,8 @@ export default function LeafGrid({ leaves = [], onStartCrafting }) {
             <button type="button" className="lg-inline-nav-btn lg-inline-nav-btn--next" onClick={() => goTo(stepIndex + 1)} disabled={!stepComplete || (nextStep === RESULT_STEP && !blendComplete)}>
               {nextStep === RESULT_STEP ? 'Ver tu cigarro' : `Continuar a ${nextStep.label}`} <ArrowRight size={14} aria-hidden="true" />
             </button>
+          </div>
+
           </div>
 
           <motion.div
