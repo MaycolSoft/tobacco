@@ -1,0 +1,7 @@
+{
+  "language": "Idioma",
+  "open": "Abrir",
+  "close": "Cerrar",
+  "logs": "Registros ({{count}})",
+  "clearLogs": "Limpiar registros"
+}

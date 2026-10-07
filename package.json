@@ -8,19 +8,26 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:i18n": "node scripts/check-i18n.mjs",
+    "test": "node --test src/config/*.test.mjs src/lib/*.test.mjs src/i18n/*.test.mjs",
+    "test:e2e": "npm run build && playwright test",
+    "check:i18n:build": "node scripts/check-i18n-build.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.23.24",
     "gsap": "^3.13.0",
+    "i18next": "^26.4.2",
     "lucide-react": "^1.11.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-i18next": "^17.0.16",
     "react-router-dom": "^7.11.0",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@playwright/test": "^1.63.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",

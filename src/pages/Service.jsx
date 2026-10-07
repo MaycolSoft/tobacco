@@ -1,11 +1,14 @@
 import { ArrowRight, Hand, Layers3, ScanEye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { leaves } from '@/data/leaves';
-import { leafCategories } from '@/data/leafPresentation';
+import { getLeafCategories } from '@/data/leafPresentation';
+import { useTranslation } from 'react-i18next';
 
 const components = ['capa-habana', 'capote-criollo-98', 'tripa-olor-seco'].map(id => leaves.find(leaf => leaf.id === id));
 
 export default function Service() {
+  const { t } = useTranslation();
+  const leafCategories = getLeafCategories(t);
   return (
     <div className="site-page">
       <section className="site-section site-shell">

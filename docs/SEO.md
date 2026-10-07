@@ -2,7 +2,7 @@
 
 Dominio confirmado: `https://tabacaleratamboril.com.do`.
 
-La identidad y los textos por ruta se editan en `src/config/seoConfig.js`. Si cambia el dominio, actualiza `siteIdentity.url` o configura `VITE_SITE_URL` con el origen público antes de generar la versión de producción. No añadas rutas ni parámetros a esa variable.
+La identidad y la indexación por ruta se editan en `src/config/seoConfig.js`; los textos se editan en `src/i18n/locales/*/seo.json`. Si cambia el dominio, actualiza `siteIdentity.url` o configura `VITE_SITE_URL` con el origen público antes de generar la versión de producción. No añadas rutas ni parámetros a esa variable.
 
 ## Qué está preparado
 
@@ -11,18 +11,18 @@ La identidad y los textos por ruta se editan en `src/config/seoConfig.js`. Si ca
 - Datos estructurados JSON-LD de organización, sitio, página y migas de navegación. La biblioteca incorpora un listado de las hojas existentes. No se publican direcciones, teléfonos, reseñas, precios ni métricas ficticias como datos estructurados.
 - Metadatos actualizados durante la navegación de React.
 - HTML inicial con metadatos propios de cada ruta, generado mediante `plugins/seoPlugin.js` cuando se compile el proyecto. Esto permite a los lectores de vistas previas acceder a los metadatos sin ejecutar React. El contenido interactivo sigue necesitando JavaScript; no se ha implementado SSR ni prerenderizado del contenido.
-- `sitemap.xml`, `robots.txt` y `404.html` generados durante esa misma compilación. No están generados todavía en esta sesión.
+- `sitemap.xml`, `robots.txt` y `404.html` generados durante esa misma compilación. La compilación local genera 36 shells HTML, cuatro manifests, cuatro archivos 404 y un sitemap con 24 URLs localizadas.
 - Vercel configurado con `cleanUrls` para servir esos HTML sin extensión y devolver la página 404 en rutas desconocidas. Las rutas nuevas deben añadirse tanto en `App.jsx` como en `seoRoutes`.
 
 ## Indexación editorial
 
-Inicio y biblioteca están habilitados para indexación y aparecen en el sitemap. Las páginas de plantilla con contenido de muestra (historia, cigarros, mezclas, contacto, reservas y testimonios), el acceso y el configurador quedan con `noindex, follow`. Continúan funcionando para visitantes. Cuando se complete el contenido de una ruta, se puede activar `index: true` en su configuración.
+Inicio, biblioteca, historia, menú, contacto y experiencia sensorial están habilitados para indexación según los flags vigentes del código, en sus cuatro idiomas. Reserva, acceso y configurador conservan `noindex, follow`. La internacionalización no cambia esos flags.
 
-`robots.txt` permite el rastreo: bloquear las rutas impediría que los buscadores leyeran su directiva `noindex`. No se añadieron etiquetas de traducciones alternativas porque no existen versiones traducidas equivalentes por URL.
+`robots.txt` permite el rastreo para que los buscadores lean `noindex`. Cada página conocida incorpora alternates `es`, `en`, `fr`, `zh-CN` y `x-default` español, canonical en su idioma y datos estructurados localizados. Query y hash quedan fuera del canonical y del sitemap. Véase [I18N.md](./I18N.md).
 
 ## Publicación
 
-El proyecto todavía no se ha publicado. La compilación y la generación de HTML por ruta se comprobaron localmente el 28 de septiembre de 2026. Las vistas previas sociales y las respuestas HTTP en Vercel quedan pendientes de comprobación tras el primer despliegue. La indexación depende del buscador; estos metadatos no garantizan posiciones ni resultados enriquecidos.
+El proyecto todavía no se ha publicado. La compilación y los metadatos de las rutas en cuatro idiomas se comprobaron localmente el 7 de octubre de 2026. Las vistas previas sociales y las respuestas HTTP en Vercel quedan pendientes de comprobación tras el primer despliegue. La indexación depende del buscador; estos metadatos no garantizan posiciones ni resultados enriquecidos.
 
 ### Rutas vigentes
 

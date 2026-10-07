@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { RotateCcw } from 'lucide-react';
 
 export function Section({ title, icon: Icon, action, className = '', children }) {
@@ -24,12 +25,13 @@ export function ToggleRow({ icon: Icon, label, checked, disabled, onToggle }) {
 }
 
 export function ColorRow({ label, value, onChange, onReset }) {
+  const { t } = useTranslation();
   return (
     <div className="cc-color-row">
       <span className="cc-color-label">{label}</span>
       <code>{value}</code>
       <input type="color" aria-label={label} title={value} value={value} onChange={event => onChange(event.target.value)} />
-      {onReset && <ResetButton onClick={onReset} label={`Reset ${label} to profile`} />}
+      {onReset && <ResetButton onClick={onReset} label={t('controls:controls.resetToProfile', { value1: label })} />}
     </div>
   );
 }

@@ -1,0 +1,7 @@
+{
+  "language": "Language",
+  "open": "Open",
+  "close": "Close",
+  "logs": "Logs ({{count}})",
+  "clearLogs": "Clear logs"
+}

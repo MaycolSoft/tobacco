@@ -1,3 +1,6 @@
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { renderMessage } from '@/i18n/messages';
+import { useTranslation } from 'react-i18next';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, RefreshCw, ChevronDown, Trash2 } from 'lucide-react';
@@ -11,6 +14,8 @@ const INITIAL_FORM = { source: '', source_fps: 60, target_fps: 30, width: 1920, 
 const errorText = (error) => typeof error === 'string' ? error : JSON.stringify(error);
 
 export default function FrameVariantsModal({ open, onClose }) {
+  const { t, i18n } = useTranslation();
+  const formatNumber = (value, options) => new Intl.NumberFormat(i18n.resolvedLanguage, options).format(value);
   const dialogRef = useRef(null);
   const titleId = useId();
   const descriptionId = useId();
@@ -48,13 +53,13 @@ export default function FrameVariantsModal({ open, onClose }) {
     setNotice('');
     const body = Object.fromEntries(Object.entries({ ...form, source }).map(([key, value]) => [key, key === 'source' ? value : Number(value)]));
     if (!source || body.target_fps > body.source_fps) {
-      setFormError('Choose a master and a target FPS no greater than the source FPS.');
+      setFormError({ key: 'controls:frameVariantsModal.chooseAMasterAndATargetFps' });
       return;
     }
     if (Object.entries(body).some(([key, value]) => key !== 'source' &&
       (!Number.isFinite(value) || (key === 'quality' ? value < 0 || value > 100 : value <= 0))) ||
       ['width', 'height', 'quality', 'workers'].some(key => !Number.isSafeInteger(body[key]))) {
-      setFormError('Enter valid positive values. Dimensions and workers must be whole numbers; quality must be from 0 to 100.');
+      setFormError({ key: 'controls:frameVariantsModal.enterValidPositiveValuesDimensionsAndWorkers' });
       return;
     }
     manager.create(body);
@@ -73,24 +78,25 @@ export default function FrameVariantsModal({ open, onClose }) {
       onClick={event => { if (event.target === event.currentTarget) onClose(); }}>
       <div className="fv-shell">
         <header className="fv-header">
-          <div className="fv-title"><span className="fv-eyebrow">Animation Performance</span><h2 id={titleId}>Manage frame variants</h2>
-            <p id={descriptionId}>Select a frame profile per animation. Saved in this browser.</p></div>
-          <button type="button" className="fv-icon" onClick={onClose} aria-label="Close frame variants"><X size={18} /></button>
+          <LanguageSwitcher />
+          <div className="fv-title"><span className="fv-eyebrow">{t('controls:frameVariantsModal.animationPerformance')}</span><h2 id={titleId}>{t('controls:frameVariantsModal.manageFrameVariants')}</h2>
+            <p id={descriptionId}>{t('controls:frameVariantsModal.selectAFrameProfilePerAnimationSaved')}</p></div>
+          <button type="button" className="fv-icon" onClick={onClose} aria-label={t('controls:frameVariantsModal.closeFrameVariants')}><X size={18} /></button>
         </header>
         <div className="fv-body">
           <section className="fv-create" aria-labelledby={`${titleId}-create`}>
-            <h3 id={`${titleId}-create`}>Create variant</h3>
+            <h3 id={`${titleId}-create`}>{t('controls:frameVariantsModal.createVariant')}</h3>
             <form onSubmit={submit}>
               <fieldset disabled={manager.busy || manager.activeJob}>
-                <label>Source / master<select value={source} onChange={event => update('source', event.target.value)} required>
-                  {!masters.length && <option value="">No masters available</option>}
+                <label>{t('controls:frameVariantsModal.sourceMaster')}<select value={source} onChange={event => update('source', event.target.value)} required>
+                  {!masters.length && <option value="">{t('controls:frameVariantsModal.noMastersAvailable')}</option>}
                   {masters.map(master => <option key={master.name} value={master.name}>{master.name}</option>)}
                 </select></label>
                 <div className="fv-fields">
-                  <label>Src FPS<input type="number" min="0.01" step="any" required value={form.source_fps} onChange={event => update('source_fps', event.target.value)} /></label>
-                  <label>Target FPS<input type="number" min="0.01" max={form.source_fps} step="any" required value={form.target_fps} onChange={event => update('target_fps', event.target.value)} /></label>
+                  <label>{t('controls:frameVariantsModal.sourceFps')}<input type="number" min="0.01" step="any" required value={form.source_fps} onChange={event => update('source_fps', event.target.value)} /></label>
+                  <label>{t('controls:frameVariantsModal.targetFps')}<input type="number" min="0.01" max={form.source_fps} step="any" required value={form.target_fps} onChange={event => update('target_fps', event.target.value)} /></label>
                 </div>
-                <label>Resolution<select value={resolution} onChange={event => {
+                <label>{t('controls:frameVariantsModal.resolution')}<select value={resolution} onChange={event => {
                   const preset = event.target.value;
                   setResolution(preset);
                   if (preset !== 'custom') {
@@ -99,41 +105,41 @@ export default function FrameVariantsModal({ open, onClose }) {
                   }
                 }}>
                   <option value="2560x1440">2560 × 1440</option><option value="1920x1080">1920 × 1080</option>
-                  <option value="1280x720">1280 × 720</option><option value="custom">Custom</option>
+                  <option value="1280x720">1280 × 720</option><option value="custom">{t('controls:frameVariantsModal.custom')}</option>
                 </select></label>
                 {resolution === 'custom' && <div className="fv-fields">
-                  <label>Width<input type="number" min="1" step="1" required value={form.width} onChange={event => update('width', event.target.value)} /></label>
-                  <label>Height<input type="number" min="1" step="1" required value={form.height} onChange={event => update('height', event.target.value)} /></label>
+                  <label>{t('controls:frameVariantsModal.width')}<input type="number" min="1" step="1" required value={form.width} onChange={event => update('width', event.target.value)} /></label>
+                  <label>{t('controls:frameVariantsModal.height')}<input type="number" min="1" step="1" required value={form.height} onChange={event => update('height', event.target.value)} /></label>
                 </div>}
                 <div className="fv-fields">
-                  <label>Quality<input type="number" min="0" max="100" step="1" required value={form.quality} onChange={event => update('quality', event.target.value)} /></label>
-                  <label>Workers<input type="number" min="1" step="1" required value={form.workers} onChange={event => update('workers', event.target.value)} /></label>
+                  <label>{t('controls:frameVariantsModal.quality')}<input type="number" min="0" max="100" step="1" required value={form.quality} onChange={event => update('quality', event.target.value)} /></label>
+                  <label>{t('controls:frameVariantsModal.workers')}<input type="number" min="1" step="1" required value={form.workers} onChange={event => update('workers', event.target.value)} /></label>
                 </div>
-                <button className="fv-primary" type="submit" disabled={!source || manager.loading}>{manager.busy ? 'Working…' : 'Create variant'}</button>
+                <button className="fv-primary" type="submit" disabled={!source || manager.loading}>{manager.busy ? t('controls:frameVariantsModal.working') : t('controls:frameVariantsModal.createVariant')}</button>
               </fieldset>
             </form>
-            {(formError || manager.actionError) && <p className="fv-error" role="alert">{formError || manager.actionError}</p>}
-            {job && <section className="fv-job" aria-label="Variant generation progress" aria-live="polite">
-              <strong>Job: {job.status}</strong><p>{jobVariant || job.id}</p>
-              <progress max="100" value={progress ?? undefined} aria-label="Generation progress" />
-              <p>{completed} / {total || '—'} frames{progress !== null ? ` · ${progress.toFixed(1)}%` : ''}</p>
-              {manager.activeJob && <small>You can close this window. Progress tracking resumes after a page reload.</small>}
+            {(formError || manager.actionError) && <p className="fv-error" role="alert">{renderMessage(formError || manager.actionError, t)}</p>}
+            {job && <section className="fv-job" aria-label={t('controls:frameVariantsModal.variantGenerationProgress')} aria-live="polite">
+              <strong>{t('controls:frameVariantsModal.job')} {t(`controls:status.${job.status}`, { defaultValue: job.status })}</strong><p>{jobVariant || job.id}</p>
+              <progress max="100" value={progress ?? undefined} aria-label={t('controls:frameVariantsModal.generationProgress')} />
+              <p>{t('controls:variant.progress', { completed: formatNumber(completed), total: total ? formatNumber(total) : '—' })}{progress !== null ? ` · ${formatNumber(progress, { maximumFractionDigits: 1 })}%` : ''}</p>
+              {manager.activeJob && <small>{t('controls:frameVariantsModal.youCanCloseThisWindowProgressTracking')}</small>}
               {job.error && <p className="fv-error" role="alert">{errorText(job.error)}</p>}
-              {job.status === 'failed' && !job.error && <p className="fv-error" role="alert">Generation failed. The server did not provide details.</p>}
-              {manager.pollError && <p className="fv-error" role="alert">{manager.pollError}</p>}
+              {job.status === 'failed' && !job.error && <p className="fv-error" role="alert">{t('controls:frameVariantsModal.generationFailedTheServerDidNotProvide')}</p>}
+              {manager.pollError && <p className="fv-error" role="alert">{renderMessage(manager.pollError, t)} {t('controls:api.retry')}</p>}
             </section>}
           </section>
-          <section className="fv-library" aria-label="Available frame variants" aria-busy={manager.loading}>
-            <div className="fv-library-heading"><h3>Available variants <small>({manager.items.length})</small></h3>
+          <section className="fv-library" aria-label={t('controls:frameVariantsModal.availableFrameVariants')} aria-busy={manager.loading}>
+            <div className="fv-library-heading"><h3>{t('controls:frameVariantsModal.availableVariants')} <small>({manager.items.length})</small></h3>
               <button type="button" className="fv-ghost" onClick={() => manager.refresh()} disabled={manager.loading || manager.busy}
-                title="Profiles apply only to their source animation. Use default restores the 30 fps default profile."><RefreshCw size={13} /> Refresh</button></div>
-            {notice && <p className="fv-notice" role="status">{notice}</p>}
-            {manager.listError && <p className="fv-error" role="alert">{manager.listError} Use Refresh to try again.</p>}
-            {manager.loading && <p role="status">Loading variants…</p>}
-            {!manager.loading && !manager.listError && !manager.items.length && <p>No variants found. Add a master in the CDN Asset Manager to get started.</p>}
+                title={t('controls:frameVariantsModal.profilesApplyOnlyToTheirSourceAnimation')}><RefreshCw size={13} /> {t('controls:frameVariantsModal.refresh')}</button></div>
+            {notice && <p className="fv-notice" role="status">{renderMessage(notice, t)}</p>}
+            {manager.listError && <p className="fv-error" role="alert">{renderMessage(manager.listError, t)} {t('controls:frameVariantsModal.useRefreshToTryAgain')}</p>}
+            {manager.loading && <p role="status">{t('controls:frameVariantsModal.loadingVariants')}</p>}
+            {!manager.loading && !manager.listError && !manager.items.length && <p>{t('controls:frameVariantsModal.noVariantsFoundAddAMasterIn')}</p>}
             {!manager.loading && !manager.listError && unavailableSelections.map(([master, profile]) => <div className="fv-warning" key={master}>
-              <p>The saved profile “{profile.folder}” is missing or not ready.</p>
-              <button type="button" onClick={() => clearVariant(master)}>Use default for {master}</button>
+              <p>{t('controls:variant.missing', { folder: profile.folder })}</p>
+              <button type="button" onClick={() => clearVariant(master)}>{t('controls:variant.defaultFor', { master })}</button>
             </div>)}
             <div className="fv-list">
               {groups.map(group => {
@@ -147,13 +153,13 @@ export default function FrameVariantsModal({ open, onClose }) {
                       <h4>{group.source}</h4>
                       <span className="fv-count">{group.variants.length}</span>
                     </button>
-                    <span className="fv-group-active" title={activeName ? `Active profile: ${activeName}` : 'Using the 30 fps default profile'}>
-                      {activeName ? activeName : 'Default'}
+                    <span className="fv-group-active" title={activeName ? t('controls:frameVariantsModal.activeProfile', { value1: activeName }) : t('controls:frameVariantsModal.usingThe30FpsDefaultProfile')}>
+                      {activeName ? activeName : t('controls:frameVariantsModal.default')}
                     </span>
-                    {activeName && <button type="button" className="fv-link" onClick={() => { clearVariant(group.source); setNotice(`Default profile restored for ${group.source}.`); }}>Use default</button>}
+                    {activeName && <button type="button" className="fv-link" onClick={() => { clearVariant(group.source); setNotice({ key: 'controls:frameVariantsModal.defaultProfileRestoredFor', values: { value1: group.source } }); }}>{t('controls:frameVariantsModal.useDefault')}</button>}
                   </div>
                   {!collapsed && <table className="fv-table" id={listId}>
-                    <thead><tr><th>Name</th><th>FPS</th><th>Resolution</th><th>Quality</th><th>Type</th><th>Status</th><th><span className="fv-sr">Actions</span></th></tr></thead>
+                    <thead><tr><th>{t('controls:frameVariantsModal.name')}</th><th>FPS</th><th>{t('controls:frameVariantsModal.resolution')}</th><th>{t('controls:frameVariantsModal.quality')}</th><th>{t('controls:frameVariantsModal.type')}</th><th>{t('controls:frameVariantsModal.status')}</th><th><span className="fv-sr">{t('controls:frameVariantsModal.actions')}</span></th></tr></thead>
                     <tbody>
                       {group.variants.map(variant => {
                         const profile = getVariantProfile(variant);
@@ -162,32 +168,32 @@ export default function FrameVariantsModal({ open, onClose }) {
                         const status = metadata?.status ?? (variant.kind === 'generated' ? 'Unknown' : 'Available');
                         const hasSize = metadata?.width && metadata?.height;
                         const details = [
-                          `Frames: ${variant.frame_count ?? '—'}`,
-                          hasSize && `Resolution: ${metadata.width} × ${metadata.height}`,
-                          metadata?.source_fps && `Source FPS: ${metadata.source_fps}`,
-                          metadata?.source && `Source: ${metadata.source}`,
+                          t('controls:frameVariantsModal.frames', { value1: variant.frame_count ?? '—' }),
+                          hasSize && t('controls:frameVariantsModal.resolution2', { value1: metadata.width, value2: metadata.height }),
+                          metadata?.source_fps && t('controls:frameVariantsModal.sourceFps2', { value1: metadata.source_fps }),
+                          metadata?.source && t('controls:frameVariantsModal.source', { value1: metadata.source }),
                         ].filter(Boolean).join('\n');
                         return <tr className={selected ? 'fv-selected' : undefined} key={variant.name}>
                           <td className="fv-name" title={details}>
                             <span>{variant.name}</span>
-                            {selected && <span className="fv-badge fv-badge-active">Active</span>}
-                            <small>{variant.frame_count ?? '—'} frames</small>
+                            {selected && <span className="fv-badge fv-badge-active">{t('controls:frameVariantsModal.active')}</span>}
+                            <small>{t('controls:variant.frames', { count: variant.frame_count ?? 0 })}</small>
                           </td>
                           <td data-label="FPS">{getVariantFps(variant) ?? '—'}</td>
-                          <td data-label="Res" title={hasSize ? `${metadata.width} × ${metadata.height}` : undefined}>{hasSize ? formatResolution(metadata) : '—'}</td>
-                          <td data-label="Q">{metadata?.quality ?? '—'}</td>
-                          <td data-label="Type"><span className={`fv-badge fv-kind-${variant.kind}`}>{variant.kind}</span></td>
-                          <td data-label="Status"><span className={`fv-status fv-status-${String(status).toLowerCase()}`}>{status}</span></td>
+                          <td data-label={t('controls:frameVariantsModal.res')} title={hasSize ? `${metadata.width} × ${metadata.height}` : undefined}>{hasSize ? formatResolution(metadata) : '—'}</td>
+                          <td data-label={t('controls:frameVariantsModal.q')}>{metadata?.quality ?? '—'}</td>
+                          <td data-label={t('controls:frameVariantsModal.type')}><span className={`fv-badge fv-kind-${t(`controls:kind.${variant.kind}`, { defaultValue: variant.kind })}`}>{t(`controls:kind.${variant.kind}`, { defaultValue: variant.kind })}</span></td>
+                          <td data-label={t('controls:frameVariantsModal.status')}><span className={`fv-status fv-status-${String(status).toLowerCase()}`}>{t(`controls:status.${status}`, { defaultValue: status })}</span></td>
                           <td className="fv-row-actions">
                             <button type="button" className="fv-use" disabled={!profile || manager.busy || selected} aria-pressed={selected}
-                              title={profile ? undefined : 'Available after generation completes with valid frame and FPS metadata.'}
+                              title={profile ? undefined : t('controls:frameVariantsModal.availableAfterGenerationCompletesWithValidFrame')}
                               onClick={() => {
                                 selectVariant(group.source, profile);
-                                setNotice(`${variant.name} will be used for ${group.source}.`);
-                              }}>{selected ? 'In use' : 'Use'}</button>
+                                setNotice({ key: 'controls:frameVariantsModal.willBeUsedFor', values: { value1: variant.name, value2: group.source } });
+                              }}>{selected ? t('controls:frameVariantsModal.inUse') : t('controls:frameVariantsModal.use')}</button>
                             {canDeleteVariant(variant) && <button className="fv-delete" type="button" disabled={manager.busy || manager.activeJob}
-                              aria-label={`Delete ${variant.name}`} title="Delete variant" onClick={() => {
-                                if (window.confirm(`Delete "${variant.name}" from the CDN? This cannot be undone.${selected ? ' This animation will return to its default profile.' : ''}`)) {
+                              aria-label={t('controls:frameVariantsModal.delete', { value1: variant.name })} title={t('controls:frameVariantsModal.deleteVariant')} onClick={() => {
+                                if (window.confirm(t(selected ? 'controls:variant.deleteSelected' : 'controls:variant.delete', { name: variant.name }))) {
                                   setNotice('');
                                   manager.remove(variant);
                                 }

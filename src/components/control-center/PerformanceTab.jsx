@@ -1,3 +1,5 @@
+import { renderMessage } from '@/i18n/messages';
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { Activity, Eye, Gauge, Trash2 } from 'lucide-react';
 import { useAnimationPerfStore } from '@/store/useAnimationPerfStore';
@@ -9,6 +11,7 @@ import { ResetButton, Section, ToggleRow } from './controls';
 
 // Only mounted while the Control Center is open on this tab, so diagnostics poll only then.
 export default function PerformanceTab() {
+  const { t } = useTranslation();
   const { config: perfConfig, updateConfig: updatePerfConfig, resetConfig: resetPerfConfig } = useAnimationPerfStore();
   const [perfStats, setPerfStats] = useState(null);
   const [cacheStatus, setCacheStatus] = useState('');
@@ -22,23 +25,23 @@ export default function PerformanceTab() {
   }, []);
 
   const handleClearFrameCache = async () => {
-    setCacheStatus('Limpiando…');
+    setCacheStatus({ key: 'controls:performanceTab.clearing' });
     try {
       await clearFrameCache();
-      setCacheStatus('Caché de animación eliminada.');
+      setCacheStatus({ key: 'controls:performanceTab.animationCacheCleared' });
     } catch (error) {
-      setCacheStatus(`No se pudo limpiar: ${error.message}`);
+      setCacheStatus({ key: 'controls:performanceTab.couldNotClear', values: { value1: error.message } });
     }
   };
 
   return (
     <div className="cc-grid cc-grid-2">
       <div className="cc-stack">
-        <Section title="Animation Performance" icon={Gauge} action={<ResetButton onClick={resetPerfConfig} label="Restaurar valores por defecto de rendimiento" />}>
-          <p className="cc-note">Ajustes guardados en este navegador.</p>
-          {PERF_RANGES.map(({ key, label, step, format }) => (
+        <Section title={t('controls:performanceTab.animationPerformance')} icon={Gauge} action={<ResetButton onClick={resetPerfConfig} label={t('controls:performanceTab.restoreDefaultPerformanceSettings')} />}>
+          <p className="cc-note">{t('controls:performanceTab.settingsSavedInThisBrowser')}</p>
+          {PERF_RANGES.map(({ key, step, format }) => (
             <label key={key} className="cc-range-row">
-              <span>{label}</span>
+              <span>{t(`controls:ranges.${key}`)}</span>
               <code>{format ? format(perfConfig[key]) : perfConfig[key]}</code>
               <input
                 type="range"
@@ -52,20 +55,20 @@ export default function PerformanceTab() {
           ))}
         </Section>
 
-        <Section title="Tools" icon={Trash2}>
-          <ToggleRow icon={Eye} label="Show loader stats" checked={perfConfig.showLoaderStats}
+        <Section title={t('controls:performanceTab.tools')} icon={Trash2}>
+          <ToggleRow icon={Eye} label={t('controls:performanceTab.showLoaderStats')} checked={perfConfig.showLoaderStats}
             onToggle={() => updatePerfConfig({ showLoaderStats: !perfConfig.showLoaderStats })} />
-          <button type="button" className="cc-btn cc-btn-block" onClick={handleClearFrameCache}>Clear animation cache</button>
-          {cacheStatus && <p className="cc-note" role="status">{cacheStatus}</p>}
+          <button type="button" className="cc-btn cc-btn-block" onClick={handleClearFrameCache}>{t('controls:performanceTab.clearAnimationCache')}</button>
+          {cacheStatus && <p className="cc-note" role="status">{renderMessage(cacheStatus, t)}</p>}
         </Section>
       </div>
 
-      <Section title="Diagnostics" icon={Activity} className="cc-diagnostics" action={<span className="cc-live">Live · 500 ms</span>}>
+      <Section title={t('controls:performanceTab.diagnostics')} icon={Activity} className="cc-diagnostics" action={<span className="cc-live">{t('controls:performanceTab.live500Ms')}</span>}>
         <table className="cc-stats">
           <tbody>
-            {PERF_STATS.map(([key, label, format]) => (
+            {PERF_STATS.map(([key, , format]) => (
               <tr key={key}>
-                <th scope="row">{label}</th>
+                <th scope="row">{t(`controls:stats.${key}`)}</th>
                 <td>{perfStats ? (format ? format(perfStats[key]) : (perfStats[key] ?? '—')) : '—'}</td>
               </tr>
             ))}

@@ -1,9 +1,12 @@
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, PencilLine } from "lucide-react";
-import { leafCategories, PROFILE_AXES, getBlendProfile } from "@/data/leafPresentation";
+import { getLeafCategories, getProfileAxes, getBlendProfile } from "@/data/leafPresentation";
 import { useBlendStore } from "@/store/useBlendStore";
 
 // Paso 04: resume la composición y prepara la transición a la elaboración frame a frame.
 export default function CigarResult({ leaves = [], onStart, onEdit }) {
+  const { t } = useTranslation();
+  const leafCategories = getLeafCategories(t);
   const selections = useBlendStore(state => state.selections);
   const parts = ['CAPA', 'CAPOTE', 'TRIPA'].map(key => ({
     key,
@@ -15,9 +18,9 @@ export default function CigarResult({ leaves = [], onStart, onEdit }) {
   return (
     <section className="craft-result" aria-labelledby="craft-step-title">
       <header className="craft-result__intro">
-        <span className="site-kicker">04 · Tu cigarro</span>
-        <h2 id="craft-step-title">Tu composición está lista.</h2>
-        <p>{allLeaves.length} hojas reunidas de fuera hacia dentro. Revisa lo que aporta cada una antes de ver cómo cobra forma.</p>
+        <span className="site-kicker">{t('craft:cigarResult.04YourCigar')}</span>
+        <h2 id="craft-step-title">{t('craft:cigarResult.yourCompositionIsReady')}</h2>
+        <p>{t('craft:result.count', { count: allLeaves.length })}</p>
       </header>
 
       <div className="craft-result__grid">
@@ -31,22 +34,22 @@ export default function CigarResult({ leaves = [], onStart, onEdit }) {
         </dl>
 
         <div className="craft-result__profile">
-          <h3>Perfil de la composición</h3>
-          {PROFILE_AXES.map(({ key, label }) => (
+          <h3>{t('craft:cigarResult.compositionProfile')}</h3>
+          {getProfileAxes(t).map(({ key, label }) => (
             <div className="craft-meter" key={key}>
               <span>{label}</span>
-              <span className={`craft-dots ${profile ? '' : 'is-pending'}`} role="img" aria-label={profile ? `${label}: ${profile[key]} de 5` : `${label}: pendiente`}>
+              <span className={`craft-dots ${profile ? '' : 'is-pending'}`} role="img" aria-label={profile ? t('craft:cigarResult.outOf5', { value1: label, value2: profile[key] }) : t('craft:cigarResult.pending', { value1: label })}>
                 {[1, 2, 3, 4, 5].map(value => <i key={value} className={profile && value <= profile[key] ? 'is-on' : ''} />)}
               </span>
             </div>
           ))}
-          {!profile && <p className="craft-result__pending">Perfil en preparación: se completará cuando cada hoja tenga documentados sus valores de fortaleza, aroma y cuerpo.</p>}
+          {!profile && <p className="craft-result__pending">{t('craft:cigarResult.profileInPreparationItWillBeCompleted')}</p>}
         </div>
       </div>
 
       <div className="craft-result__actions">
-        <button type="button" className="site-button site-button--primary" onClick={onStart}>Ver cómo cobra forma <ArrowRight size={17} /></button>
-        <button type="button" className="site-button site-button--secondary" onClick={onEdit}><PencilLine size={16} aria-hidden="true" /> Modificar mi mezcla</button>
+        <button type="button" className="site-button site-button--primary" onClick={onStart}>{t('craft:cigarResult.watchItTakeShape')} <ArrowRight size={17} /></button>
+        <button type="button" className="site-button site-button--secondary" onClick={onEdit}><PencilLine size={16} aria-hidden="true" /> {t('craft:cigarResult.editMyBlend')}</button>
       </div>
     </section>
   );

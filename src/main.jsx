@@ -1,5 +1,6 @@
 
 import React from "react";
+import './i18n/index.js';
 import { createRoot } from 'react-dom/client'
 import '@styles/tokens.css';
 import '@styles/typography.css';

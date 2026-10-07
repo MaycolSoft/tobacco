@@ -1,3 +1,5 @@
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 import { createElement, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Gauge, LayoutTemplate, Palette, Video, X } from 'lucide-react';
@@ -7,14 +9,16 @@ import ThemeTypographyTab from './ThemeTypographyTab';
 import VideoTab from './VideoTab';
 import PerformanceTab from './PerformanceTab';
 
-const TABS = [
-  { id: 'layout', label: 'Layout', icon: LayoutTemplate },
-  { id: 'theme', label: 'Theme & Typography', icon: Palette },
-  { id: 'video', label: 'Video', icon: Video },
-  { id: 'performance', label: 'Performance', icon: Gauge },
-];
 
 export default function UIControlCenterModal({ open, onClose, theme, onOpenVariants }) {
+  const { t } = useTranslation();
+const TABS = [
+  { id: 'layout', label: t('controls:uIControlCenterModal.layout'), icon: LayoutTemplate },
+  { id: 'theme', label: t('controls:uIControlCenterModal.themeTypography'), icon: Palette },
+  { id: 'video', label: t('controls:uIControlCenterModal.video'), icon: Video },
+  { id: 'performance', label: t('controls:uIControlCenterModal.performance'), icon: Gauge },
+];
+
   const dialogRef = useRef(null);
   const tabRefs = useRef({});
   const baseId = useId();
@@ -43,14 +47,15 @@ export default function UIControlCenterModal({ open, onClose, theme, onOpenVaria
       onClick={event => { if (event.target === event.currentTarget) onClose(); }}>
       {open && <div className="cc-shell">
         <header className="cc-header">
+          <LanguageSwitcher />
           <div className="cc-title">
-            <h2 id={`${baseId}-title`}>UI Control Center</h2>
-            <p id={`${baseId}-desc`}>Configure layout, appearance and animation tools.</p>
+            <h2 id={`${baseId}-title`}>{t('controls:uIControlCenterModal.uiControlCenter')}</h2>
+            <p id={`${baseId}-desc`}>{t('controls:uIControlCenterModal.configureLayoutAppearanceAndAnimationTools')}</p>
           </div>
-          <button type="button" className="cc-icon-btn cc-close" onClick={onClose} aria-label="Close UI Control Center"><X size={18} /></button>
+          <button type="button" className="cc-icon-btn cc-close" onClick={onClose} aria-label={t('controls:uIControlCenterModal.closeUiControlCenter')}><X size={18} /></button>
         </header>
 
-        <div className="cc-tabs" role="tablist" aria-label="Control Center sections" onKeyDown={onTabKeyDown}>
+        <div className="cc-tabs" role="tablist" aria-label={t('controls:uIControlCenterModal.controlCenterSections')} onKeyDown={onTabKeyDown}>
           {TABS.map(({ id, label, icon }) => (
             <button key={id} type="button" role="tab" id={`${baseId}-tab-${id}`} aria-controls={`${baseId}-panel`}
               aria-selected={activeTab === id} tabIndex={activeTab === id ? 0 : -1}

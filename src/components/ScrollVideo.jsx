@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
@@ -26,6 +27,7 @@ const getStepIndex = (steps, frame) => {
 };
 
 const FloatingSteps = ({ steps, onStepClick, activeStep }) => {
+  const { t } = useTranslation();
   return (
     <motion.div
       initial={{ x: 50, opacity: 0 }}
@@ -44,7 +46,7 @@ const FloatingSteps = ({ steps, onStepClick, activeStep }) => {
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
           >
-            <span className="sv-step-label">PASO</span>
+            <span className="sv-step-label">{t('craft:scrollVideo.step')}</span>
             {index + 1}
           </motion.button>
         );
@@ -82,6 +84,7 @@ function drawContain(ctx, frame, canvas) {
 }
 
 export default function ScrollVideo({ videoInfo={} }) {
+  const { t } = useTranslation();
   const canvasRef = useRef(null);
   const frameRef = useRef({ index: 0 });
   const schedulerRef = useRef(null);
@@ -360,14 +363,14 @@ export default function ScrollVideo({ videoInfo={} }) {
       if (!statsRef.current) return;
       const stats = getFrameDiagnostics();
       statsRef.current.textContent =
-        `Req: ${stats.requestedFrame ?? 0} / ${frameCount} | Drawn: ${stats.renderedFrame ?? '—'} (lag ${stats.frameLag ?? '—'}) | ` +
-        `Decoded: ${stats.decodedFrames ?? 0} | Queue: ${stats.queueLength ?? 0} | Active: ${stats.activeDownloads ?? 0}/${stats.activeDecodes ?? 0} | ` +
-        `Stride: ${stats.stride ?? 1}`;
+        t('craft:scrollVideo.requestedDrawnLag', { value1: stats.requestedFrame ?? 0, value2: frameCount, value3: stats.renderedFrame ?? '—', value4: stats.frameLag ?? '—' }) +
+        t('craft:scrollVideo.decodedQueueActive', { value1: stats.decodedFrames ?? 0, value2: stats.queueLength ?? 0, value3: stats.activeDownloads ?? 0, value4: stats.activeDecodes ?? 0 }) +
+        t('craft:scrollVideo.stride', { value1: stats.stride ?? 1 });
     };
     update();
     const interval = setInterval(update, 250);
     return () => clearInterval(interval);
-  }, [perfConfig.showLoaderStats, frameCount]);
+  }, [perfConfig.showLoaderStats, frameCount, t]);
 
   return (
     <div className="scroll-container"
@@ -414,9 +417,7 @@ export default function ScrollVideo({ videoInfo={} }) {
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 2, repeat: Infinity }}
                 style={titleStyle}
-              >
-                PREPARANDO MEZCLA
-              </motion.h2>
+              >{t('craft:scrollVideo.preparingBlend')}</motion.h2>
               <div style={progressContainer}>
                 <motion.div 
                   initial={{ width: 0 }}
@@ -425,7 +426,7 @@ export default function ScrollVideo({ videoInfo={} }) {
                 />
               </div>
               <div style={statusContainer}>
-                <span>CALIDAD: PREMIUM</span>
+                <span>{t('craft:scrollVideo.qualityPremium')}</span>
                 <span>{loadingProgress}%</span>
               </div>
             </div>
@@ -462,6 +463,7 @@ export default function ScrollVideo({ videoInfo={} }) {
           <div style={{ width: 1, height: 20, background: 'var(--ls-border)', borderRadius: 1 }} />
           <button
             className="ls-controls-toggle"
+            aria-label={t(isPlaying ? 'craft:pause' : 'craft:play')}
             onClick={togglePlayPause}
           >
             {isPlaying ? (
@@ -482,7 +484,7 @@ export default function ScrollVideo({ videoInfo={} }) {
           <button
             className="sv-gear-btn"
             onClick={() => setShowSpeedPanel(p => !p)}
-            title="Velocidad de scroll"
+            title={t('craft:scrollVideo.scrollSpeed')}
           >
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.02 7.02 0 0 0-1.62-.94l-.36-2.54A.484.484 0 0 0 14 2h-4a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.37 1.03.7 1.62.94l.36 2.54c.05.24.27.41.48.41h4c.22 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
@@ -492,7 +494,7 @@ export default function ScrollVideo({ videoInfo={} }) {
           {showSpeedPanel && (
             <div className="sv-speed-panel">
               <div className="sv-speed-label">
-                <span>VELOCIDAD</span>
+                <span>{t('craft:scrollVideo.speed')}</span>
                 <span className="sv-speed-value">{scrollHeight}vh</span>
               </div>
               <input
@@ -505,8 +507,8 @@ export default function ScrollVideo({ videoInfo={} }) {
                 className="sv-speed-slider"
               />
               <div className="sv-speed-hints">
-                <span>Rápido</span>
-                <span>Lento</span>
+                <span>{t('craft:scrollVideo.fast')}</span>
+                <span>{t('craft:scrollVideo.slow')}</span>
               </div>
             </div>
           )}

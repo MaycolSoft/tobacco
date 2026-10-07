@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import "@styles/floating-prep-button.css";
 
 export default function FloatingPrepButton({ visible, onClick }) {
+  const { t } = useTranslation();
   return (
     <AnimatePresence>
       {visible && (
@@ -20,9 +22,7 @@ export default function FloatingPrepButton({ visible, onClick }) {
           <button
             className="prep-button btn btn-primary btn-pill"
             onClick={onClick}
-          >
-            Iniciar preparación
-          </button>
+          >{t('craft:floatingPrepButton.startPreparation')}</button>
         </motion.div>
       )}
     </AnimatePresence>

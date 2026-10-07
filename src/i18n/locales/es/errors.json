@@ -1,0 +1,6 @@
+{
+  "errorBoundary.somethingWentWrong": "Algo salió mal",
+  "errorBoundary.technicalDetails": "Detalles técnicos",
+  "errorBoundary.tryAgain": "Reintentar",
+  "errorBoundary.resetApp": "Restablecer app"
+}

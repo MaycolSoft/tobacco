@@ -1,6 +1,10 @@
+import { useTranslation } from 'react-i18next';
 
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate as RouterNavigate } from 'react-router-dom';
+import { LanguageSync, Link } from '@/i18n/navigation';
+import { localizePath, parseLocalePath } from '@/i18n/routing';
+import { LocaleLocationContext } from '@/i18n/locationContext';
 import { ArrowLeft, Compass } from 'lucide-react';
 import ProtectedRoute from '@components/ProtectedRoute';
 import Login from '@pages/Login';
@@ -20,13 +24,20 @@ import Contact from '@/pages/Contact';
 import CraftYourCigar from '@/pages/CraftYourCigar';
 import LeafLibrary from '@/pages/LeafLibrary';
 
-function App() {
+function AppContent() {
+  const { t } = useTranslation();
+  const location = useLocation();
+  const { basePath } = parseLocalePath(location.pathname);
+  if (/^\/es(?:\/|$)/.test(location.pathname)) {
+    return <RouterNavigate to={localizePath(`${location.pathname}${location.search}${location.hash}`, 'es')} replace state={location.state} />;
+  }
   return (
-    <Router>
+    <LocaleLocationContext.Provider value={location}>
+      <LanguageSync />
       <Seo />
       <LayoutControlPanel />
       <MainLayout>
-        <Routes>
+        <Routes location={{ ...location, pathname: basePath }}>
           {/* Ruta principal */}
           <Route path="/" element={<Home />} />
           
@@ -45,16 +56,18 @@ function App() {
           <Route path="*" element={
             <section className="site-empty-state">
               <Compass size={34} strokeWidth={1.4} aria-hidden="true" />
-              <span className="site-kicker">Error 404</span>
-              <h1>Esta página no forma parte del recorrido.</h1>
-              <p>Regresa al inicio para continuar explorando el universo de la hoja y el cigarro.</p>
-              <Link className="site-button site-button--secondary" to="/"><ArrowLeft size={17} /> Volver al inicio</Link>
+              <span className="site-kicker">{t('leaves:app.error404')}</span>
+              <h1>{t('leaves:app.thisPageIsOutsideTheJourney')}</h1>
+              <p>{t('leaves:app.returnHomeToKeepExploringTheWorld')}</p>
+              <Link className="site-button site-button--secondary" to="/"><ArrowLeft size={17} /> {t('leaves:app.backToHome')}</Link>
             </section>
           } />
         </Routes>
       </MainLayout>
-    </Router>
+    </LocaleLocationContext.Provider>
   );
 }
 
-export default App;
+export default function App() {
+  return <Router><AppContent /></Router>;
+}

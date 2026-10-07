@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from '@/i18n/navigation';
 import { ChevronRight } from 'lucide-react';
 
 const headerImages = {
@@ -9,6 +10,7 @@ const headerImages = {
 };
 
 const Header = ({ title, subtitle, Icon, parent, variant = 'editorial' }) => {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   const image = headerImages[pathname];
   return (
@@ -19,8 +21,8 @@ const Header = ({ title, subtitle, Icon, parent, variant = 'editorial' }) => {
       <div className="site-page-header__icon">{Icon && <Icon size={27} strokeWidth={1.35} aria-hidden="true" />}</div>
       <span className="site-kicker">{subtitle}</span>
       <h1>{title}</h1>
-      <nav className="site-breadcrumb" aria-label="Migas de pan">
-        <Link to="/">Inicio</Link><ChevronRight size={13} aria-hidden="true" />{parent && <><span>{parent}</span><ChevronRight size={13} aria-hidden="true" /></>}<span aria-current="page">{title}</span>
+      <nav className="site-breadcrumb" aria-label={t('navigation:header.breadcrumbs')}>
+        <Link to="/">{t('navigation:header.home')}</Link><ChevronRight size={13} aria-hidden="true" />{parent && <><span>{parent}</span><ChevronRight size={13} aria-hidden="true" /></>}<span aria-current="page">{title}</span>
       </nav>
     </div>
   </header>

@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from '@/i18n/navigation';
 import { useAuthStore } from '../store/authStore';
 
 const ProtectedRoute = ({ children }) => {

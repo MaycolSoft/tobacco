@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 
 export default function MixingAnimation({ onFinish }) {
+  const { t } = useTranslation();
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinish();
@@ -66,9 +68,7 @@ export default function MixingAnimation({ onFinish }) {
           marginBottom: "28px",
           letterSpacing: "0.7px",
         }}
-      >
-        Mixing your tobacco blend…
-      </div>
+      >{t('craft:mixingAnimation.mixingYourTobaccoBlend')}</div>
 
       {/* Contenedor */}
       <div

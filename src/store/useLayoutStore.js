@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 
 export const useLayoutStore = create(
   persist(
@@ -13,7 +13,7 @@ export const useLayoutStore = create(
         showFooter: true,
         showHeader: true,
         navbarSticky: false,
-        headerData: { title: '', subtitle: '', icon: null } // Se llena al cargar
+        headerData: { titleKey: '', subtitleKey: '', icon: null } // Se llena al cargar
       },
 
       loadPageConfig: (path, defaultConfig) => {
@@ -25,8 +25,8 @@ export const useLayoutStore = create(
             ...defaultConfig, // Trae title, subtitle e icon reales (funciones)
             ...savedSettings, // Sobrescribe showNavbar, showHeader, etc.
             headerData: {
-              title: defaultConfig.title || '',
-              subtitle: defaultConfig.subtitle || '',
+              titleKey: defaultConfig.titleKey || '',
+              subtitleKey: defaultConfig.subtitleKey || '',
               icon: defaultConfig.icon || null
             }
           }

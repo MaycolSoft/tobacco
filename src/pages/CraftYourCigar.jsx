@@ -1,6 +1,7 @@
+import { useTranslation } from 'react-i18next';
 import "@styles/craft-your-cigar.css";
 import React, { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from '@/i18n/navigation';
 import { BookOpen, Film, X } from 'lucide-react';
 import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 import { AnimatePresence, motion } from "framer-motion";
@@ -10,7 +11,7 @@ import BlendSummary from "@components/BlendSummary";
 import MasterBlends from "@components/MasterBlends";
 import TobaccoGuidePage from "@components/TobaccoGuidePage";
 
-import { leaves } from "@/data/leaves";
+import { useLocalizedLeaves } from '@/i18n/useLocalizedLeaves';
 import { masterBlends } from "@/data/masterBlends";
 import { BLEND_STEPS, useBlendStore } from "@/store/useBlendStore";
 import { getFrameProfile } from "@/lib/frameProfile";
@@ -43,17 +44,12 @@ const listVideos = [
 ];
 
 
-const PROFILE_TYPE_LABELS = {
-  default: 'Por defecto',
-  master: 'Master',
-  legacy: 'Legacy',
-  generated: 'Generada',
-  selected: 'Seleccionada',
-  unavailable: 'No disponible',
-};
 
 // Lista las animaciones reales del CDN (GET /variants) y el perfil de frames que cargará cada una.
 const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
+  const { t } = useTranslation();
+
+
   const frameVariants = useAnimationPerfStore(state => state.config.frameVariants);
   const [variants, setVariants] = useState({ items: [], status: 'loading' });
   const formatName = (name) => {
@@ -73,14 +69,14 @@ const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
   return (
     <>
       <div className="craft-you-cigar-video-selector-header">
-        <span className="craft-you-cigar-video-selector-title">Recorridos disponibles</span>
+        <span className="craft-you-cigar-video-selector-title">{t('pages:craftYourCigar.availableJourneys')}</span>
         <span className="craft-you-cigar-video-selector-count">
-          {variants.status === 'loading' ? 'Cargando…' : `${videos.length} secuencias`}
+          {variants.status === 'loading' ? t('pages:craftYourCigar.loading') : t('pages:craftYourCigar.sequences', { value1: videos.length })}
         </span>
       </div>
 
       {variants.status === 'error' && (
-        <p className="craft-you-cigar-video-selector-notice" role="status">No se pudo consultar el CDN. Se muestra la lista local.</p>
+        <p className="craft-you-cigar-video-selector-notice" role="status">{t('pages:craftYourCigar.couldNotQueryTheCdnShowingThe')}</p>
       )}
 
       <div className="craft-you-cigar-video-selector-scroll-container" aria-busy={variants.status === 'loading'}>
@@ -99,12 +95,12 @@ const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
               }}
             >
               <span className="craft-you-cigar-video-selector-item-name">
-                {selection && <span className="craft-you-cigar-video-selector-item-dot" aria-label="Variante seleccionada" />}
+                {selection && <span className="craft-you-cigar-video-selector-item-dot" aria-label={t('pages:craftYourCigar.selectedVariant')} />}
                 {video.displayName || formatName(video.name)}
               </span>
               <span className="craft-you-cigar-video-selector-item-meta">
-                <span>{[`${profile.fps} fps`, profile.resolution, `${profile.frames} frames`].filter(Boolean).join(' · ')}</span>
-                <span className={`craft-you-cigar-video-selector-item-tag is-${profile.type}`}>{PROFILE_TYPE_LABELS[profile.type]}</span>
+                <span>{[t('pages:craftYourCigar.fps', { value1: profile.fps }), profile.resolution, t('pages:craftYourCigar.frames', { value1: profile.frames })].filter(Boolean).join(' · ')}</span>
+                <span className={`craft-you-cigar-video-selector-item-tag is-${profile.type}`}>{t(`craft:profileTypes.${profile.type}`)}</span>
               </span>
             </motion.button>
           );
@@ -114,7 +110,8 @@ const VideoSelectorPanel = ({ listVideos = [], onSelect, setIsOpen }) => {
   );
 };
 
-const ButtonFlotanteItem = ({ openName = "Abrir", closeName = "Cerrar", onClick, Icon, children }) => {
+const ButtonFlotanteItem = ({ openName, closeName, onClick, Icon, children }) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -145,7 +142,7 @@ const ButtonFlotanteItem = ({ openName = "Abrir", closeName = "Cerrar", onClick,
         onClick={onClick ? onClick : () => setIsOpen((prev) => !prev)}
       >
         {isOpen ? <X size={17} aria-hidden="true" /> : Icon && <Icon size={17} aria-hidden="true" />}
-        {isOpen ? closeName : openName}
+        {isOpen ? (closeName || t('common:close')) : (openName || t('common:open'))}
       </motion.button>
     </div>
   );
@@ -165,6 +162,9 @@ const MultiButtonFlotanteContainer = ({ children }) => {
 
 // Recorrido: mesa de composición → Tripa → Capote → Capa → Tu cigarro → elaboración frame a frame.
 function CraftYourCigar() {
+  const { t } = useTranslation();
+  const leaves = useLocalizedLeaves();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [showGuide, setShowGuide] = useState(() => searchParams.get('guia') === 'abierta');
   const [showVideo, setShowVideo] = useState(false);
@@ -176,7 +176,7 @@ function CraftYourCigar() {
 
   // ?guia=abierta permite entrar con la guía abierta; el parámetro se limpia después.
   useEffect(() => {
-    if (searchParams.has('guia')) setSearchParams({}, { replace: true });
+    if (searchParams.has('guia')) { const next = new URLSearchParams(searchParams); next.delete('guia'); setSearchParams(next, { replace: true }); }
   }, [searchParams, setSearchParams]);
 
   const openGuide = () => setShowGuide(true);
@@ -200,9 +200,7 @@ function CraftYourCigar() {
                 setShowVideo(false);
               }}
               className="craft-back-btn btn btn-secondary btn-pill"
-            >
-              ✕ Volver a mi cigarro
-            </button>
+            >{t('pages:craftYourCigar.backToMyCigar')}</button>
             <ScrollVideo videoInfo={videoInfo} />
           </motion.div>
         </AnimatePresence>
@@ -213,13 +211,12 @@ function CraftYourCigar() {
         <>
           <header className="craft-intro">
             <div>
-              <span className="site-kicker">Mesa de composición</span>
-              <h1>{isResult ? 'Tu cigarro.' : 'Compón tu mezcla.'}</h1>
-              <p>{isResult ? 'Todas las partes están elegidas. Revisa la composición y continúa a su elaboración.' : 'Elige tripa, capote y capa para crear tu cigarro.'}</p>
+              <span className="site-kicker">{t('pages:craftYourCigar.blendingTable')}</span>
+              <h1>{isResult ? t('pages:craftYourCigar.yourCigar') : t('pages:craftYourCigar.composeYourBlend')}</h1>
+              <p>{isResult ? t('pages:craftYourCigar.allPartsAreSelectedReviewTheComposition') : t('pages:craftYourCigar.chooseFillerBinderAndWrapperToCreate')}</p>
             </div>
             <button type="button" className="craft-guide-button" onClick={openGuide} aria-haspopup="dialog">
-              <BookOpen size={17} aria-hidden="true" /> Guía de la mezcla
-            </button>
+              <BookOpen size={17} aria-hidden="true" />{t('pages:craftYourCigar.blendingGuide')}</button>
           </header>
 
           {!isResult && <MasterBlends blends={masterBlends} onUse={loadBlend} />}
@@ -230,7 +227,7 @@ function CraftYourCigar() {
           </div>
 
           <MultiButtonFlotanteContainer>
-            <ButtonFlotanteItem openName="Ver recorridos" closeName="Cerrar recorridos" Icon={Film}>
+            <ButtonFlotanteItem openName={t('pages:craftYourCigar.viewJourneys')} closeName={t('pages:craftYourCigar.closeJourneys')} Icon={Film}>
               <VideoSelectorPanel 
                 listVideos={listVideos}
                 onSelect={(videoSelected) => { setVideoInfo(videoSelected); setShowVideo(true); }} 

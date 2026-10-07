@@ -1,36 +1,42 @@
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, Feather, Gauge, Sparkles } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/i18n/navigation';
 import { useAuthStore } from '@store/authStore';
-import { leaves } from '@/data/leaves';
-import { leafCategories } from '@/data/leafPresentation';
+import { useLocalizedLeaves } from '@/i18n/useLocalizedLeaves';
+import { getLeafCategories } from '@/data/leafPresentation';
 
 // Cada perfil enlaza con hojas de la colección cuyo texto ya describe ese aporte.
-const profiles = [
-  { icon: Feather, leafId: 'tripa-olor-seco', title: 'Aroma', note: 'Los matices de la hoja', text: 'Comienza por reconocer las notas descritas en cada variedad. Compara sus diferencias antes de combinarlas.', link: { to: '/leaf-library#tripa-olor-seco', label: 'Ver una hoja aromática' } },
-  { icon: Sparkles, leafId: 'capote-criollo-98', title: 'Estructura', note: 'La función de cada parte', text: 'Observa cómo el capote sostiene el conjunto. La composición también se entiende desde la función de cada hoja.', link: { to: '/leaf-library?categoria=CAPOTE', label: 'Ver hojas de capote' } },
-  { icon: Gauge, leafId: 'tripa-corojo-ligero', title: 'Fortaleza', note: 'La presencia en la mezcla', text: 'Compara las hojas de carácter intenso con las más moderadas para orientar tu selección.', link: { to: '/leaf-library#tripa-corojo-ligero', label: 'Ver una hoja de fortaleza intensa' } },
-];
 
 export default function MenuPage() {
+  const { t } = useTranslation();
+  const leaves = useLocalizedLeaves();
+
+  const leafCategories = getLeafCategories(t);
+const profiles = [
+  { icon: Feather, leafId: 'tripa-olor-seco', title: t('pages:menu.aroma'), note: t('pages:menu.theNuancesOfTheLeaf'), text: t('pages:menu.startByRecognizingTheNotesDescribedFor'), link: { to: '/leaf-library#tripa-olor-seco', label: t('pages:menu.viewAnAromaticLeaf') } },
+  { icon: Sparkles, leafId: 'capote-criollo-98', title: t('pages:menu.structure'), note: t('pages:menu.theFunctionOfEachPart'), text: t('pages:menu.observeHowTheBinderSupportsTheWhole'), link: { to: '/leaf-library?categoria=CAPOTE', label: t('pages:menu.viewBinderLeaves') } },
+  { icon: Gauge, leafId: 'tripa-corojo-ligero', title: t('pages:menu.strength'), note: t('pages:menu.presenceInTheBlend'), text: t('pages:menu.compareIntenseLeavesWithMilderOnesTo'), link: { to: '/leaf-library#tripa-corojo-ligero', label: t('pages:menu.viewAStrongLeaf') } },
+];
+
   const user = useAuthStore(state => state.user);
   return (
     <div className="site-page">
       <section className="site-section site-shell">
         <div className="site-section-heading">
-          <div><span className="site-kicker">Comprender el carácter</span><h2>Una mezcla empieza por conocer sus hojas.</h2></div>
-          <p>Un perfil no es una receta: describe cómo se percibe una composición. Aroma, estructura y fortaleza ayudan a leerla. Las hojas de referencia muestran aportes individuales; el resultado depende del conjunto.</p>
+          <div><span className="site-kicker">{t('pages:menu.understandCharacter')}</span><h2>{t('pages:menu.aBlendBeginsWithKnowingItsLeaves')}</h2></div>
+          <p>{t('pages:menu.aProfileIsNotARecipeIt')}</p>
         </div>
         <div className="site-profile-grid site-profile-grid--specimens">
           {profiles.map(({ icon: Icon, leafId, title, note, text, link }, index) => {
             const leaf = leaves.find(item => item.id === leafId);
             return (
               <article key={title} className="site-profile-card">
-                <figure><img src={leaf.fullImg} alt={`Hoja de ${leaf.name}, ${leafCategories[leaf.category].label}`} loading="lazy" /><span>0{index + 1}</span></figure>
+                <figure><img src={leaf.fullImg} alt={t('pages:menu.leaf', { value1: leaf.name, value2: leafCategories[leaf.category].label })} loading="lazy" /><span>0{index + 1}</span></figure>
                 <div>
                   <Icon size={22} strokeWidth={1.3} aria-hidden="true" />
                   <span className="site-kicker">{note}</span><h3>{title}</h3><p>{text}</p>
                   <div className="site-leaf-reference">
-                    <span className="site-kicker">Hoja de referencia · {leafCategories[leaf.category].label}</span>
+                    <span className="site-kicker">{t('pages:menu.referenceLeaf')} {leafCategories[leaf.category].label}</span>
                     <h4>{leaf.name}</h4><p>{leaf.description}</p>
                   </div>
                   <Link className="site-text-link" to={link.to}>{link.label} <ArrowRight size={16} /></Link>
@@ -41,9 +47,9 @@ export default function MenuPage() {
         </div>
       </section>
       <section className="site-inline-cta site-shell">
-        <div><span className="site-kicker">De la hoja a la composición</span><h2>Encuentra tu equilibrio.</h2></div>
-        <p>En la mesa de composición eliges tripa, capote y capa, y revisas el carácter del conjunto antes de verlo cobrar forma.</p>
-        <Link className="site-button site-button--primary" to={user ? '/craft-your-cigar' : '/login'}>Crear mi cigarro <ArrowRight size={17} /></Link>
+        <div><span className="site-kicker">{t('pages:menu.fromLeafToComposition')}</span><h2>{t('pages:menu.findYourBalance')}</h2></div>
+        <p>{t('pages:menu.atTheBlendingTableChooseFillerBinder')}</p>
+        <Link className="site-button site-button--primary" to={user ? '/craft-your-cigar' : '/login'}>{t('pages:menu.createMyCigar')} <ArrowRight size={17} /></Link>
       </section>
     </div>
   );

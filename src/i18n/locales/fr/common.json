@@ -1,0 +1,7 @@
+{
+  "language": "Langue",
+  "open": "Ouvrir",
+  "close": "Fermer",
+  "logs": "Journaux ({{count}})",
+  "clearLogs": "Effacer les journaux"
+}

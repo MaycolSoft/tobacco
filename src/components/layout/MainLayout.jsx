@@ -1,5 +1,7 @@
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from '@/i18n/navigation';
 import { getRouteConfig } from '@/config/routesConfig';
 import { useLayoutStore } from '@/store/useLayoutStore';
 import Header from '@/components/layout/Header';
@@ -8,6 +10,7 @@ import Footer from '@components/layout/Footer';
 
 
 const MainLayout = ({ children }) => {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   const { currentConfig, loadPageConfig } = useLayoutStore();
 
@@ -19,18 +22,18 @@ const MainLayout = ({ children }) => {
   }, [pathname, loadPageConfig]);
 
   const { showNavbar, showFooter, showHeader, headerData, headerVariant } = currentConfig;
-  const { parent } = getRouteConfig(pathname);
+  const { parentKey } = getRouteConfig(pathname);
 
   return (
     <div className="app-layout-wrapper" data-route={pathname} data-header={showHeader ? 'visible' : 'hidden'}>
-      {showNavbar && <Navbar />}
+      {showNavbar ? <Navbar /> : <LanguageSwitcher floating />}
       
       {showHeader && (
         <Header 
-          title={headerData?.title || ""} 
-          subtitle={headerData?.subtitle || ""} 
+          title={headerData?.titleKey ? t(headerData.titleKey) : ""}
+          subtitle={headerData?.subtitleKey ? t(headerData.subtitleKey) : ""}
           Icon={headerData?.icon} 
-          parent={parent}
+          parent={parentKey ? t(parentKey) : undefined}
           variant={headerVariant}
         />
       )}

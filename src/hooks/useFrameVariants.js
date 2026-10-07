@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAnimationPerfStore } from '@/store/useAnimationPerfStore';
 import { listFrameVariants, createFrameVariant, getFrameVariantJob, deleteFrameVariant } from '@/lib/frameVariantsApi';
 import { isFinishedJob } from '@/lib/frameVariants';
+import { errorMessage } from '@/i18n/messages';
 
 // Kept mounted by the modal: closing it does not interrupt a server-side job.
 export default function useFrameVariants(open) {
@@ -26,7 +27,7 @@ export default function useFrameVariants(open) {
       const variants = await listFrameVariants(signal);
       if (request === sequence.current && !signal?.aborted) setItems(variants);
     } catch (error) {
-      if (request === sequence.current && error.name !== 'AbortError') setListError(error.message);
+      if (request === sequence.current && error.name !== 'AbortError') setListError(errorMessage(error));
     } finally {
       if (request === sequence.current) setLoading(false);
     }
@@ -59,7 +60,7 @@ export default function useFrameVariants(open) {
       } catch (error) {
         if (controller.signal.aborted) return;
         failures++;
-        setPollError(`${error.message} Progress polling will retry automatically.`);
+        setPollError(errorMessage(error));
       }
       if (!controller.signal.aborted) timer = setTimeout(poll, Math.min(1500 * (failures + 1), 10000));
     };
@@ -78,7 +79,7 @@ export default function useFrameVariants(open) {
       setJob(next);
       if (isFinishedJob(next)) await refresh();
     } catch (error) {
-      setActionError(error.message);
+      setActionError(errorMessage(error));
     } finally {
       actionLock.current = false;
       setBusy(false);
@@ -95,7 +96,7 @@ export default function useFrameVariants(open) {
       removeSelection(variant.name);
       await refresh();
     } catch (error) {
-      setActionError(error.message);
+      setActionError(errorMessage(error));
     } finally {
       actionLock.current = false;
       setBusy(false);

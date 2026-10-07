@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 
 import React, { useState, useRef, useEffect } from "react";
 import useCentralLogger from "@/hooks/useCentralLogger";
 import "@styles/central-log.css";
 
 export default function CentralLogViewer() {
+  const { t } = useTranslation();
   const { logs, clearLogs } = useCentralLogger(20);
   const [open, setOpen] = useState(false);
   const listRef = useRef(null);
@@ -34,8 +36,8 @@ export default function CentralLogViewer() {
 
       <div className="central-log-panel">
         <div className="central-log-header">
-          <span>Logs ({logs.length})</span>
-          <button className="central-log-clear-btn" onClick={clearLogs}>
+          <span>{t('common:logs', { count: logs.length })}</span>
+          <button className="central-log-clear-btn" aria-label={t('common:clearLogs')} onClick={clearLogs}>
             ❌
           </button>
         </div>

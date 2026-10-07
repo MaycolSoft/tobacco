@@ -15,3 +15,9 @@ The React Compiler is not enabled on this template because of its impact on dev 
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 # tobacco
+
+## Internacionalización
+
+Disponible en español, inglés, francés y chino simplificado. Las URLs españolas se mantienen; las otras versiones usan `/en`, `/fr` y `/zh-CN`. Arquitectura, mantenimiento y pruebas: [docs/I18N.md](docs/I18N.md).
+
+Comprobar con `npm run check:i18n`, `npm test`, `npm run build`, `npm run check:i18n:build` y `npm run test:e2e`.

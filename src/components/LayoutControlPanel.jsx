@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect } from 'react';
 import { Settings } from 'lucide-react';
 import FrameVariantsModal from '@/components/FrameVariantsModal';
@@ -19,6 +20,7 @@ const loadGoogleFont = (googleParam) => {
 // Always mounted in App: it restores the saved theme tokens and font pairing on load,
 // independently of whether the Control Center modal is open.
 const LayoutControlPanel = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [variantsOpen, setVariantsOpen] = useState(false);
 
@@ -51,7 +53,7 @@ const LayoutControlPanel = () => {
 
   return (
     <>
-      <button type="button" className="cc-trigger" aria-label="Open UI Control Center" aria-haspopup="dialog" aria-expanded={isOpen}
+      <button type="button" className="cc-trigger" aria-label={t('controls:layoutControlPanel.openUiControlCenter')} aria-haspopup="dialog" aria-expanded={isOpen}
         onClick={() => setIsOpen(true)}>
         <Settings size={18} />
       </button>

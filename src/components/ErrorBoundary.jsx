@@ -1,7 +1,8 @@
+import { withTranslation } from 'react-i18next';
 import React from "react";
 import "@styles/error-boundary.css";
 
-export default class ErrorBoundary extends React.Component {
+class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false, error: null, errorInfo: null, resetKey: 0 };
@@ -32,6 +33,7 @@ export default class ErrorBoundary extends React.Component {
   };
 
   render() {
+    const { t } = this.props;
     if (this.state.hasError) {
       const { error, errorInfo } = this.state;
       const message = error && (error.message || String(error));
@@ -40,7 +42,7 @@ export default class ErrorBoundary extends React.Component {
         <div className="error-boundary-container" role="alert">
           <div className="error-boundary-card">
             <div className="error-boundary-icon" aria-hidden>⚠️</div>
-            <h2 className="error-boundary-title">Algo salió mal</h2>
+            <h2 className="error-boundary-title">{t('errors:errorBoundary.somethingWentWrong')}</h2>
 
             {message && (
               <pre className="error-boundary-message">
@@ -50,7 +52,7 @@ export default class ErrorBoundary extends React.Component {
 
             {errorInfo?.componentStack && (
               <details className="error-boundary-details" open>
-                <summary>Detalles técnicos</summary>
+                <summary>{t('errors:errorBoundary.technicalDetails')}</summary>
                 <pre className="error-boundary-stack">
 {errorInfo.componentStack.trim()}
                 </pre>
@@ -58,16 +60,12 @@ export default class ErrorBoundary extends React.Component {
             )}
 
             <div className="error-boundary-actions">
-              <button className="error-boundary-button" onClick={this.handleRetry}>
-                Reintentar
-              </button>
+              <button className="error-boundary-button" onClick={this.handleRetry}>{t('errors:errorBoundary.tryAgain')}</button>
               {this.props.onReset && (
                 <button
                   className="error-boundary-button secondary"
                   onClick={this.props.onReset}
-                >
-                  Restablecer app
-                </button>
+                >{t('errors:errorBoundary.resetApp')}</button>
               )}
             </div>
           </div>
@@ -79,3 +77,6 @@ export default class ErrorBoundary extends React.Component {
     return <div key={this.state.resetKey}>{this.props.children}</div>;
   }
 }
+
+const TranslatedErrorBoundary = withTranslation()(ErrorBoundary);
+export default TranslatedErrorBoundary;

@@ -17,8 +17,8 @@ import {
  */
 export const routesConfig = {
   "/": {
-    title: "Tabacalera Tamboril",
-    subtitle: "Del cultivo al cigarro",
+    titleKey: "navigation:routes.home.title",
+    subtitleKey: "navigation:routes.home.subtitle",
     icon: Home,
     showNavbar: true,
     showFooter: true,
@@ -26,8 +26,8 @@ export const routesConfig = {
     navbarSticky: false
   },
   "/leaf-library": {
-    title: "Biblioteca de hojas",
-    subtitle: "Materia prima",
+    titleKey: "navigation:routes.library.title",
+    subtitleKey: "navigation:routes.library.subtitle",
     icon: Library,
     showNavbar: true,
     showFooter: false, // Según tu log: "showFooter":false
@@ -35,8 +35,8 @@ export const routesConfig = {
     navbarSticky: true  // Según tu log: "navbarSticky":true
   },
   "/about": {
-    title: "El oficio",
-    subtitle: "Una cultura construida alrededor de la hoja",
+    titleKey: "navigation:routes.about.title",
+    subtitleKey: "navigation:routes.about.subtitle",
     icon: Info,
     showNavbar: true,
     showFooter: true,
@@ -44,8 +44,8 @@ export const routesConfig = {
     navbarSticky: false
   },
   "/menu": {
-    title: "Perfiles de mezcla",
-    subtitle: "Equilibrio, carácter y expresión",
+    titleKey: "navigation:routes.menu.title",
+    subtitleKey: "navigation:routes.menu.subtitle",
     icon: LayoutGrid,
     showNavbar: true,
     showFooter: true,
@@ -54,9 +54,9 @@ export const routesConfig = {
   },
   "/reservation": {
     headerVariant: 'compact',
-    parent: "Experiencias",
-    title: "Presentación guiada",
-    subtitle: "Una experiencia alrededor del tabaco",
+    parentKey: "navigation:routes.reservation.parent",
+    titleKey: "navigation:routes.reservation.title",
+    subtitleKey: "navigation:routes.reservation.subtitle",
     icon: CalendarCheck,
     showNavbar: true,
     showFooter: true,
@@ -64,9 +64,9 @@ export const routesConfig = {
     navbarSticky: false
   },
   "/testimonial": {
-    parent: "Experiencias",
-    title: "La experiencia sensorial",
-    subtitle: "Aprender a observar cada detalle",
+    parentKey: "navigation:routes.testimonial.parent",
+    titleKey: "navigation:routes.testimonial.title",
+    subtitleKey: "navigation:routes.testimonial.subtitle",
     icon: MessageSquare,
     showNavbar: true,
     showFooter: true,
@@ -75,8 +75,8 @@ export const routesConfig = {
   },
   "/contact": {
     headerVariant: 'compact',
-    title: "Contacto",
-    subtitle: "Continuemos la conversación",
+    titleKey: "navigation:routes.contact.title",
+    subtitleKey: "navigation:routes.contact.subtitle",
     icon: Mail,
     showNavbar: true,
     showFooter: true,
@@ -84,8 +84,8 @@ export const routesConfig = {
     navbarSticky: false
   },
   "/craft-your-cigar": {
-    title: "Crear mi cigarro",
-    subtitle: "Mesa de composición",
+    titleKey: "navigation:routes.craft.title",
+    subtitleKey: "navigation:routes.craft.subtitle",
     icon: Wrench,
     showNavbar: true, 
     showFooter: false, 
@@ -93,8 +93,8 @@ export const routesConfig = {
     navbarSticky: true
   },
   "/login": {
-    title: "Acceso",
-    subtitle: "Acceso privado a Crear mi cigarro",
+    titleKey: "navigation:routes.login.title",
+    subtitleKey: "navigation:routes.login.subtitle",
     icon: LogIn,
     showNavbar: true,
     showFooter: false,
@@ -108,8 +108,8 @@ export const routesConfig = {
  */
 export const getRouteConfig = (pathname) => {
   return routesConfig[pathname] || {
-    title: "Error 404",
-    subtitle: "Página no encontrada",
+    titleKey: "navigation:routes.notFound.title",
+    subtitleKey: "navigation:routes.notFound.subtitle",
     icon: Info,
     showNavbar: true,
     showFooter: true,

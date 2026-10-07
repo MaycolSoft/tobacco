@@ -3,11 +3,11 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 
 // Pasos de la mesa de composición. El paso 04 solo existe cuando la mezcla está completa.
 export const BLEND_STEPS = [
-  { key: 'TRIPA', number: '01', label: 'Tripa', min: 2, max: 5, multi: true },
-  { key: 'CAPOTE', number: '02', label: 'Capote', min: 1, max: 1, multi: false },
-  { key: 'CAPA', number: '03', label: 'Capa', min: 1, max: 1, multi: false },
+  { key: 'TRIPA', number: '01', labelKey: 'craft:steps.TRIPA', min: 2, max: 5, multi: true },
+  { key: 'CAPOTE', number: '02', labelKey: 'craft:steps.CAPOTE', min: 1, max: 1, multi: false },
+  { key: 'CAPA', number: '03', labelKey: 'craft:steps.CAPA', min: 1, max: 1, multi: false },
 ];
-export const RESULT_STEP = { key: 'RESULT', number: '04', label: 'Tu cigarro' };
+export const RESULT_STEP = { key: 'RESULT', number: '04', labelKey: 'craft:steps.RESULT' };
 
 const emptySelections = () => ({ TRIPA: [], CAPOTE: [], CAPA: [] });
 
@@ -18,13 +18,11 @@ export const isStepComplete = (step, selections) => {
 export const isBlendComplete = selections => BLEND_STEPS.every(step => isStepComplete(step, selections));
 
 // Explica siempre qué puede hacer la persona después de cada selección.
-export const getStepMessage = (step, count) => {
-  const name = step.label.toLowerCase();
-  if (!step.multi) return count ? `Hoja de ${name} seleccionada · Puedes continuar o elegir otra.` : `Selecciona una hoja de ${name}.`;
-  if (count === 0) return `Selecciona entre ${step.min} y ${step.max} hojas de ${name}.`;
-  if (count < step.min) return `${count} hoja seleccionada · Añade al menos ${step.min - count === 1 ? 'una más' : `${step.min - count} más`}.`;
-  if (count < step.max) return `${count} hojas seleccionadas · Puedes continuar o añadir hasta ${step.max - count} más.`;
-  return `${count} hojas seleccionadas · Has alcanzado el máximo.`;
+export const getStepMessage = (step, count, t) => {
+  const options = { count, min: step.min, max: step.max, remaining: (count < step.min ? step.min : step.max) - count };
+  if (!step.multi) return t(`craft:selection.${step.key}.${count ? 'ready' : 'empty'}`, options);
+  const state = count === 0 ? 'empty' : count < step.min ? 'insufficient' : count < step.max ? 'ready' : 'maximum';
+  return t(`craft:selection.TRIPA.${state}`, options);
 };
 
 // La mezcla se conserva durante la sesión para poder consultar la biblioteca o la guía sin perderla.
@@ -62,7 +60,7 @@ export const useBlendStore = create(
 
       loadBlend: blend => set({
         selections: { TRIPA: [...blend.leaves.TRIPA], CAPOTE: [blend.leaves.CAPOTE], CAPA: [blend.leaves.CAPA] },
-        loadedBlend: blend.name,
+        loadedBlend: { id: blend.id, name: blend.name },
         stepIndex: 0,
       }),
       clearLoadedBlend: () => set({ loadedBlend: null }),
