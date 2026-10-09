@@ -10,6 +10,8 @@ const DB_NAME = "scroll-video-cache";
 const DB_VERSION = 2;
 const BLOB_STORE = "frames";
 const META_STORE = "frameMeta";
+export const FRAME_CACHE_CLEAR_EVENT = 'animation-cache-clear';
+let cacheGeneration = 0;
 
 const TOUCH_FLUSH_DELAY_MS = 2000;
 const EVICTION_DELAY_MS = 3000;
@@ -148,9 +150,9 @@ export async function getCachedFrameKeys(prefix) {
   }
 }
 
-export async function saveCachedFrame({ key, blob, videoName, frame }) {
+export async function saveCachedFrame({ key, blob, videoName, frame, generation = cacheGeneration }) {
   const db = await openDB();
-  if (!db) return false;
+  if (!db || generation !== cacheGeneration) return false;
 
   const now = Date.now();
   const tx = db.transaction([META_STORE, BLOB_STORE], "readwrite");
@@ -260,6 +262,14 @@ export function enforceCacheBudget() {
 }
 
 export async function clearFrameCache() {
+  cacheGeneration++;
+  for (const { controller } of inflight.values()) controller.abort();
+  inflight.clear();
+  clearTimeout(touchTimer);
+  touchTimer = null;
+  clearTimeout(evictionTimer);
+  evictionTimer = null;
+  await evictionRunning;
   const db = await openDB();
   if (!db) throw new Error("IndexedDB no está disponible en este navegador");
 
@@ -313,6 +323,7 @@ async function fetchWithRetry(url, { signal, retryCount, retryBaseDelayMs, frame
 }
 
 async function readOrDownload({ key, url, videoName, frame, signal, retryCount, retryBaseDelayMs }) {
+  const generation = cacheGeneration;
   const cachedBlob = await getCachedFrame(key);
   if (cachedBlob) {
     cacheDiagnostics.cacheHits++;
@@ -330,7 +341,7 @@ async function readOrDownload({ key, url, videoName, frame, signal, retryCount, 
   cacheDiagnostics.networkDownloads++;
 
   // La escritura en caché es independiente: si falla (cuota, modo privado), el frame se usa igual.
-  saveCachedFrame({ key, blob, videoName, frame }).catch((error) => {
+  saveCachedFrame({ key, blob, videoName, frame, generation }).catch((error) => {
     cacheDiagnostics.cacheWriteFailures++;
     if (error?.name === "QuotaExceededError") enforceCacheBudget();
     else console.warn("frameCache: no se pudo guardar el frame", frame, error);

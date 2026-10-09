@@ -47,6 +47,10 @@ export function getFrameDiagnostics() {
   return { ...cacheDiagnostics, ...(activeScheduler?.stats() ?? {}) };
 }
 
+export function stopFramePlayback() {
+  activeScheduler?.dispose();
+}
+
 // Búsqueda binaria: primera posición con valor >= target.
 function lowerBound(sorted, target) {
   let lo = 0;
@@ -754,6 +758,7 @@ export class FrameScheduler {
     this.decoded.clear();
     this.decodedSorted = [];
     this.blobs.clear();
+    this.cached.clear();
     if (activeScheduler === this) activeScheduler = null;
   }
 }

@@ -17,6 +17,7 @@ import { BLEND_STEPS, useBlendStore } from "@/store/useBlendStore";
 import { getFrameProfile } from "@/lib/frameProfile";
 import { describeFrameProfile, getAnimationCatalog } from "@/lib/frameVariants";
 import { listFrameVariants } from "@/lib/frameVariantsApi";
+import { FRAME_CACHE_CLEAR_EVENT } from '@/lib/frameCache';
 import { useAnimationPerfStore } from "@/store/useAnimationPerfStore";
 
 
@@ -173,6 +174,12 @@ function CraftYourCigar() {
   const loadBlend = useBlendStore(state => state.loadBlend);
   const isResult = stepIndex === BLEND_STEPS.length;
   useBodyScrollLock(showVideo);
+
+  useEffect(() => {
+    const closePlayback = () => setShowVideo(false);
+    window.addEventListener(FRAME_CACHE_CLEAR_EVENT, closePlayback);
+    return () => window.removeEventListener(FRAME_CACHE_CLEAR_EVENT, closePlayback);
+  }, []);
 
   // ?guia=abierta permite entrar con la guía abierta; el parámetro se limpia después.
   useEffect(() => {

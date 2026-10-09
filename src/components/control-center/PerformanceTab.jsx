@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { Activity, Eye, Gauge, Trash2 } from 'lucide-react';
 import { useAnimationPerfStore } from '@/store/useAnimationPerfStore';
 import { ANIMATION_PERF_LIMITS } from '@/config/animationPerformance';
-import { clearFrameCache, enforceCacheBudget } from '@/lib/frameCache';
-import { getFrameDiagnostics } from '@/lib/frameScheduler';
+import { clearFrameCache, enforceCacheBudget, FRAME_CACHE_CLEAR_EVENT } from '@/lib/frameCache';
+import { getFrameDiagnostics, stopFramePlayback } from '@/lib/frameScheduler';
 import { PERF_RANGES, PERF_STATS } from './controlCenterConfig';
 import { ResetButton, Section, ToggleRow } from './controls';
 
@@ -27,6 +27,8 @@ export default function PerformanceTab() {
   const handleClearFrameCache = async () => {
     setCacheStatus({ key: 'controls:performanceTab.clearing' });
     try {
+      stopFramePlayback();
+      window.dispatchEvent(new Event(FRAME_CACHE_CLEAR_EVENT));
       await clearFrameCache();
       setCacheStatus({ key: 'controls:performanceTab.animationCacheCleared' });
     } catch (error) {
@@ -58,7 +60,7 @@ export default function PerformanceTab() {
         <Section title={t('controls:performanceTab.tools')} icon={Trash2}>
           <ToggleRow icon={Eye} label={t('controls:performanceTab.showLoaderStats')} checked={perfConfig.showLoaderStats}
             onToggle={() => updatePerfConfig({ showLoaderStats: !perfConfig.showLoaderStats })} />
-          <button type="button" className="cc-btn cc-btn-block" onClick={handleClearFrameCache}>{t('controls:performanceTab.clearAnimationCache')}</button>
+          <button type="button" className="cc-btn cc-btn-block" disabled={cacheStatus?.key === 'controls:performanceTab.clearing'} onClick={handleClearFrameCache}>{t('controls:performanceTab.clearAnimationCache')}</button>
           {cacheStatus && <p className="cc-note" role="status">{renderMessage(cacheStatus, t)}</p>}
         </Section>
       </div>

@@ -454,6 +454,10 @@ export default function ScrollVideo({ videoInfo={} }) {
       />
        
       {showCanvas && (
+        <h1 className="craft-sequence-title">{videoInfo?.displayName || videoInfo?.name?.replaceAll('_', ' ')}</h1>
+      )}
+
+      {showCanvas && (
         <div style={controlsColumnStyle}>
           <FloatingSteps
             steps={steps}
