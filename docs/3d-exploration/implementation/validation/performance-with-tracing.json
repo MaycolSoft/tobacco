@@ -1,0 +1,11 @@
+{
+  "longTasks": [
+    {
+      "duration": 170,
+      "startTime": 2457.600000000559
+    }
+  ],
+  "cls": 0,
+  "maxFrameMs": 170.09999999962747,
+  "frames": 120
+}

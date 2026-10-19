@@ -1,0 +1,1 @@
+Sin generación independiente. Derivar gradientes centrales de luminancia del albedo a 1024×256, normal tangent-space OpenGL +Y. Fondo normal neutra. Ver scripts/prepare-leaf-ribbon-assets.mjs.

@@ -3,6 +3,7 @@ import { ArrowDown, ArrowRight, Hand, Layers3, Leaf } from 'lucide-react';
 import { useAuthStore } from '@store/authStore';
 import { Link } from '@/i18n/navigation';
 import { useLocalizedLeaves } from '@/i18n/useLocalizedLeaves';
+import LeafRibbon from '@/components/home/LeafRibbon';
 
 
 export default function Home() {
@@ -35,7 +36,7 @@ const journey = [
 
       <section id="recorrido" className="site-section site-shell site-intro-grid">
         <div><span className="site-kicker">{t('pages:home.aLivingPresentation')}</span><h2><Trans ns="pages" i18nKey="home.story" components={{ line: <br /> }} /></h2></div>
-        <div><p className="site-lead">{t('pages:home.theOriginTextureAndFunctionOfEach')}</p><a className="site-text-link" href="#recorrido-pasos">{t('pages:home.viewTheJourney')} <ArrowDown size={15} /></a></div>
+        <div><p className="site-lead">{t('pages:home.theOriginTextureAndFunctionOfEach')}</p><a className="site-text-link" href="#recorrido-pasos">{t('pages:home.viewTheJourney')} <ArrowDown size={15} /></a><LeafRibbon /></div>
       </section>
 
       <section className="site-section site-section--surface" id="recorrido-pasos">

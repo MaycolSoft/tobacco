@@ -1,0 +1,20 @@
+/* ART-H1 is an overlay inside existing section whitespace, never a grid item. */
+#recorrido > div:last-child { position: relative; isolation: isolate; }
+#recorrido > div:last-child > .site-lead,
+#recorrido > div:last-child > .site-text-link { position: relative; z-index: 1; }
+.leaf-ribbon { position: absolute; z-index: 0; left: 0; top: calc(100% + 10px); width: min(100%, 420px); height: 210px; pointer-events: none; contain: layout paint; }
+.leaf-ribbon__poster, .leaf-ribbon__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.leaf-ribbon__poster img { width: 100%; height: 100%; object-fit: contain; }
+.leaf-ribbon__canvas { opacity: 0; }
+.leaf-ribbon[data-mode='webgl'] .leaf-ribbon__canvas { opacity: 1; }
+.leaf-ribbon[data-mode='webgl'] .leaf-ribbon__poster { visibility: hidden; }
+@media (min-width: 861px) and (max-width: 1080px) {
+  .leaf-ribbon { width: min(100%, 340px); height: 150px; }
+}
+@media (max-width: 860px) {
+  .leaf-ribbon { width: min(100%, 360px); height: 74px; top: calc(100% + 4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .leaf-ribbon__canvas { display: none; }
+  .leaf-ribbon__poster { visibility: visible !important; }
+}

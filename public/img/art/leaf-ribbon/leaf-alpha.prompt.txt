@@ -1,0 +1,1 @@
+Sin generación independiente. Derivar canal alfa del albedo, misma UV y resolución, convertir a máscara RGB gris lossless. Ver scripts/prepare-leaf-ribbon-assets.mjs.
