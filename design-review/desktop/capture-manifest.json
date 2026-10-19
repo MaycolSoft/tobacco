@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-25",
+  "date": "2026-10-19",
   "profile": "black",
   "viewport": {
     "width": 1440,
@@ -8,94 +8,198 @@
   "routes": [
     {
       "name": "inicio",
-      "route": "/"
+      "route": "/",
+      "captured": "2026-10-19"
     },
     {
       "name": "biblioteca-hojas",
-      "route": "/leaf-library"
+      "route": "/leaf-library",
+      "captured": "2026-10-19"
     },
     {
       "name": "oficio",
-      "route": "/about"
+      "route": "/about",
+      "captured": "2026-10-19"
     },
     {
       "name": "perfiles-mezcla",
-      "route": "/menu"
+      "route": "/menu",
+      "captured": "2026-10-19"
     },
     {
       "name": "experiencia-sensorial",
-      "route": "/testimonial"
+      "route": "/testimonial",
+      "captured": "2026-09-25"
     },
     {
       "name": "presentacion-guiada",
-      "route": "/reservation"
+      "route": "/reservation",
+      "captured": "2026-09-25"
     },
     {
       "name": "contacto",
-      "route": "/contact"
+      "route": "/contact",
+      "captured": "2026-09-25"
     },
     {
       "name": "acceso",
-      "route": "/login"
+      "route": "/login",
+      "captured": "2026-10-19"
     },
     {
       "name": "error-404",
-      "route": "/pagina-no-encontrada"
+      "route": "/pagina-no-encontrada",
+      "captured": "2026-09-25"
     },
     {
       "name": "proceso",
       "route": "/service → /about#proceso",
-      "note": "Redirección a El oficio · Proceso"
+      "note": "Redirección a El oficio · Proceso",
+      "captured": "2026-10-19"
     },
     {
       "name": "menu-experiencias",
       "route": "/menu",
-      "note": "Submenú Experiencias abierto"
+      "note": "Submenú Experiencias abierto",
+      "captured": "2026-09-25"
     },
     {
       "name": "crea-tu-cigarro",
       "route": "/craft-your-cigar",
-      "note": "01 Tripa sin selección"
+      "note": "01 Tripa sin selección",
+      "captured": "2026-10-19"
     },
     {
       "name": "crea-tu-cigarro-mezcla",
       "route": "/craft-your-cigar",
-      "note": "01 Tripa con 2 hojas · resumen Tu mezcla"
+      "note": "01 Tripa con 2 hojas · resumen Tu mezcla",
+      "captured": "2026-10-19"
     },
     {
       "name": "tu-cigarro",
       "route": "/craft-your-cigar",
-      "note": "04 Tu cigarro"
+      "note": "04 Tu cigarro",
+      "captured": "2026-10-19"
     },
     {
       "name": "hoja-detalle",
       "route": "/leaf-library",
-      "note": "Ficha de hoja con sesión iniciada"
+      "note": "Ficha de hoja con sesión iniciada",
+      "captured": "2026-10-19"
     },
     {
       "name": "guia-mezcla",
       "route": "/blend-guide → /craft-your-cigar",
-      "note": "Guía de la mezcla · vista 1"
+      "note": "Guía de la mezcla · vista 1",
+      "captured": "2026-10-19"
     },
     {
       "name": "guia-mezcla-2",
       "route": "/blend-guide → /craft-your-cigar",
-      "note": "Guía de la mezcla · vista 2"
+      "note": "Guía de la mezcla · vista 2",
+      "captured": "2026-10-19"
     },
     {
       "name": "guia-mezcla-3",
       "route": "/blend-guide → /craft-your-cigar",
-      "note": "Guía de la mezcla · vista 3"
+      "note": "Guía de la mezcla · vista 3",
+      "captured": "2026-10-19"
     },
     {
       "name": "guia-mezcla-4",
       "route": "/blend-guide → /craft-your-cigar",
-      "note": "Guía de la mezcla · vista 4"
+      "note": "Guía de la mezcla · vista 4",
+      "captured": "2026-10-19"
     },
     {
       "name": "guia-mezcla-5",
       "route": "/blend-guide → /craft-your-cigar",
-      "note": "Guía de la mezcla · vista 5"
+      "note": "Guía de la mezcla · vista 5",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "inicio-hero",
+      "route": "/",
+      "note": "Vista · hero",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "inicio-recorrido",
+      "route": "/#recorrido",
+      "note": "Vista · intro",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "inicio-tres-momentos",
+      "route": "/#recorrido-pasos",
+      "note": "Vista · Tres momentos",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "inicio-arte-de-mezclar",
+      "route": "/",
+      "note": "Vista · El arte de combinar",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "inicio-cta",
+      "route": "/",
+      "note": "Vista · CTA final y footer",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "hoja-inmersiva",
+      "route": "/leaf-library",
+      "note": "Recorrido inmersivo, capítulo 01, con sesión",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "hoja-inmersiva-avance",
+      "route": "/leaf-library",
+      "note": "Recorrido inmersivo tras 5 s sin interacción",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "crea-tu-cigarro-capote",
+      "route": "/craft-your-cigar",
+      "note": "Vista · 02 Capote",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "crea-tu-cigarro-capa",
+      "route": "/craft-your-cigar",
+      "note": "Vista · 03 Capa",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "tu-cigarro-vista",
+      "route": "/craft-your-cigar",
+      "note": "Vista · 04 Tu cigarro",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "recorridos-selector",
+      "route": "/craft-your-cigar",
+      "note": "Panel flotante Ver recorridos abierto",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "frames-cargando",
+      "route": "/craft-your-cigar",
+      "note": "Overlay de frames · loader (0,4 s)",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "frames-canvas",
+      "route": "/craft-your-cigar",
+      "note": "Overlay de frames · canvas tras cerrar el loader",
+      "captured": "2026-10-19"
+    },
+    {
+      "name": "frames-canvas-avance",
+      "route": "/craft-your-cigar",
+      "note": "Overlay de frames · scroll interno 35 %, paso 2",
+      "captured": "2026-10-19"
     }
   ]
 }
