@@ -1,9 +1,20 @@
 # TOBACCO — 3D & UX Exploration · PROGRESS
 
-> Inicio: 2026-10-19 · Base: `docs/TOBACCO_PROJECT_AUDIT.md` · Reglas: no tocar código, no instalar, no commits.
+> Inicio: 2026-10-19 · Actualizado: 2026-10-19 · Base: `docs/TOBACCO_PROJECT_AUDIT.md`.
+> Sesión actual: **solo planificación ART-O2**, sin cambios de aplicación, instalaciones ni commits. Las reglas históricas de exploración no implican que ART-H1 siga sin implementar.
 
 ## Estado general
-**COMPLETADO** (2026-10-19). Exploración documentada; nada implementado.
+**Exploración completada; desarrollo iniciado.** ART-H1 está implementado y validado. ART-O2 es el siguiente objetivo y tiene plan técnico preparado, **sin implementar**. ART-L1 y ART-C1 tienen referencias conceptuales, sin implementación registrada aquí.
+
+| Entregable | Estado real | Dónde continuar |
+|---|---|---|
+| Exploración inicial/artística | Documentada, finalizada | `01`–`04`, `04-parts/`, recomendaciones y prompts |
+| Concept art | 10 imágenes finales: H1 original y orgánica, O2, L1, C1 (objeto + maqueta por dirección); un borrador C1 conservado | [Galería](refs/art/README.md), [registro](CODEX_GENERATION_PROGRESS.md) |
+| ART-H1 orgánica · Home #recorrido | **Implementado y validado; no modificar por ahora** | [Progreso y evidencias](implementation/ART-H1-PROGRESS.md) |
+| ART-O2 · El oficio #proceso | **Plan técnico preparado; no implementado** | [ART-O2-NEXT-STEPS](implementation/ART-O2-NEXT-STEPS.md) |
+| ART-L1 / ART-C1 y demás propuestas | Sin implementación registrada; fuera de la sesión actual | Exploración y referencias |
+
+Los apartados de agentes y fases de abajo conservan el historial; no describen agentes activos ni autorizan reanudarlos. Los resultados de H1 no constituyen validación de O2.
 
 ## Agentes
 | Agente | Rol | Archivo | Estado |
@@ -15,7 +26,7 @@
 | D | Asset & Prompt Designer | `CODEX_IMAGE_PROMPTS.md` | **finalizado** |
 | Main | Consolidación | `../TOBACCO_3D_UX_RECOMMENDATIONS.md` | **finalizado** |
 
-## Entorno
+## Entorno de la exploración original (histórico)
 - Dev server: `npx vite --host 127.0.0.1 --port 5173 --strictPort --open false` → http://127.0.0.1:5173
 - Playwright: `@playwright/test` 1.63 + chromium-1243 instalados.
 - Login demo: `/login` con `admin` / `1234` (precargado).
@@ -58,19 +69,20 @@ Assets: TEX-WRAP-01, TEX-FILLER-01, TEX-LEAF-NRM-xx, TEX-LEAF-HGT-xx, IMG-LEAF-T
 - Script captura (temporal): scratchpad `cap.mjs`
 
 ## Próximo paso
-Validación humana: elegir conceptos (recomendado empezar por C2), responder preguntas de la auditoría §16, generar concept art REF-C1/C2/C3 con Codex para mostrar al cliente.
+Revisar el [plan de ART-O2](implementation/ART-O2-NEXT-STEPS.md). Esperar una solicitud de implementación: esta sesión termina con documentación. Decisiones propuestas: CSS 3D primero con revisión visual, scrub local visible sin pin, SVG estático en tablet si cabe y ocultar el decorativo móvil para no desplazar la página. Estas adaptaciones no se presentan como decisiones ya aprobadas por el usuario.
 
 ## Cómo reanudar
-1. Leer este archivo y la tabla de agentes.
-2. Arrancar dev server (ver Entorno).
-3. Retomar solo los agentes en estado distinto a "finalizado"; cada doc de agente tiene su propia sección de progreso.
+1. Leer este estado general, [H1-PROGRESS](implementation/ART-H1-PROGRESS.md) y [O2-NEXT-STEPS](implementation/ART-O2-NEXT-STEPS.md).
+2. Conservar H1. Revisar `git status`, About/CSS actuales y decisiones propuestas de O2 antes de editar código.
+3. Si el usuario solicita implementar O2, crear `implementation/ART-O2-PROGRESS.md`, capturar baseline y empezar por medición de hueco/estudio visual estático. No reactivar agentes históricos ni instalar dependencias por indicaciones antiguas.
+4. Usar scripts actuales de package.json: dev con `npm run dev`; e2e usa build + preview en 127.0.0.1:4173. Verificar puertos y herramientas al reanudar.
 
 ---
 
 # Fase 2 — Exploración 3D artística (2026-10-19)
 
-## Estado
-**COMPLETADO.** Nada implementado.
+## Estado histórico de fase 2
+**Exploración completada.** En ese momento no había implementación; posteriormente ART-H1 sí se implementó. Ver estado general actualizado arriba.
 
 ## Objetivo
 Objetos 3D artísticos/flotantes/decorativos/interactivos en Home, About, Leaf Library y Craft (no solo resultado). Acentos de color más allá del marrón. Conservar C1.
@@ -85,10 +97,29 @@ Objetos 3D artísticos/flotantes/decorativos/interactivos en Home, About, Leaf L
 | Main | Consolidación | `04_ARTISTIC_3D_EXPLORATION.md` | **finalizado** |
 
 ## Cómo reanudar fase 2
-Todo finalizado. Próximo paso humano: generar en Codex ART-H1/O2/L1/C1 (P1) → `docs/3d-exploration/refs/art/` y validar con cliente las 4 preguntas de §8 del doc 04. Detalle por campo en `04-parts/*`.
+La generación prioritaria ya se realizó y H1 ya se implementó. No repetir imágenes ni volver a empezar H1. Continuar con el plan de ART-O2; `04-parts/*` conserva las propuestas históricas, subordinadas a las decisiones nuevas del usuario.
 
 ## Resultado fase 2
 - 10 objetos (AR-H1..H3, AR-O1..O2, AR-L1..L2, AR-C1..C3) + AR-A1 opcional.
 - Paleta acentos unificada: verdín #6F907F, clarete #7B2F2B, celadón #BCC8A4, ámbar #D4913F (solo luz), tinta #3F4C6E (reserva).
 - Set recomendado: Home AR-H1 · Oficio AR-O2 · Biblioteca AR-L1 · Craft AR-C1 (+AR-C2) · C1.
-- Primero: AR-H1 (SVG+GSAP, 0 KB three).
+- Recomendación histórica inicial: AR-H1 SVG+GSAP. **Fue sustituida**, con aprobación del usuario para H1 orgánica, por Three vanilla lazy y GSAP existente. No extrapolar a O2 una autorización automática de WebGL.
+
+
+## Continuación documentada — ART-O2 (2026-10-19)
+
+- [x] Revisar progreso, propuesta consolidada, E/F/G, prompts, galería y aprendizaje H1.
+- [x] Revisar visualmente ART-O2 objeto y maqueta, y contrastar con About y CSS actuales.
+- [x] Preparar [plan técnico detallado](implementation/ART-O2-NEXT-STEPS.md): tecnología, DOM, geometría/materiales/tema, GSAP, responsive, archivos, assets, cleanup y matriz Playwright.
+- [x] Actualizar este estado sin cambiar ART-H1, aplicación ni dependencias.
+- [ ] Implementar ART-O2: **no autorizado en esta sesión; pendiente**.
+- [ ] Generar validación propia de ART-O2: solo después de implementación.
+
+### Hallazgos que condicionan el próximo desarrollo
+
+- About usa flex con p.site-lead directo; envolverlo alteraría selectores y podría mover el diseño. El plan propone ancla absoluta independiente y medición del hueco.
+- El recorrido largo de la propuesta E terminaría cuando el nudo ya está fuera de pantalla si no hay pin. Se propone scrub local de tres fases, visible y reversible; no se ha aprobado ni construido un pin.
+- CSS 3D se recomienda como v1 geométrica, pero no promete el volumen/oclusión material del render. Revisar poses antes de seguir; documentar problemas antes de plantear Three existente como alternativa.
+- En móvil no está demostrado que quepa el SVG sin añadir altura: el plan explicita la alternativa de ocultarlo; no se inventa una reserva de espacio.
+- Aprendizajes H1: progreso puro, cleanup local, pausa por visibilidad, mock saveData como EventTarget, separación entre concept y producción, medición sin interferencia de tracing. Última evidencia H1: build y 19 unitarias/21 e2e correctos; lint global con deuda previa. No se han vuelto a ejecutar pruebas de aplicación en esta sesión documental.
+- Las disponibilidades de skills y tecnologías de las fases históricas deben verificarse en cada entorno; no instalar ni asumir R3F/drei por aparecer en esos documentos.
