@@ -1,0 +1,61 @@
+{
+  "results": [
+    {
+      "requested": 0,
+      "actual": 0
+    },
+    {
+      "requested": 0.5,
+      "actual": 0.5
+    },
+    {
+      "requested": 1,
+      "actual": 1
+    },
+    {
+      "requested": 0.5,
+      "actual": 0.5
+    },
+    {
+      "requested": 0,
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "mode": "hidden",
+      "canvas": 0,
+      "overflow": false
+    },
+    {
+      "width": 860,
+      "mode": "hidden",
+      "canvas": 0,
+      "overflow": false
+    },
+    {
+      "width": 861,
+      "mode": "static",
+      "canvas": 0,
+      "overflow": false
+    },
+    {
+      "width": 1080,
+      "mode": "static",
+      "canvas": 0,
+      "overflow": false
+    },
+    {
+      "width": 1081,
+      "mode": "webgl",
+      "canvas": 1,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "mode": "webgl",
+      "canvas": 1,
+      "overflow": false
+    }
+  ],
+  "errors": []
+}

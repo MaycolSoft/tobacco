@@ -1,0 +1,19 @@
+{
+  "environment": "Chromium headless, production preview 4173, 1440x900",
+  "attempt": 22,
+  "beforeFix": {
+    "mode": "static",
+    "progress": "0.5000",
+    "start": 1285,
+    "end": 1933,
+    "canvasCount": 0,
+    "scrollY": 1609,
+    "rootRect": {"x":904.5,"y":350.96875,"width":296.953125,"height":197.96875},
+    "singleObserverDelivery": [
+      {"targetClass":"layer-knot","isIntersecting":false,"top":2309,"bottom":2506.96875,"callbackTimeMs":92.69999999925494},
+      {"targetClass":"layer-knot","isIntersecting":true,"top":351,"bottom":548.96875,"callbackTimeMs":92.69999999925494}
+    ]
+  },
+  "cause": "The first entry was stale. The final entry described the current visible root.",
+  "fix": "Read entries.at(-1) before syncing visibility and starting the lazy import."
+}

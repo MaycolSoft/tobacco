@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Play, Pause, RotateCcw } from 'lucide-react';
 import { getLeafChapters } from '@/data/leafPresentation';
 import '@/styles/anatomia-hoja.css';
+import SpecimenRing from './SpecimenRing';
 
 export default function ImmersiveView({ leaf, onComplete }) {
   const { t } = useTranslation();
@@ -78,7 +79,7 @@ export default function ImmersiveView({ leaf, onComplete }) {
 
   return (
     <section className="th-experience" aria-label={t('leaves:immersiveView.exploring', { value1: leaf.name })}>
-      <div ref={stageRef} className={`th-stage th-stage-${step} ${reducedMotion ? 'th-reduced' : ''}`}
+      <div ref={stageRef} className={`th-stage th-stage--specimen th-stage-${step} ${reducedMotion ? 'th-reduced' : ''}`}
         onTouchStart={event => { const touch = event.touches[0]; touchStart.current = { x: touch.clientX, y: touch.clientY }; }}
         onTouchEnd={event => {
           if (!touchStart.current) return;
@@ -91,7 +92,9 @@ export default function ImmersiveView({ leaf, onComplete }) {
         }} onTouchCancel={() => { touchStart.current = null; }}>
         <div className="th-scene-caption"><span>{t('leaves:immersiveView.leafStudy')}</span><span>0{step + 1} / 04</span></div>
         <div className="th-leaf-frame">
+          <SpecimenRing specimenKey={leaf.id} category={leaf.category} chapter={step} />
           <img src={leaf.fullImg} alt={t('leaves:immersiveView.detailOfTheLeaf', { value1: leaf.name })} className={`th-leaf ${imageState === 'loaded' ? 'is-loaded' : ''}`} onLoad={() => setImageState('loaded')} onError={() => setImageState('error')} />
+          <SpecimenRing specimenKey={leaf.id} category={leaf.category} chapter={step} side="front" />
           {imageState === 'loading' && <span className="th-image-status" role="status">{t('leaves:immersiveView.preparingTheLeaf')}</span>}
           {imageState === 'error' && <span className="th-image-status" role="status">{t('leaves:immersiveView.couldNotLoadThisLeafSImage')}</span>}
           {imageState === 'loaded' && <span className="th-point" style={{ left: `${chapter.x}%`, top: `${chapter.y}%` }} aria-hidden="true"><span />0{step + 1}</span>}

@@ -6,6 +6,7 @@ import { useLayoutStore } from '@/store/useLayoutStore';
 import { useAuthStore } from '@store/authStore';
 import { useLocalizedLeaves } from '@/i18n/useLocalizedLeaves';
 import { getLeafCategories } from '@/data/leafPresentation';
+import LayerKnot from '@/components/about/LayerKnot';
 
 // El oficio reúne el conocimiento del tabaquero y el proceso de elaboración.
 
@@ -63,6 +64,7 @@ const chapters = [
       </section>
 
       <section id="proceso" className="site-section site-shell site-anchor" aria-labelledby="process-title">
+        <LayerKnot />
         <div className="site-section-heading site-section-heading--wide">
           <div><span className="site-kicker">{t('pages:about.theProcessASequenceOfDecisions')}</span><h2 id="process-title">{t('pages:about.theFinalShapeBeginsWithSelection')}</h2></div>
           <p className="site-lead">{t('pages:about.getToKnowTheRawMaterialDiscover')}</p>

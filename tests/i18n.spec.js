@@ -154,6 +154,8 @@ test('navigation history, Chinese mobile and French layouts remain usable', asyn
   await page.goto('/fr');
   await page.locator('.site-nav-links a[href="/fr/about"]').click();
   await expect(page).toHaveURL(/\/fr\/about$/);
+  // React may commit the destination after history updates; interact with the rendered route.
+  await expect(page.locator('#proceso')).toBeAttached();
   await selector(page).selectOption('zh-CN');
   await expect(page).toHaveURL(/\/zh-CN\/about$/);
   await page.goBack();

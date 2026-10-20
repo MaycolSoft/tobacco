@@ -1,18 +1,20 @@
 # TOBACCO — 3D & UX Exploration · PROGRESS
 
-> Inicio: 2026-10-19 · Actualizado: 2026-10-19 · Base: `docs/TOBACCO_PROJECT_AUDIT.md`.
-> Sesión actual: **solo planificación ART-O2**, sin cambios de aplicación, instalaciones ni commits. Las reglas históricas de exploración no implican que ART-H1 siga sin implementar.
+> Inicio: 2026-10-19 · Actualizado: 2026-10-20 · Base: `docs/TOBACCO_PROJECT_AUDIT.md`.
+> Sesión actual: **implementación paralela del set ART-O2, ART-L1 y ART-C1**, solicitada por el usuario. Sin instalaciones ni commits. ART-H1 y el reproductor de frames se conservan.
 
 ## Estado general
-**Exploración completada; desarrollo iniciado.** ART-H1 está implementado y validado. ART-O2 es el siguiente objetivo y tiene plan técnico preparado, **sin implementar**. ART-L1 y ART-C1 tienen referencias conceptuales, sin implementación registrada aquí.
+**Set seleccionado implementado.** ART-H1 se conserva; O2, L1 y C1 ya están integrados y revisados en escritorio/móvil. El cierre de pruebas, las incidencias corregidas y los límites visuales están en [ART-INTEGRATION-PROGRESS](implementation/ART-INTEGRATION-PROGRESS.md). L1/C1 usan las alternativas SVG: no equivalen al volumen/materiales físicos de los conceptos.
 
 | Entregable | Estado real | Dónde continuar |
 |---|---|---|
 | Exploración inicial/artística | Documentada, finalizada | `01`–`04`, `04-parts/`, recomendaciones y prompts |
 | Concept art | 10 imágenes finales: H1 original y orgánica, O2, L1, C1 (objeto + maqueta por dirección); un borrador C1 conservado | [Galería](refs/art/README.md), [registro](CODEX_GENERATION_PROGRESS.md) |
 | ART-H1 orgánica · Home #recorrido | **Implementado y validado; no modificar por ahora** | [Progreso y evidencias](implementation/ART-H1-PROGRESS.md) |
-| ART-O2 · El oficio #proceso | **Plan técnico preparado; no implementado** | [ART-O2-NEXT-STEPS](implementation/ART-O2-NEXT-STEPS.md) |
-| ART-L1 / ART-C1 y demás propuestas | Sin implementación registrada; fuera de la sesión actual | Exploración y referencias |
+| ART-O2 · El oficio #proceso | Three lazy integrado; diez casos QA aprobados, incluido fix de visibilidad | [Plan](implementation/ART-O2-NEXT-STEPS.md), [progreso](implementation/ART-O2-PROGRESS.md) |
+| ART-L1 · Biblioteca | SVG integrado; cinco casos aprobados en producción | [Plan](implementation/ART-L1-NEXT-STEPS.md), [progreso](implementation/ART-L1-PROGRESS.md) |
+| ART-C1 · Tu mezcla | SVG integrado; cinco casos aprobados en producción | [Plan](implementation/ART-C1-NEXT-STEPS.md), [progreso](implementation/ART-C1-PROGRESS.md) |
+| Otras propuestas | Reserva; fuera del set seleccionado | Exploración y referencias |
 
 Los apartados de agentes y fases de abajo conservan el historial; no describen agentes activos ni autorizan reanudarlos. Los resultados de H1 no constituyen validación de O2.
 
@@ -69,12 +71,12 @@ Assets: TEX-WRAP-01, TEX-FILLER-01, TEX-LEAF-NRM-xx, TEX-LEAF-HGT-xx, IMG-LEAF-T
 - Script captura (temporal): scratchpad `cap.mjs`
 
 ## Próximo paso
-Revisar el [plan de ART-O2](implementation/ART-O2-NEXT-STEPS.md). Esperar una solicitud de implementación: esta sesión termina con documentación. Decisiones propuestas: CSS 3D primero con revisión visual, scrub local visible sin pin, SVG estático en tablet si cabe y ocultar el decorativo móvil para no desplazar la página. Estas adaptaciones no se presentan como decisiones ya aprobadas por el usuario.
+Revisar visualmente el set funcionando antes de elegir otro refinamiento. La fidelidad material de L1/C1 sigue limitada por SVG; cualquier mejora debe partir de las capturas y límites documentados. O2 probó CSS 3D y documentó su falta de volumen antes de pasar a Three existente. No hay implementación adicional del set seleccionado pendiente; las propuestas de reserva quedan fuera del alcance.
 
 ## Cómo reanudar
 1. Leer este estado general, [H1-PROGRESS](implementation/ART-H1-PROGRESS.md) y [O2-NEXT-STEPS](implementation/ART-O2-NEXT-STEPS.md).
 2. Conservar H1. Revisar `git status`, About/CSS actuales y decisiones propuestas de O2 antes de editar código.
-3. Si el usuario solicita implementar O2, crear `implementation/ART-O2-PROGRESS.md`, capturar baseline y empezar por medición de hueco/estudio visual estático. No reactivar agentes históricos ni instalar dependencias por indicaciones antiguas.
+3. Consultar [registro conjunto](implementation/ART-INTEGRATION-PROGRESS.md) y los progresos individuales antes de repetir trabajo. La petición del 2026-10-20 autoriza implementar el set; las restricciones de la sesión de planificación anterior son históricas. No instalar dependencias ni reiniciar agentes antiguos por indicaciones de exploración.
 4. Usar scripts actuales de package.json: dev con `npm run dev`; e2e usa build + preview en 127.0.0.1:4173. Verificar puertos y herramientas al reanudar.
 
 ---
@@ -112,8 +114,8 @@ La generación prioritaria ya se realizó y H1 ya se implementó. No repetir im�
 - [x] Revisar visualmente ART-O2 objeto y maqueta, y contrastar con About y CSS actuales.
 - [x] Preparar [plan técnico detallado](implementation/ART-O2-NEXT-STEPS.md): tecnología, DOM, geometría/materiales/tema, GSAP, responsive, archivos, assets, cleanup y matriz Playwright.
 - [x] Actualizar este estado sin cambiar ART-H1, aplicación ni dependencias.
-- [ ] Implementar ART-O2: **no autorizado en esta sesión; pendiente**.
-- [ ] Generar validación propia de ART-O2: solo después de implementación.
+- [x] Implementación solicitada posteriormente por el usuario (2026-10-20); ver estado actual arriba.
+- [x] Validación funcional conjunta y revisión independiente de ART-O2/ART-L1/ART-C1; resultados exactos y límites en el registro conjunto.
 
 ### Hallazgos que condicionan el próximo desarrollo
 

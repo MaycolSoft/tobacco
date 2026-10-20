@@ -1,0 +1,105 @@
+{
+  "samples": [
+    {
+      "gl": {
+        "created": 1,
+        "lost": 1
+      },
+      "canvas": 0,
+      "modal": 0,
+      "bodyOverflow": "",
+      "craft": 1
+    },
+    {
+      "gl": {
+        "created": 2,
+        "lost": 2
+      },
+      "canvas": 0,
+      "modal": 0,
+      "bodyOverflow": "",
+      "craft": 1
+    },
+    {
+      "gl": {
+        "created": 3,
+        "lost": 3
+      },
+      "canvas": 0,
+      "modal": 0,
+      "bodyOverflow": "",
+      "craft": 1
+    },
+    {
+      "gl": {
+        "created": 4,
+        "lost": 4
+      },
+      "canvas": 0,
+      "modal": 0,
+      "bodyOverflow": "",
+      "craft": 1
+    },
+    {
+      "gl": {
+        "created": 5,
+        "lost": 5
+      },
+      "canvas": 0,
+      "modal": 0,
+      "bodyOverflow": "",
+      "craft": 1
+    },
+    {
+      "gl": {
+        "created": 6,
+        "lost": 6
+      },
+      "canvas": 0,
+      "modal": 0,
+      "bodyOverflow": "",
+      "craft": 1
+    },
+    {
+      "gl": {
+        "created": 7,
+        "lost": 7
+      },
+      "canvas": 0,
+      "modal": 0,
+      "bodyOverflow": "",
+      "craft": 1
+    },
+    {
+      "gl": {
+        "created": 8,
+        "lost": 8
+      },
+      "canvas": 0,
+      "modal": 0,
+      "bodyOverflow": "",
+      "craft": 1
+    },
+    {
+      "gl": {
+        "created": 9,
+        "lost": 9
+      },
+      "canvas": 0,
+      "modal": 0,
+      "bodyOverflow": "",
+      "craft": 1
+    },
+    {
+      "gl": {
+        "created": 10,
+        "lost": 10
+      },
+      "canvas": 0,
+      "modal": 0,
+      "bodyOverflow": "",
+      "craft": 1
+    }
+  ],
+  "errors": []
+}

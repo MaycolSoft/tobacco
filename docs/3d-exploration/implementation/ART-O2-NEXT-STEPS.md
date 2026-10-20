@@ -1,5 +1,7 @@
 # ART-O2 — Nudo de tres capas · Plan de implementación
 
+> **Actualización 2026-10-20:** este documento conserva el plan previo. El usuario ya solicitó implementar el set. La implementación y la revisión de CSS a Three están registradas en [ART-O2-PROGRESS.md](ART-O2-PROGRESS.md); consultar también [el cierre conjunto](ART-INTEGRATION-PROGRESS.md). Las restricciones temporales de la sesión de planificación de abajo son históricas.
+
 > 2026-10-19 · **Plan preparado; ART-O2 no implementado.** Próxima sesión: implementar solo cuando el usuario lo solicite. Esta sesión autoriza documentación, no código, assets nuevos, dependencias ni commits. ART-H1 queda intacto.
 
 ## 1. Fuentes y estado comprobado

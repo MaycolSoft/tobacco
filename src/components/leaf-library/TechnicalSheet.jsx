@@ -6,6 +6,7 @@ import { ArrowRight, ArrowUpRight, Sparkles, MapPin, Leaf, Layers, Plus } from '
 import { getLeafCategories, getLeafOrigin, getLeafProfile } from '@/data/leafPresentation';
 import { useLocalizedLeaves } from '@/i18n/useLocalizedLeaves';
 import '@styles/technical-sheet.css';
+import SpecimenRing from './SpecimenRing';
 
 export default function TechnicalSheet({ leaf, onExplore, onAddToBlend, addError }) {
   const { t } = useTranslation();
@@ -20,10 +21,12 @@ export default function TechnicalSheet({ leaf, onExplore, onAddToBlend, addError
   const pending = [!leaf.family && t('leaves:pending.family'), !profile && t('leaves:pending.intensity'), !leaf.contributes?.length && t('leaves:pending.contributions')].filter(Boolean);
   return (
     <div className="ts-wrapper">
-      <figure className="ts-image-side">
+      <figure className="ts-image-side ts-image-side--specimen">
+        <SpecimenRing specimenKey={leaf.id} category={leaf.category} />
         <span className="ts-specimen-label">{t('leaves:technicalSheet.leafCollection')} {category.label}</span>
         <img src={leaf.fullImg} alt={t('leaves:technicalSheet.wholeLeaf', { value1: leaf.name })} className={`ts-main-img ${imageState === 'loaded' ? 'is-loaded' : ''}`} onLoad={() => setImageState('loaded')} onError={() => setImageState('error')} />
         {imageState !== 'loaded' && <span className="ts-image-status" role="status">{imageState === 'error' ? t('leaves:technicalSheet.couldNotLoadThisLeafSImage') : t('leaves:technicalSheet.preparingTheLeaf')}</span>}
+        <SpecimenRing specimenKey={leaf.id} category={leaf.category} side="front" />
         <figcaption>{leaf.name}<span>{getLeafOrigin(leaf, t)}</span></figcaption>
       </figure>
       <div className="ts-info-side">

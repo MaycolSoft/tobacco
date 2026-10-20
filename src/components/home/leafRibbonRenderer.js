@@ -35,7 +35,7 @@ export async function init(root, { signal, onFailure }) {
   const uv = geometry.attributes.uv;
   for (let i = 0; i < uv.count; i++) {
     const u = uv.getX(i);
-    if (u > .33) uv.setX(i, THREE.MathUtils.lerp(.33 + (u - .33) * .66, u, smooth(.92, 1, u)));
+    if (u > .5) uv.setX(i, THREE.MathUtils.lerp(.5 + (u - .5) * .62, u, smooth(.92, 1, u)));
   }
   const idle = { value: 0 };
   const material = new THREE.MeshStandardMaterial({ map, alphaMap, normalMap, normalScale: new THREE.Vector2(.45, .45), roughness: .91, metalness: 0, side: THREE.DoubleSide, alphaTest: .32 });
@@ -59,55 +59,74 @@ export async function init(root, { signal, onFailure }) {
   let aspect = 2;
   const center = new THREE.Vector3();
   const tangent = new THREE.Vector3();
-  const normal = new THREE.Vector3();
-  const across = new THREE.Vector3();
+    const across = new THREE.Vector3();
   const centers = Array.from({ length: SEGMENTS + 1 }, () => new THREE.Vector3());
   const frames = Array.from({ length: SEGMENTS + 1 }, () => new THREE.Vector3());
   const normals = Array.from({ length: SEGMENTS + 1 }, () => new THREE.Vector3());
+  const widths = new Float32Array(SEGMENTS + 1);
   let appliedProgress = -1;
   let lastFrame = -Infinity;
+  // Coil tuning: radius, helix slope (pitch > coiled width => open gaps), arc stretch of the coiled strip.
+  const FLAT = .5, RADIUS = 1.1, SLOPE = .34, STRETCH = 2.7, COIL_WIDTH = .62;
+  const AXIS = new THREE.Vector3(1, 0, 0);
+  const UP = new THREE.Vector3(0, 1, 0);
+  const helix = new THREE.Vector3();
+  const box = new THREE.Box3();
   function deform(p) {
-    center.set(-7, 0, 0);
-
-    // Arc-length integration preserves the lamina length as curvature increases.
-    // Fixed irregularities + pure p => identical geometry going up or down.
+    center.set(0, 0, 0);
+    // The coil grows from the tip: `front` slides from the tip to FLAT as p goes 0 -> 1.
+    // Arc-length integration (the coiled strip is stretched by STRETCH) + fixed irregularities
+    // + pure p => identical geometry going up or down.
+    const front = 1 - p * (1 - FLAT);
+    const fade = smooth(0, .08, p);
+    let phi = -.6;
     for (let i = 0; i <= SEGMENTS; i++) {
       const u = i / SEGMENTS;
-      const t = Math.max(0, (u - .33) / .67);
-      const curl = p * smooth(0, .12, t);
-      const phase = t * Math.PI * 10 * p + .38 * p * Math.sin(t * 17) + .10 * p * Math.sin(t * 39);
-      const axial = .16 + .055 * Math.sin(t * 23 + .8);
-      tangent.set(1 - curl + curl * axial, curl * Math.sqrt(1 - axial * axial) * Math.cos(phase), curl * Math.sqrt(1 - axial * axial) * Math.sin(phase)).normalize();
-      if (i) center.addScaledVector(tangent, (u < .33 ? 14 : 40) / SEGMENTS);
-      normal.set(0, -Math.sin(phase), Math.cos(phase));
-      across.crossVectors(tangent, normal).normalize();
-      across.applyAxisAngle(tangent, .35 * p * Math.sin(u * Math.PI));
+      const b = fade * smooth(front - .03, front + .09, u);
+      const ds = 14 / SEGMENTS * (1 + (STRETCH - 1) * b);
+      const radius = RADIUS * (1 + .08 * Math.sin(phi * .8 + .6) + .04 * Math.sin(phi * 2.3));
+      const slope = SLOPE * (1 + .1 * Math.sin(phi * 1.3 + 2));
+      const ring = Math.sqrt(1 - slope * slope);
+      helix.set(slope, -ring * Math.sin(phi), ring * Math.cos(phi));
+      tangent.copy(AXIS).lerp(helix, b).normalize();
+      if (i) { center.addScaledVector(tangent, ds); phi += b * ring * ds / radius; }
+      // Width turns from screen-vertical (flat leaf) to along the coil axis (rolled band): the mid twist.
+      across.copy(AXIS).addScaledVector(tangent, -tangent.x);
+      if (across.lengthSq() < 1e-6) across.copy(UP); else across.normalize();
+      across.lerp(UP, 1 - smooth(0, .7, b));
+      across.addScaledVector(tangent, -across.dot(tangent));
+      if (across.lengthSq() < 1e-6) across.copy(frames[Math.max(0, i - 1)]); else across.normalize();
+      across.applyAxisAngle(tangent, .12 * Math.sin(u * 9 + 1) * b);
       centers[i].copy(center); frames[i].copy(across);
       normals[i].crossVectors(tangent, across).normalize();
+      widths[i] = 2.7 * (1 - (1 - COIL_WIDTH) * smooth(.1, 1, b));
     }
-    const middle = (centers[0].x + centers[SEGMENTS].x) / 2;
     const position = geometry.attributes.position;
     const vertexNormal = geometry.attributes.normal;
+    box.makeEmpty();
     for (let j = 0; j <= ROWS; j++) for (let i = 0; i <= SEGMENTS; i++) {
       const u = i / SEGMENTS, v = .5 - j / ROWS;
-      // Broad, veined left tip narrows into the coil, leaving open air gaps.
-      const width = 2.7 * (1 - .79 * smooth(.27, .58, u));
+      const flat = 1 - smooth(.2, .6, frames[i].dot(AXIS) ** 2);
       const ruffle = .035 * Math.sin(u * 147 + j * .7) * Math.pow(Math.abs(v) * 2, 2);
-      const c = centers[i], f = frames[i], n = normals[i];
-      vertexNormal.setXYZ(j * (SEGMENTS + 1) + i, n.x, n.y, n.z);
-      position.setXYZ(j * (SEGMENTS + 1) + i,
-        c.x - middle + f.x * v * width,
-        c.y + f.y * v * width + .12 * Math.sin(u * 11) * (1 - smooth(.3, .5, u)) + ruffle,
+      const c = centers[i], f = frames[i], n = normals[i], width = widths[i];
+      const k = j * (SEGMENTS + 1) + i;
+      vertexNormal.setXYZ(k, n.x, n.y, n.z);
+      position.setXYZ(k,
+        c.x + f.x * v * width,
+        c.y + f.y * v * width + .12 * Math.sin(u * 11) * flat * (1 - smooth(.3, .5, u)) + ruffle,
         c.z + f.z * v * width + .035 * Math.cos(u * 87) * (1 - v * v));
+      box.expandByPoint(center.set(position.getX(k), position.getY(k), position.getZ(k)));
     }
     position.needsUpdate = true;
     vertexNormal.needsUpdate = true;
     appliedProgress = p;
-    const span = (centers[SEGMENTS].x - centers[0].x) + 1.5;
+    // Fixed scale (no zoom while scrolling); only recentre on the deformed bounds.
+    box.getCenter(center);
+    const span = 15.5;
     camera.left = -span / 2; camera.right = span / 2;
     camera.top = span / aspect / 2; camera.bottom = -camera.top;
     camera.updateProjectionMatrix();
-    mesh.position.y = -.3 * p;
+    mesh.position.copy(center).applyQuaternion(mesh.quaternion).negate();
     dirty = true;
   }
   function resize() {
@@ -137,7 +156,7 @@ export async function init(root, { signal, onFailure }) {
     setIdle(value) {
       if (disposed || idle.value === value) return;
       idle.value = value;
-      mesh.position.y = -.3 * Math.max(0, progress) + (value - .5) * .12;
+      mesh.rotation.z = .04 + (value - .5) * .02;
       dirty = true;
     },
     render, resize,

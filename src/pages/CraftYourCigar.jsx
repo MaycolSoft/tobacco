@@ -230,7 +230,7 @@ function CraftYourCigar() {
 
           <div className={`craft-workspace ${isResult ? 'is-result' : ''}`}>
             <LeafGrid leaves={leaves} onStartCrafting={startCrafting} />
-            {!isResult && <BlendSummary leaves={leaves} onOpenGuide={openGuide} />}
+            {!isResult && <BlendSummary leaves={leaves} onOpenGuide={openGuide} artPaused={showGuide} />}
           </div>
 
           <MultiButtonFlotanteContainer>

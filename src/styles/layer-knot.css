@@ -1,0 +1,5 @@
+#proceso:has(> .layer-knot) { position: relative; }
+.layer-knot { position: absolute; display: none; pointer-events: none; contain: layout style; }
+.layer-knot__poster, .layer-knot__canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.layer-knot[data-mode='webgl'] .layer-knot__poster { visibility: hidden; }
+@media (max-width: 860px) { .layer-knot { display: none !important; } }

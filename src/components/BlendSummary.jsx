@@ -1,10 +1,14 @@
+import { useState } from 'react';
+import BlendSculpture from '@/components/craft-art/BlendSculpture';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, BookOpen, Check, Plus, X } from "lucide-react";
 import { BLEND_STEPS, isBlendComplete, isStepComplete, useBlendStore } from "@/store/useBlendStore";
 
 // Resumen persistente: qué se eligió, qué falta y cómo continuar sin recordar pasos anteriores.
-export default function BlendSummary({ leaves = [], onOpenGuide }) {
+export default function BlendSummary({ leaves = [], onOpenGuide, artPaused = false }) {
   const { t } = useTranslation();
+  const [hovered, setHovered] = useState(null);
+  const [focused, setFocused] = useState(null);
   const { selections, stepIndex, setStep, toggleLeaf, loadedBlend, clearLoadedBlend } = useBlendStore();
   const complete = isBlendComplete(selections);
   const missing = BLEND_STEPS.filter(step => !isStepComplete(step, selections)).map(step => t(step.labelKey));
@@ -14,6 +18,7 @@ export default function BlendSummary({ leaves = [], onOpenGuide }) {
   return (
     <aside className="craft-summary" aria-labelledby="craft-summary-title">
       <header className="craft-summary__header">
+        <BlendSculpture leaves={leaves} selections={selections} stepIndex={stepIndex} highlighted={focused || hovered} paused={artPaused} />
         <span className="site-kicker">{t('craft:blendSummary.compositionInProgress')}</span>
         <h2 id="craft-summary-title">{t('craft:blendSummary.yourBlend')}</h2>
       </header>
@@ -38,7 +43,7 @@ export default function BlendSummary({ leaves = [], onOpenGuide }) {
             {ids.length ? (
               <ul>
                 {ids.map(id => (
-                  <li key={id}>
+                  <li key={id} onPointerEnter={() => setHovered(id)} onPointerLeave={() => setHovered(null)} onFocus={() => setFocused(id)} onBlur={() => setFocused(null)}>
                     <Check size={14} aria-hidden="true" /><span>{nameOf(id)}</span>
                     <button type="button" onClick={() => toggleLeaf(step.key, id)} aria-label={t('craft:blendSummary.removeFromYourBlend', { value1: nameOf(id) })}><X size={14} /></button>
                   </li>
