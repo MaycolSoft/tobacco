@@ -1,7 +1,9 @@
 # 04 — Exploración 3D artística (objetos flotantes, decorativos e interactivos)
 
+> **Referencia histórica de exploración (19/10/2026).** H1/O2/L1/ART-C1 se implementaron después; tecnología, cifras y tareas de este documento describen aquella fase. Consultar [estado vigente](PROGRESS.md) y [pendientes del proyecto](../STATUS.md). Los encargos y restricciones de sesiones anteriores no son instrucciones actuales.
+
 > Fecha: 2026-10-19. Continuación de [TOBACCO_3D_UX_RECOMMENDATIONS.md](../TOBACCO_3D_UX_RECOMMENDATIONS.md). Se mantiene **C1 «Anatomía de tu cigarro»** tal cual.
-> Nueva dirección: objetos 3D **artísticos** en varias secciones (Home, El oficio, Biblioteca, Craft) sin rediseñar páginas. Es solo exploración: no hay nada implementado ni instalado, y no se han hecho commits.
+> Nueva dirección: objetos 3D **artísticos** en varias secciones (Home, El oficio, Biblioteca, Craft) sin rediseñar páginas. En esta fase solo se exploraron propuestas; la implementación posterior está enlazada en el aviso histórico superior.
 > Evidencia visual: capturas desktop (1440×1000, perfil Black) en [design-review/desktop/](../../design-review/desktop/).
 > Documentos de trabajo (con todo el detalle por campo):
 > - [04-parts/E_HOME_ABOUT.md](04-parts/E_HOME_ABOUT.md)

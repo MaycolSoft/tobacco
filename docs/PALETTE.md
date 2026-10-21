@@ -4,13 +4,13 @@ La biblioteca y el configurador comparten estos colores. La definición base viv
 
 | Uso | Color base |
 | --- | --- |
-| Fondo principal | `#0F1110` |
-| Tarjetas | `#181C19` |
-| Paneles elevados | `#222823` |
+| Fondo principal | `#0F0E0C` |
+| Tarjetas | `#171512` |
+| Paneles elevados | `#211E19` |
 | Acento bronce | `#C7A479` |
-| Títulos y texto principal | `#F3EFE6` |
-| Párrafos y descripciones | `#B8BBAF` |
-| Etiquetas y texto auxiliar | `#939C92` |
+| Títulos y texto principal | `#F1ECE3` |
+| Párrafos y descripciones | `#B5ADA1` |
+| Etiquetas y texto auxiliar | `#8F887E` |
 | Fondo del video | `#D6C8B9` |
 
 El marfil se utiliza para los títulos y la información principal. El bronce se reserva para acciones, selección y detalles de marca. Los párrafos utilizan el texto secundario; los metadatos y etiquetas, el auxiliar. Evitar porcentajes de opacidad en texto necesario para comprender la presentación.
@@ -21,6 +21,6 @@ El panel conserva los colores personalizados guardados. Los valores del antiguo 
 
 La escena del video tiene un color independiente para integrarse con sus fotogramas; cambiar el tema de la interfaz no recolorea las imágenes. No se modificaron descargas, caché, reproducción, scroll ni selección de videos.
 
-Los estilos de referencia se aplican en `presentation-theme.css`. Las demás páginas pueden heredar los tokens que ya usaban, pero su adaptación visual queda para próximas revisiones. Los controles del UI Kit conservan una paleta neutral propia para poder editar incluso un tema con colores poco legibles.
+Los estilos de referencia se aplican en `presentation-theme.css`. El alcance original de esta paleta fue biblioteca/configurador; el estado actual de las integraciones visuales se documenta en [STATUS](STATUS.md) y en el [set artístico](3d-exploration/PROGRESS.md). Los controles del UI Kit conservan una paleta neutral propia para poder editar incluso un tema con colores poco legibles.
 
-La revisión visual queda a cargo del usuario; no se ejecutaron builds, servidores ni pruebas.
+Valores contrastados con `src/styles/tokens.css` el 21/10/2026. La revisión visual de perfiles y personalizaciones guardadas queda a cargo del usuario; esta corrección documental no cambia el tema.

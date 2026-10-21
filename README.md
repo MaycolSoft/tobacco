@@ -1,23 +1,28 @@
-# React + Vite
+# Tabacalera Tamboril
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Experiencia editorial e interactiva sobre hojas, composición y oficio. SPA en React 19 + Vite 7, con Zustand, GSAP, Framer Motion y Three.js. Disponible en español, inglés, francés y chino simplificado.
 
-Currently, two official plugins are available:
+## Desarrollo y comprobaciones
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```sh
+npm ci
+npm run dev
+npm run check:i18n
+npm test
+npm run build
+npm run check:i18n:build
+npm run lint
+npm run test:e2e
+```
 
-## React Compiler
+Playwright requiere Chromium instalado al preparar el entorno. La suite e2e construye y sirve el proyecto en `127.0.0.1:4173`. El lint global tiene deuda heredada documentada; consultar los resultados del trabajo que se revise.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Documentación
 
-## Expanding the ESLint configuration
+- [Estado y pendientes del proyecto](docs/STATUS.md): punto de entrada para continuar.
+- [Estado del set artístico](docs/3d-exploration/PROGRESS.md): H1/O2/L1/C1 implementados, límites y evidencias.
+- [Internacionalización](docs/I18N.md), [SEO y publicación](docs/SEO.md), [paleta](docs/PALETTE.md).
+- [Motor de fotogramas](docs/scroll-video-optimization.md) y [mediciones históricas](docs/scroll-video-performance-audit.md).
+- [Capturas de diseño](design-review/README.md), [herramientas de conversión](scripts/README.md).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# tobacco
-
-## Internacionalización
-
-Disponible en español, inglés, francés y chino simplificado. Las URLs españolas se mantienen; las otras versiones usan `/en`, `/fr` y `/zh-CN`. Arquitectura, mantenimiento y pruebas: [docs/I18N.md](docs/I18N.md).
-
-Comprobar con `npm run check:i18n`, `npm test`, `npm run build`, `npm run check:i18n:build` y `npm run test:e2e`.
+La autenticación es local y los formularios no tienen envío a servidor. La secuencia de elaboración usa un CDN externo. Los planes y prompts históricos son contexto documental; sus encargos a agentes no constituyen instrucciones vigentes.

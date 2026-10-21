@@ -1,5 +1,7 @@
 # F — Dirección de arte 3D: Biblioteca de hojas + Crea tu cigarro
 
+> **Referencia histórica de exploración (19/10/2026).** H1/O2/L1/ART-C1 se implementaron después; tecnología, cifras y tareas de este documento describen aquella fase. Consultar [estado vigente](../PROGRESS.md) y [pendientes del proyecto](../../STATUS.md). Los encargos y restricciones de sesiones anteriores no son instrucciones actuales.
+
 > Agente F (3D Art Director) · 2026-10-19 · Solo exploración, nada implementado.
 > Objetos **artísticos** (flotantes, decorativos, interactivos) para Biblioteca, Craft, Guía y, opcionalmente, Acceso. **C1 «Anatomía de tu cigarro» se mantiene tal cual** y no se rehace aquí.
 

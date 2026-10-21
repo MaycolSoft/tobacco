@@ -1,31 +1,23 @@
-# ART-C1 — Progreso
+# ART-C1 — implementación y QA consolidados
 
-Fecha: 2026-10-20. Implementación terminada y revisada. Cinco casos Playwright aprobados también en producción; [cierre conjunto](ART-INTEGRATION-PROGRESS.md), [QA independiente](ART-C1-QA.md). Consultar [plan](ART-C1-NEXT-STEPS.md). Los checks pendientes del historial inferior fueron completados en ese cierre, salvo mezclas maestras: el inventario de maestros está vacío.
+Implementado y validado el 20/10/2026; consolidación 21/10. Esta pieza es **Haz suspendido**, distinta de C1 «Anatomía». Sustituye NEXT-STEPS y QA ejecutados. [Cierre conjunto](ART-INTEGRATION-PROGRESS.md).
 
-## Trabajo realizado
+## Decisiones finales
 
-- Revisados propuesta AR-C1 en F_LIBRARY_CRAFT, ambos conceptos ART-C1 y componente/estilos reales. Esta pieza es la composición artística de la mesa, no el antiguo C1 de anatomía.
-- `BlendSculpture.jsx` implementa la alternativa SVG documentada. Cada tripa elegida genera una lámina con su fotografía real; capa usa la fotografía de la capa elegida en su cinta. Capote usa una cinta ámbar translúcida estilizada. Los extremos quedan abiertos.
-- Integración exclusivamente en cabecera de BlendSummary, como franja superior de 150 px (100 px <=860). No modifica la rejilla ni el inventario ni el store.
-- Framer Motion controla todos los nodos animados: entrada/salida, énfasis hover/foco, cintas, inclinación por paso, flotación finita de cuatro segundos después de selección. No hay GSAP duplicado, canvas ni nueva dependencia.
-- `artPaused={showGuide}` pausa al abrir guía. Visibilidad de página, IntersectionObserver de Framer, móvil, Save-Data (con listener dinámico) y reduced motion desactivan animación. El montaje existente desaparece en resultado y reproducción; efectos limpian listeners y controles al desmontar.
-- Foco de botón de quitar hoja prima sobre hover. La decoración es `aria-hidden`, sin eventos que intercepten acciones.
+`BlendSculpture.jsx` y `blend-sculpture.css`, integrado en `BlendSummary.jsx`; `CraftYourCigar.jsx` comunica pausa de guía. Franja150px, 100px <=860. SVG derivado de selecciones reales: una lámina con fotografía por tripa(0–5), cinta capote ámbar estilizada y cinta capa con su fotografía únicamente cuando se eligen. Sin alterar inventario/store/rejilla ni usar concept art como textura.
 
-## Validación realizada
+Framer Motion controla los nodos, sin GSAP sobre la misma transformación. Entrada/salida, énfasis con foco prioritario sobre hover y flotación finita4s. Guía, documento oculto y fuera de viewport pausan; móvil, reduced motion y Save-Data muestran composición estática. Listener dinámico de ahorro y limpieza al desmontar. Resultado y reproducción desmontan la pieza. SVG decorativo `aria-hidden`, sin interceptar controles, sin canvas ni carga Three.
 
-`npx eslint src/components/craft-art/BlendSculpture.jsx src/components/BlendSummary.jsx`: pasa. No se ejecutó build concurrente para evitar interferencia con otros agentes. Intento de Vite local bloqueado por permiso EPERM de Console Ninja sobre loopback; coordinación central ejecutará navegador/build con el entorno autorizado.
+## Validación documentada
 
-## Contrato para QA
+Cinco casos de `tests/craft-sculpture.spec.js` aprobados en dev y producción: vacío, selección0→5→4, capote/capa condicionales, foco/hover, quitar, guía/resultado, ES/EN/FR/ZH preservando selección, móvil/reduced/Save-Data y ausencia de errores o requests Three. Build integrado y ESLint específico correctos.
 
-- Ruta protegida `/craft-your-cigar`; usar autenticación local de tests/i18n.spec.js.
-- `.blend-sculpture[data-art="art-c1"]`, `data-leaf-count` (0–5), `data-motion-eligible` (true únicamente visible/desktop/sin pausa/reducción/Save-Data), `data-running` (flotación activa, termina a cuatro segundos).
-- SVG `[data-leaf="ID"]` para láminas; `[data-layer="CAPOTE"]` y `[data-layer="CAPA"]` para cintas frontales.
-- Store persistido `sessionStorage` clave `tamboril-blend` con state.selections y state.stepIndex.
-- Verificar selección real, maestro, quitar hoja y salida, foco/hover, capote/capa, guía (running false), resultado/desmontaje, móvil y reduced, consola, ausencia de recursos Three nuevos en Craft.
-- `data-running` vuelve a false al terminar la flotación, al abrir guía, ocultar pestaña o salir de viewport.
+[Objeto](validation/art-c1/complete-object.png), [escritorio](validation/art-c1/complete-desktop.png), [móvil](validation/art-c1/complete-mobile.png). La revisión conjunta tuvo CLS0 en tres ventanas; una tarea aislada64ms y máximoRAF83.3ms sin atribución. No afirmar ausencia absoluta de tirones.
 
-## Límites y decisiones conscientes
+## Límites y pendientes
 
-La alternativa SVG reproduce capas y cambios de selección, pero no transmisión física, autooclusiones reales ni deformación volumétrica del concept art. No se afirma fidelidad fotográfica equivalente a Three. Capote conserva ámbar común, no color medio calculado por hoja. La capa usa fotografía y no sheen de shader. Estas diferencias están documentadas antes de revisión visual; si no resulta convincente se evaluará mejora específica, sin sustituir tecnología silenciosamente.
+Aceptación estética pendiente: láminas más planas, menor profundidad y separación que el render; ámbar sin transmisión física, capa sin sheen de shader. Capote no calcula color medio de la hoja. Posibles refinamientos opcionales: siluetas/inclinaciones diferentes, sombras locales y reversos de cintas. No están implementados ni se asume cambio a Three.
 
-La franja prevista en el handoff aumenta solo el panel de resumen. Comprobar en capturas que no invade el dock ni reduce acceso a los controles. Sin commits y sin cambios a ART-H1, ScrollVideo o reproductor de frames.
+La carga de mezcla maestra no se probó por UI: `src/data/masterBlends.js` está vacío y oculta ese control. Requiere datos reales; la selección manual sí está validada.
+
+Contrato: `.blend-sculpture[data-art="art-c1"]`, `data-leaf-count`, `data-motion-eligible`, `data-running`; SVG `data-leaf` y `data-layer`. Sesión de mezcla: `tamboril-blend`. La flotación termina a4s o al pausar. No quedan build/QA generales abiertos de la implementación entregada.

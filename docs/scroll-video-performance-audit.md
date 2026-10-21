@@ -1,5 +1,7 @@
 # Auditoría de rendimiento de la animación por scroll
 
+> **Medición histórica, no backlog vigente.** Auditoría del commit indicado abajo. A 21/10/2026, `frameScheduler.refresh()` ya incorpora `decodeSet` a la adquisición de blobs para decodificar; el hallazgo de §9 sobre anticipación desde IndexedDB no se debe trasladar intacto al código actual. Se conservan cifras y método como evidencia; hay que repetir la medición para evaluar el estado vigente. [Pendientes actuales](STATUS.md).
+
 **Fecha:** 24 de septiembre de 2026.  
 **Código examinado:** commit `09954abde40260593c39aab54df4b9d3c80ff863`.  
 **Estado:** diagnóstico realizado; no se implementaron optimizaciones como parte de la auditoría.

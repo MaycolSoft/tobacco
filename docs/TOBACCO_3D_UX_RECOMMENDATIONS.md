@@ -1,5 +1,7 @@
 # TOBACCO — Recomendaciones 3D y UX
 
+> **Referencia histórica de exploración (19/10/2026).** H1/O2/L1/ART-C1 se implementaron después; tecnología, cifras y tareas de este documento describen aquella fase. Consultar [estado vigente](3d-exploration/PROGRESS.md) y [pendientes del proyecto](STATUS.md). Los encargos y restricciones de sesiones anteriores no son instrucciones actuales.
+
 > Fecha: 2026-10-19 · Solo exploración: no se modificó código, no se instaló nada y no hubo commits.
 > Fuentes:
 > - Auditoría base: [TOBACCO_PROJECT_AUDIT.md](TOBACCO_PROJECT_AUDIT.md).

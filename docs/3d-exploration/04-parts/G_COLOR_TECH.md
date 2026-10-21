@@ -1,5 +1,7 @@
 # G — Sistema de color y tecnología 3D artística
 
+> **Referencia histórica de exploración (19/10/2026).** H1/O2/L1/ART-C1 se implementaron después; tecnología, cifras y tareas de este documento describen aquella fase. Consultar [estado vigente](../PROGRESS.md) y [pendientes del proyecto](../../STATUS.md). Los encargos y restricciones de sesiones anteriores no son instrucciones actuales.
+
 > Agente G · Asesor de color y tecnología 3D · TOBACCO / Tabacalera Tamboril
 > Solo propuesta. No modifica código de la app ni instala dependencias.
 

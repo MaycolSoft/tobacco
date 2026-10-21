@@ -1,5 +1,7 @@
 # 01 — Análisis visual (Desktop)
 
+> **Referencia histórica de exploración (19/10/2026).** H1/O2/L1/ART-C1 se implementaron después; tecnología, cifras y tareas de este documento describen aquella fase. Consultar [estado vigente](PROGRESS.md) y [pendientes del proyecto](../STATUS.md). Los encargos y restricciones de sesiones anteriores no son instrucciones actuales.
+
 > Agente A1 — Visual UX Inspector (DESKTOP). Fecha: 2026-10-19.
 > Capturas con Playwright/Chromium sobre el servidor dev `http://127.0.0.1:5173`: viewport **1440×1000**, escala 1, perfil visual **Black** (inyectado en `localStorage['ls-design-tokens'] = {version:3, profileId:'black'}` antes de cargar), idioma español. Se sigue la convención de `design-review/README.md`; las capturas viven en `design-review/desktop/`.
 > Contexto previo: `docs/TOBACCO_PROJECT_AUDIT.md` (no se repite aquí). Solo se describe lo que se ve en las capturas.

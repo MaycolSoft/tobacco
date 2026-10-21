@@ -1,5 +1,7 @@
 # 02 — Conceptos 3D (Agente B · 3D Creative Researcher / Art Director)
 
+> **Referencia histórica de exploración (19/10/2026).** H1/O2/L1/ART-C1 se implementaron después; tecnología, cifras y tareas de este documento describen aquella fase. Consultar [estado vigente](PROGRESS.md) y [pendientes del proyecto](../STATUS.md). Los encargos y restricciones de sesiones anteriores no son instrucciones actuales.
+
 > Fecha: 2026-10-19 · Repositorio `tobacco` (`main`, commit `0451152`). Documento solo de exploración: no se modificó código ni se instaló nada.
 > Base: `docs/TOBACCO_PROJECT_AUDIT.md` (§6, §7.11, §12 Nivel 3, §13, §14), código verificado y capturas de `design-review/desktop/` (perfil visual **Black**, 1440 px). La carpeta `docs/3d-exploration/screenshots/` no existía al redactar este documento: todas las observaciones visuales salen de `design-review`.
 

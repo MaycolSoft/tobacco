@@ -1,5 +1,7 @@
 # TOBACCO — Auditoría del proyecto (Frontend, UX/UI y sistema de frames)
 
+> **Referencia histórica de exploración (19/10/2026).** H1/O2/L1/ART-C1 se implementaron después; tecnología, cifras y tareas de este documento describen aquella fase. Consultar [estado vigente](3d-exploration/PROGRESS.md) y [pendientes del proyecto](STATUS.md). Los encargos y restricciones de sesiones anteriores no son instrucciones actuales.
+
 > Fecha: 2026-10-19 · Alcance: repositorio `tobacco` (rama `main`, commit `0451152`).
 > Documento solo de análisis: no se modificó código, no se instalaron dependencias y no se alteró la secuencia de frames.
 >

@@ -1,5 +1,7 @@
 # CODEX_ARTISTIC_IMAGE_PROMPTS — Concept art de los objetos artísticos 3D (Agente H · Artistic Asset & Prompt Designer)
 
+> Catálogo histórico de prompts y alternativas, conservado como referencia. La generación prioritaria y el set seleccionado ya se completaron: [estado vigente](PROGRESS.md), [galería](refs/art/README.md). El texto de los prompts no es una solicitud de generación o implementación actual.
+
 > Fecha: 2026-10-19 · Repositorio `tobacco` (`main`). Solo especificación: no se generaron imágenes, no se tocó código ni se instaló nada.
 > Fuentes: `04-parts/E_HOME_ABOUT.md` (AR-H1…H3, AR-O1…O2), `04-parts/F_LIBRARY_CRAFT.md` (AR-L1, AR-L2, AR-C1…C3, AR-A1), `04-parts/G_COLOR_TECH.md` §1 (sistema de acentos) y `CODEX_IMAGE_PROMPTS.md` (formato y bloque negativo, cuyos IDs no se duplican). También se revisaron las capturas de `design-review/desktop/`: inicio-recorrido, inicio-arte-de-mezclar, inicio-tres-momentos, oficio, proceso, hoja-detalle, hoja-inmersiva, biblioteca-hojas, crea-tu-cigarro-mezcla, crea-tu-cigarro-capa, guia-mezcla y acceso.
 > Estructura y explicaciones en español; **los prompts van en inglés**.
@@ -63,7 +65,7 @@ No smoke, no vapor, no haze, no mist, no fire, no embers, no glowing tip, no ash
 > En las maquetas (b), «no text» se refiere al objeto y a la imagen. La UI de la página se pide como **bloques de tipografía ilegible**, sin palabras reales.
 
 **Convenciones comunes**
-- Ruta de salida: `docs/3d-exploration/refs/art/` (carpeta propuesta, todavía no existe). Sufijos `_object.png` y `_context.png`.
+- Ruta de salida: `docs/3d-exploration/refs/art/` (carpeta propuesta, ya existe tras la generación conceptual). Sufijos `_object.png` y `_context.png`.
 - Las referencias se entregan en PNG 8-bit sRGB, sin alfa. No van a `public/`.
 - Las maquetas (b) usan proporción **16:10** (equivale a un viewport de 1440×900; las capturas miden 1440×1000) o un recorte de la sección indicada.
 

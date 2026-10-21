@@ -2,7 +2,7 @@
 
 Contexto completo del trabajo sobre la animación por scroll de `CraftYourCigar`. Este documento es la fuente de contexto para retomar el trabajo: qué problema había, qué se decidió, cómo funciona hoy y qué falta.
 
-Estado: **fase 1 implementada** (canvas + GSAP + secuencias de imágenes). Validada con simulaciones en Node; **pendiente de prueba en navegadores y dispositivos reales**, sobre todo Safari/iOS.
+Estado: **fase 1 implementada** (canvas + GSAP + secuencias de imágenes). Validada con simulaciones en Node; posteriormente hubo una auditoría exploratoria en Chromium; **siguen pendientes Safari/iOS y dispositivos físicos**. Las mediciones históricas no son una validación del código vigente.
 
 ---
 

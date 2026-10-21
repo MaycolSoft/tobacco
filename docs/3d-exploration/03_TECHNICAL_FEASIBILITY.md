@@ -1,5 +1,7 @@
 # 03 — Viabilidad técnica 3D (Agent C)
 
+> **Referencia histórica de exploración (19/10/2026).** H1/O2/L1/ART-C1 se implementaron después; tecnología, cifras y tareas de este documento describen aquella fase. Consultar [estado vigente](PROGRESS.md) y [pendientes del proyecto](../STATUS.md). Los encargos y restricciones de sesiones anteriores no son instrucciones actuales.
+
 > Alcance: viabilidad técnica de añadir 3D/pseudo-3D a TOBACCO sin romper la secuencia de frames.
 > Convenciones: **[Confirmado]** = verificado en código (archivo:línea). **[Conocimiento]** = dato de la librería/plataforma no verificado en este repo. **[Estimación]** / **[Propuesta]** = valores orientativos, no medidos.
 > No se modificó código de la app ni se instalaron dependencias.

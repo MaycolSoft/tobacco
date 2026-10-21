@@ -1,5 +1,7 @@
 # CODEX_IMAGE_PROMPTS — Prompts de assets para la exploración 3D (Agente D · Asset & Prompt Designer)
 
+> Catálogo histórico de prompts y alternativas, conservado como referencia. La generación prioritaria y el set seleccionado ya se completaron: [estado vigente](PROGRESS.md), [galería](refs/art/README.md). El texto de los prompts no es una solicitud de generación o implementación actual.
+
 > Fecha: 2026-10-19 · Repositorio `tobacco` (`main`, commit `0451152`). Documento solo de especificación: no se generaron imágenes, no se modificó código y no se instaló nada.
 > Fuentes: `docs/3d-exploration/02_3D_CONCEPTS.md` (§2 conceptos, §4 lista de assets), `design-review/generated-imagery.md` y `design-review/mezclas-imagen.md` (tono de prompt ya usado en el proyecto), `src/styles/tokens.css`, `src/data/leaves.js` y revisión visual de `public/assets/thumbs/*.webp`, `public/img/about.png`, `design-review/desktop/tu-cigarro.png` y `design-review/desktop/guia-mezcla.png`.
 > Estructura y explicaciones en español; **los prompts van en inglés**.

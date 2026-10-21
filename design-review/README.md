@@ -1,5 +1,7 @@
 # Capturas para revisión de línea gráfica
 
+> Estas capturas preceden a la integración artística. Para aprobar H1/O2/L1/C1 usar las evidencias enlazadas en el [estado artístico](../docs/3d-exploration/PROGRESS.md); actualizar esta colección si se necesita una revisión global del sitio actual.
+
 Actualizadas el **19 de octubre de 2026** desde la aplicación local (exploración 3D, `docs/3d-exploration/01_VISUAL_ANALYSIS.md`). Se re-capturaron las páginas ligadas al recorrido y se añadieron vistas por sección. Contacto, Experiencia sensorial, Presentación guiada, Submenú Experiencias y 404 conservan la captura del 25 de septiembre de 2026.
 
 - Solo escritorio: viewport de **1440 × 1000 px**, escala 1.

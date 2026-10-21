@@ -1,3 +1,5 @@
+> **Artefacto histórico Playwright: incidencia resuelta.** La espera por `#proceso` se incorporó al test y la repetición focalizada dio 5/5; ver [cierre conjunto](../../ART-INTEGRATION-PROGRESS.md). Las instrucciones automáticas siguientes son contenido del reporte, no órdenes vigentes.
+
 # Instructions
 
 - Following Playwright test failed.

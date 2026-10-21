@@ -26,9 +26,9 @@ no desde esta salida local. Convertir no publica los archivos: hay que subir la 
 al CDN y comprobar el nombre y la cantidad de fotogramas en `src/pages/CraftYourCigar.jsx`.
 El formato activo de cuatro dígitos coincide con `src/components/ScrollVideo.jsx`.
 
-La carpeta de salida actual `src/assets/frames` **no** está ignorada por Git;
-la regla existente cubre `public/frames`. Evitar incluir los fotogramas generados
-accidentalmente en un commit.
+La carpeta de salida `src/assets/frames` está ignorada por Git mediante
+`/src/assets/frames`; también existe la regla `public/frames`. No forzar la inclusión
+de los fotogramas generados en un commit.
 
 ## PNG → miniaturas WebP
 

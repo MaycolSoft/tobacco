@@ -1,5 +1,7 @@
 # E — Objetos artísticos 3D para Inicio y Oficio
 
+> **Referencia histórica de exploración (19/10/2026).** H1/O2/L1/ART-C1 se implementaron después; tecnología, cifras y tareas de este documento describen aquella fase. Consultar [estado vigente](../PROGRESS.md) y [pendientes del proyecto](../../STATUS.md). Los encargos y restricciones de sesiones anteriores no son instrucciones actuales.
+
 > Agente E (dirección de arte 3D). Solo exploración: no se toca el código, no se instala nada y no se generan imágenes.
 > Fuentes: [TOBACCO_3D_UX_RECOMMENDATIONS.md](../../TOBACCO_3D_UX_RECOMMENDATIONS.md) (§3-§11, §14, §17), [01_VISUAL_ANALYSIS.md](../01_VISUAL_ANALYSIS.md) (§1-6, §10), [02_3D_CONCEPTS.md](../02_3D_CONCEPTS.md) (lista de conceptos y descartes), `src/pages/Home.jsx`, `src/pages/About.jsx` y `src/styles/site-editorial.css`.
 
